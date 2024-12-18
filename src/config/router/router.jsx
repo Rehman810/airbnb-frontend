@@ -5,11 +5,14 @@ const Home = lazy(() => import("../../pages/home/home"));
 const About = lazy(() => import("../../pages/about/about"));
 const Team = lazy(() => import("../../pages/team/team"));
 const News = lazy(() => import("../../pages/news/news"));
+const Navbar = lazy(() => import("../../components/navbar/navbar"));
+const Footer = lazy(() => import("../../components/footer/footer"));
 
 const Router = () => {
   return (
     <>
       <BrowserRouter>
+      <Navbar />
         <Routes>
           {/* Home Page */}
           <Route path="/" element={<Home />} />
@@ -23,6 +26,7 @@ const Router = () => {
           {/* News Page */}
           <Route path="/news" element={<News />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </>
   );

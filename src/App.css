@@ -1,15 +1,19 @@
 @font-face {
-  font-family: "Average";
-  src: url("./assets/fonts/Average/Average-Regular.ttf") format("woff2"),
+  font-family: "Airbnb";
+  src: url("./assets/fonts/Airbnb/AirbnbCereal_W_Lt.otf") format("woff2"),
 }
 
 @font-face {
-  font-family: "DMSans";
-  src: url("./assets/fonts/DM_Sans/DMSans-Italic-VariableFont_opsz\,wght.ttf") format("woff2"),
+  font-family: "AirbnbBold";
+  src: url("./assets/fonts/Airbnb/AirbnbCereal_W_Bd.otf") format("woff2"),
 }
 
 *{
   margin: 0;
   padding: 0;
-  font-family: Average !important;
+  font-family: Airbnb !important;
+}
+
+.airbnbBold{
+  font-family: AirbnbBold !important;
 }
