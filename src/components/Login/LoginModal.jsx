@@ -9,8 +9,50 @@ import {
   Grid,
 } from "@mui/material";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
+import { loginUser } from "../../config/ServiceApi/serviceApi"; // Assume `loginUser` is your API function.
+import { useNavigate } from "react-router-dom";
 
 const LoginModal = ({ open, onClose }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const navigate = useNavigate();
+
+  const onSubmit = async (data) => {
+    try {
+      const res = await loginUser("signup", data.userName, data.email, data.password);
+      if (res) {
+        localStorage.setItem("token", res.token);
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful",
+          text: `Welcome back, ${data.userName}!`,
+        });
+        onClose(); 
+        setTimeout(() => {
+          navigate("/");
+        }, 500);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: "Invalid credentials. Please try again.",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "An Error Occurred",
+        text: "Please check your connection or try again later.",
+      });
+      console.error("Login Error:", error);
+    }
+  };
+
   return (
     <Modal
       open={open}
@@ -19,6 +61,8 @@ const LoginModal = ({ open, onClose }) => {
       aria-describedby="responsive-login-modal"
     >
       <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
         sx={{
           position: "absolute",
           top: "50%",
@@ -49,13 +93,26 @@ const LoginModal = ({ open, onClose }) => {
           Welcome to Airbnb
         </Typography>
 
+        {/* Name Field */}
+        <TextField
+          fullWidth
+          label="Name"
+          variant="outlined"
+          margin="normal"
+          {...register("userName", { required: "Name is required" })}
+          error={!!errors.userName}
+          helperText={errors.userName?.message}
+        />
+
         {/* Email Field */}
         <TextField
           fullWidth
           label="Email"
           variant="outlined"
           margin="normal"
-          InputLabelProps={{ shrink: true }}
+          {...register("email", { required: "Email is required" })}
+          error={!!errors.email}
+          helperText={errors.email?.message}
         />
 
         {/* Password Field */}
@@ -65,11 +122,14 @@ const LoginModal = ({ open, onClose }) => {
           variant="outlined"
           margin="normal"
           type="password"
-          InputLabelProps={{ shrink: true }}
+          {...register("password", { required: "Password is required" })}
+          error={!!errors.password}
+          helperText={errors.password?.message}
         />
 
         {/* Continue Button */}
         <Button
+          type="submit"
           fullWidth
           variant="contained"
           sx={{
@@ -117,7 +177,7 @@ const SocialButton = ({ icon, text }) => {
         textTransform: "none",
         justifyContent: "center",
         fontWeight: "bold",
-        padding:'10px',
+        padding: "10px",
         "&:hover": {
           borderColor: "#bbb",
         },
