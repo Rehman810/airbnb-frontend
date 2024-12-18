@@ -21,6 +21,7 @@ import Icon1 from "../../assets/icons/icons1.png";
 import Icon2 from "../../assets/icons/icons2.png";
 import Icon3 from "../../assets/icons/icons3.png";
 import "../../assets/styles/navbar.css"
+import { useAppContext } from "../../context/context";
 
 const SearchBar = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -36,6 +37,7 @@ const SearchBar = () => {
   const [selectedDestination, setSelectedDestination] = useState("");
   const [whereAnchorEl, setWhereAnchorEl] = useState(null);
   const [guestsAnchorEl, setGuestsAnchorEl] = useState(null);
+  const { searchVisible, setSearchVisible } = useAppContext();
 
   const openWhereMenu = (event) => setWhereAnchorEl(event.currentTarget);
   const closeWhereMenu = () => setWhereAnchorEl(null);
@@ -74,6 +76,7 @@ const SearchBar = () => {
       if (currentScrollPos === 0) {
         setIsVisible(true);
       } else if (currentScrollPos > scrollPosition) {
+        setSearchVisible(false)
         setIsVisible(false);
       }
       setScrollPosition(currentScrollPos);
@@ -85,7 +88,7 @@ const SearchBar = () => {
 
   return (
     <Box
-      className={`${isVisible ? "search-visible" : "search-hidden"}`}
+      className={`${searchVisible ? !isVisible : isVisible ? "search-visible" : "search-hidden"}`}
       sx={{
         display: "flex",
         alignItems: "center",

@@ -18,6 +18,7 @@ import {
 } from "@mui/icons-material";
 import LoginModal from "../Login/LoginModal";
 import SearchBar from "../searchBar/searchBar";
+import SearchBar2 from "../searchBar/searchBar2";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -61,6 +62,10 @@ const Navbar = () => {
           >
             airbnb
           </Typography>
+        </Box>
+
+        <Box>
+          <SearchBar2 />
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
