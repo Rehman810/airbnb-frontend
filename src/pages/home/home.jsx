@@ -7,7 +7,6 @@ import CardData from '../../data/data'
 const Home = () => {
   return (
     <div>
-      <SearchBar />
       <Box sx={{ flexGrow: 1, p: 2 }}>
       <Grid container spacing={2}>
         {CardData.map((item) => (

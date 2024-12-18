@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -20,8 +20,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Icon1 from "../../assets/icons/icons1.png";
 import Icon2 from "../../assets/icons/icons2.png";
 import Icon3 from "../../assets/icons/icons3.png";
+import "../../assets/styles/navbar.css"
 
 const SearchBar = () => {
+  const [isVisible, setIsVisible] = useState(true);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
   const [guests, setGuests] = useState({
@@ -65,14 +68,30 @@ const SearchBar = () => {
     },
   ];
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      if (currentScrollPos === 0) {
+        setIsVisible(true);
+      } else if (currentScrollPos > scrollPosition) {
+        setIsVisible(false);
+      }
+      setScrollPosition(currentScrollPos);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrollPosition]);
+
   return (
     <Box
+      className={`${isVisible ? "search-visible" : "search-hidden"}`}
       sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
-        padding: "16px",
+        paddingBottom: "20px"
       }}
     >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -87,7 +106,7 @@ const SearchBar = () => {
             backgroundColor: "white",
             width: "100%",
             maxWidth: "900px",
-            height: "70px",
+            height: "60px",
             position: "relative",
             padding: "5px 20px",
           }}

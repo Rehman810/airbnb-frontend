@@ -17,12 +17,12 @@ import {
   Person as PersonIcon,
 } from "@mui/icons-material";
 import LoginModal from "../Login/LoginModal";
+import SearchBar from "../searchBar/searchBar";
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // Modal State
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-  // Handle Menu Open and Close
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -31,10 +31,9 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-  // Open and Close Login Modal
   const handleLoginModalOpen = () => {
     setIsLoginModalOpen(true);
-    handleMenuClose(); // Close the menu when opening modal
+    handleMenuClose(); 
   };
 
   const handleLoginModalClose = () => {
@@ -44,7 +43,7 @@ const Navbar = () => {
   return (
     <AppBar
       position="static"
-      sx={{ backgroundColor: "white", color: "black", boxShadow: "none" }}
+      sx={{ backgroundColor: "white", color: "black", boxShadow: "none", position: "sticky", top: 0, zIndex: 10 }}
     >
       <Toolbar
         sx={{
@@ -53,7 +52,6 @@ const Navbar = () => {
           padding: "0 16px",
         }}
       >
-        {/* Logo */}
         <Box>
           <Typography
             variant="h6"
@@ -65,7 +63,6 @@ const Navbar = () => {
           </Typography>
         </Box>
 
-        {/* Right-Side Options */}
         <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Button
@@ -118,7 +115,6 @@ const Navbar = () => {
               </Avatar>
             </Box>
 
-            {/* Dropdown Menu */}
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
@@ -136,8 +132,8 @@ const Navbar = () => {
           </Box>
         </Box>
       </Toolbar>
-
-      {/* Login Modal */}
+      <SearchBar />
+      <Divider />
       {isLoginModalOpen && (
         <LoginModal open={isLoginModalOpen} onClose={handleLoginModalClose} />
       )}

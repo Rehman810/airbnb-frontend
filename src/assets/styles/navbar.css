@@ -1,0 +1,15 @@
+.search-visible {
+  transform: translateY(0); 
+  transition: transform 0.5s ease-in-out; 
+}
+
+.search-hidden {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 1000;
+  transform: translateY(-150px); 
+  transition: transform 0.5s ease-in-out; 
+}
