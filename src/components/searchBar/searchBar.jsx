@@ -17,9 +17,9 @@ import {
 } from "@mui/icons-material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import Icon1 from "../../assets/icons/icons1.png"
-import Icon2 from "../../assets/icons/icons2.png"
-import Icon3 from "../../assets/icons/icons3.png"
+import Icon1 from "../../assets/icons/icons1.png";
+import Icon2 from "../../assets/icons/icons2.png";
+import Icon3 from "../../assets/icons/icons3.png";
 
 const SearchBar = () => {
   const [checkIn, setCheckIn] = useState(null);
@@ -46,24 +46,24 @@ const SearchBar = () => {
     setGuests((prev) => ({ ...prev, [type]: Math.max(0, prev[type] - 1) }));
 
   const isMobile = useMediaQuery("(max-width:600px)");
-  
+
   const cities = [
     {
-        name: "Karachi",
-        text: "For enjoying the city of lights",
-        icon: Icon1
+      name: "Karachi",
+      text: "For enjoying the city of lights",
+      icon: Icon1,
     },
     {
-        name: "Islamabad",
-        text: "For sights like Faisal Mosque",
-        icon: Icon2
+      name: "Islamabad",
+      text: "For sights like Faisal Mosque",
+      icon: Icon2,
     },
     {
-        name: "Lahore",
-        text: "For a trip abroad",
-        icon: Icon3
+      name: "Lahore",
+      text: "For a trip abroad",
+      icon: Icon3,
     },
-  ]
+  ];
 
   return (
     <Box
@@ -89,7 +89,7 @@ const SearchBar = () => {
             maxWidth: "900px",
             height: "70px",
             position: "relative",
-            padding: "5px 20px"
+            padding: "5px 20px",
           }}
         >
           <Box
@@ -130,7 +130,12 @@ const SearchBar = () => {
                   closeWhereMenu();
                 }}
               >
-                <img src={city.icon} alt={city.name} width={50} style={{paddingRight: "20px"}}/>
+                <img
+                  src={city.icon}
+                  alt={city.name}
+                  width={50}
+                  style={{ paddingRight: "20px" }}
+                />
                 <Box>
                   <Typography sx={{ fontWeight: "bold" }}>
                     {city.name}, Pakistan
