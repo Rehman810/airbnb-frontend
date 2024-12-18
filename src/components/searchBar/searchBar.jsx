@@ -7,18 +7,27 @@ import {
   Divider,
   Menu,
   MenuItem,
-  Avatar,
   Button,
+  useMediaQuery,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Search as SearchIcon, LocationOn as LocationIcon } from "@mui/icons-material";
+import {
+  Search as SearchIcon,
+  LocationOn as LocationIcon,
+} from "@mui/icons-material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const SearchBar = () => {
   const [checkIn, setCheckIn] = useState(null);
   const [checkOut, setCheckOut] = useState(null);
-  const [guests, setGuests] = useState({ adults: 0, children: 0, infants: 0, pets: 0 });
+  const [guests, setGuests] = useState({
+    adults: 0,
+    children: 0,
+    infants: 0,
+    pets: 0,
+  });
+  const [selectedDestination, setSelectedDestination] = useState("");
   const [whereAnchorEl, setWhereAnchorEl] = useState(null);
   const [guestsAnchorEl, setGuestsAnchorEl] = useState(null);
 
@@ -28,9 +37,12 @@ const SearchBar = () => {
   const openGuestsMenu = (event) => setGuestsAnchorEl(event.currentTarget);
   const closeGuestsMenu = () => setGuestsAnchorEl(null);
 
-  const incrementGuest = (type) => setGuests((prev) => ({ ...prev, [type]: prev[type] + 1 }));
+  const incrementGuest = (type) =>
+    setGuests((prev) => ({ ...prev, [type]: prev[type] + 1 }));
   const decrementGuest = (type) =>
     setGuests((prev) => ({ ...prev, [type]: Math.max(0, prev[type] - 1) }));
+
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   return (
     <Box
@@ -56,9 +68,9 @@ const SearchBar = () => {
             maxWidth: "900px",
             height: "70px",
             position: "relative",
+            padding: "5px 20px"
           }}
         >
-          {/* Where */}
           <Box
             sx={{
               flex: 1,
@@ -79,6 +91,8 @@ const SearchBar = () => {
               fullWidth
               InputProps={{ disableUnderline: true }}
               sx={{ color: "gray", fontWeight: "bold" }}
+              value={selectedDestination}
+              readOnly
             />
           </Box>
 
@@ -88,10 +102,18 @@ const SearchBar = () => {
             onClose={closeWhereMenu}
           >
             {["Karachi", "Islamabad", "Lahore"].map((city) => (
-              <MenuItem key={city} onClick={closeWhereMenu}>
+              <MenuItem
+                key={city}
+                onClick={() => {
+                  setSelectedDestination(`${city}, Pakistan`);
+                  closeWhereMenu();
+                }}
+              >
                 <LocationIcon sx={{ marginRight: "8px" }} />
                 <Box>
-                  <Typography sx={{ fontWeight: "bold" }}>{city}, Pakistan</Typography>
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    {city}, Pakistan
+                  </Typography>
                   <Typography variant="body2" sx={{ color: "gray" }}>
                     For sights like Faisal Mosque
                   </Typography>
@@ -100,117 +122,134 @@ const SearchBar = () => {
             ))}
           </Menu>
 
-          <Divider orientation="vertical" flexItem />
+          {!isMobile && (
+            <>
+              <Divider orientation="vertical" flexItem />
 
-          {/* Check In */}
-          <Box sx={{ flex: 1, padding: "15px 16px" }}>
-            <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "12px" }}>
-              Check in
-            </Typography>
-            <DatePicker
-              value={checkIn}
-              onChange={(newValue) => setCheckIn(newValue)}
-              slotProps={{
-                textField: {
-                  variant: "standard",
-                  InputProps: { disableUnderline: true },
-                  placeholder: "Add dates",
-                },
-              }}
-            />
-          </Box>
+              <Box sx={{ flex: 1, padding: "15px 16px" }}>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: "bold", fontSize: "12px" }}
+                >
+                  Check in
+                </Typography>
+                <DatePicker
+                  value={checkIn}
+                  onChange={(newValue) => setCheckIn(newValue)}
+                  slotProps={{
+                    textField: {
+                      variant: "standard",
+                      InputProps: { disableUnderline: true },
+                      placeholder: "Add dates",
+                    },
+                  }}
+                />
+              </Box>
 
-          <Divider orientation="vertical" flexItem />
+              <Divider orientation="vertical" flexItem />
 
-          {/* Check Out */}
-          <Box sx={{ flex: 1, padding: "15px 16px" }}>
-            <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "12px" }}>
-              Check out
-            </Typography>
-            <DatePicker
-              value={checkOut}
-              onChange={(newValue) => setCheckOut(newValue)}
-              slotProps={{
-                textField: {
-                  variant: "standard",
-                  InputProps: { disableUnderline: true },
-                  placeholder: "Add dates",
-                },
-              }}
-            />
-          </Box>
+              <Box sx={{ flex: 1, padding: "15px 16px" }}>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: "bold", fontSize: "12px" }}
+                >
+                  Check out
+                </Typography>
+                <DatePicker
+                  value={checkOut}
+                  onChange={(newValue) => setCheckOut(newValue)}
+                  slotProps={{
+                    textField: {
+                      variant: "standard",
+                      InputProps: { disableUnderline: true },
+                      placeholder: "Add dates",
+                    },
+                  }}
+                />
+              </Box>
 
-          <Divider orientation="vertical" flexItem />
+              <Divider orientation="vertical" flexItem />
 
-          {/* Who */}
-          <Box
-            sx={{
-              flex: 1,
-              padding: "15px 16px",
-              cursor: "pointer",
-            }}
-            onClick={openGuestsMenu}
-          >
-            <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: "12px" }}>
-              Who
-            </Typography>
-            <TextField
-              placeholder="Add guests"
-              variant="standard"
-              fullWidth
-              InputProps={{ disableUnderline: true }}
-              sx={{ color: "gray", fontWeight: "bold" }}
-              value={`${guests.adults + guests.children + guests.infants + guests.pets} Guests`}
-            />
-          </Box>
+              <Box
+                sx={{
+                  flex: 1,
+                  padding: "15px 16px",
+                  cursor: "pointer",
+                }}
+                onClick={openGuestsMenu}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: "bold", fontSize: "12px" }}
+                >
+                  Who
+                </Typography>
+                <TextField
+                  placeholder="Add guests"
+                  variant="standard"
+                  fullWidth
+                  InputProps={{ disableUnderline: true }}
+                  sx={{ color: "gray", fontWeight: "bold" }}
+                  value={[
+                    guests.adults ? `${guests.adults} Adults` : "",
+                    guests.children ? `${guests.children} Children` : "",
+                    guests.infants ? `${guests.infants} Infants` : "",
+                    guests.pets ? `${guests.pets} Pets` : "",
+                  ]
+                    .filter(Boolean)
+                    .join(", ")}
+                  readOnly
+                />
+              </Box>
 
-          <Menu
-            anchorEl={guestsAnchorEl}
-            open={Boolean(guestsAnchorEl)}
-            onClose={closeGuestsMenu}
-          >
-            {[
-              { label: "Adults", range: "Ages 13 or above", type: "adults" },
-              { label: "Children", range: "Ages 2–12", type: "children" },
-              { label: "Infants", range: "Under 2", type: "infants" },
-              { label: "Pets", range: "Bringing a pet?", type: "pets" },
-            ].map((guestType) => (
-              <MenuItem key={guestType.type}>
-                <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-                  <Box>
-                    <Typography sx={{ fontWeight: "bold" }}>{guestType.label}</Typography>
-                    <Typography variant="body2" sx={{ color: "gray" }}>
-                      {guestType.range}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    <Button
-                      variant="outlined"
-                      onClick={() => decrementGuest(guestType.type)}
-                      sx={{ minWidth: "30px", padding: "0" }}
+              <Menu
+                anchorEl={guestsAnchorEl}
+                open={Boolean(guestsAnchorEl)}
+                onClose={closeGuestsMenu}
+              >
+                {[
+                  { label: "Adults", type: "adults" },
+                  { label: "Children", type: "children" },
+                  { label: "Infants", type: "infants" },
+                  { label: "Pets", type: "pets" },
+                ].map((guest) => (
+                  <MenuItem key={guest.type}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "100%",
+                      }}
                     >
-                      -
-                    </Button>
-                    <Typography>{guests[guestType.type]}</Typography>
-                    <Button
-                      variant="outlined"
-                      onClick={() => incrementGuest(guestType.type)}
-                      sx={{ minWidth: "30px", padding: "0" }}
-                    >
-                      +
-                    </Button>
-                  </Box>
-                </Box>
-              </MenuItem>
-            ))}
-          </Menu>
+                      <Typography>{guest.label}</Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <Button onClick={() => decrementGuest(guest.type)}>
+                          -
+                        </Button>
+                        <Typography>{guests[guest.type]}</Typography>
+                        <Button onClick={() => incrementGuest(guest.type)}>
+                          +
+                        </Button>
+                      </Box>
+                    </Box>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </>
+          )}
 
-          <Box sx={{ display: "flex", alignItems: "center", marginLeft: "8px" }}>
+          <Box sx={{ marginLeft: "8px" }}>
             <IconButton
               sx={{
-                backgroundColor: "red",
+                backgroundColor: "#FF385C",
                 color: "white",
-                "&:hover": { backgroundColor: "darkred" },
+                "&:hover": { backgroundColor: "#FF385E" },
                 width: 50,
                 height: 50,
               }}
