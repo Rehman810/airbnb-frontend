@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -16,16 +16,29 @@ import {
   Language as GlobalIcon,
   Person as PersonIcon,
 } from "@mui/icons-material";
+import LoginModal from "../Login/LoginModal";
 
 const Navbar = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // Modal State
 
+  // Handle Menu Open and Close
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  // Open and Close Login Modal
+  const handleLoginModalOpen = () => {
+    setIsLoginModalOpen(true);
+    handleMenuClose(); // Close the menu when opening modal
+  };
+
+  const handleLoginModalClose = () => {
+    setIsLoginModalOpen(false);
   };
 
   return (
@@ -40,6 +53,7 @@ const Navbar = () => {
           padding: "0 16px",
         }}
       >
+        {/* Logo */}
         <Box>
           <Typography
             variant="h6"
@@ -50,6 +64,8 @@ const Navbar = () => {
             airbnb
           </Typography>
         </Box>
+
+        {/* Right-Side Options */}
         <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Button
@@ -84,7 +100,7 @@ const Navbar = () => {
                 display: "flex",
                 alignItems: "center",
                 flexDirection: "row",
-                cursor: "pointer"
+                cursor: "pointer",
               }}
             >
               <IconButton>
@@ -101,23 +117,30 @@ const Navbar = () => {
                 <PersonIcon />
               </Avatar>
             </Box>
+
+            {/* Dropdown Menu */}
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
               keepMounted
             >
-              <MenuItem >Login</MenuItem>
-              <MenuItem >Sign up</MenuItem>
+              <MenuItem onClick={handleLoginModalOpen}>Login</MenuItem>
+              <MenuItem onClick={handleLoginModalOpen}>Sign up</MenuItem>
               <Divider />
-              <MenuItem >Gift cards</MenuItem>
-              <MenuItem >Airbnb your home</MenuItem>
-              <MenuItem >Host an experience</MenuItem>
-              <MenuItem >Help center</MenuItem>
+              <MenuItem>Gift cards</MenuItem>
+              <MenuItem>Airbnb your home</MenuItem>
+              <MenuItem>Host an experience</MenuItem>
+              <MenuItem>Help center</MenuItem>
             </Menu>
           </Box>
         </Box>
       </Toolbar>
+
+      {/* Login Modal */}
+      {isLoginModalOpen && (
+        <LoginModal open={isLoginModalOpen} onClose={handleLoginModalClose} />
+      )}
     </AppBar>
   );
 };
