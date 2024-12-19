@@ -4,6 +4,7 @@ import { Box, Grid } from '@mui/material'
 import Card from '../../components/cards/cards'
 import CardData from '../../data/data'
 
+
 const Home = () => {
   return (
     <div>
