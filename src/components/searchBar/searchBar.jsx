@@ -10,11 +10,11 @@ import {
   Button,
   useMediaQuery,
 } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import {
   Search as SearchIcon,
   LocationOn as LocationIcon,
 } from "@mui/icons-material";
+
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Icon1 from "../../assets/icons/icons1.png";
@@ -22,8 +22,10 @@ import Icon2 from "../../assets/icons/icons2.png";
 import Icon3 from "../../assets/icons/icons3.png";
 import "../../assets/styles/navbar.css"
 import { useAppContext } from "../../context/context";
+import { DatePicker } from 'antd';
 
 const SearchBar = () => {
+  const { RangePicker } = DatePicker;
   const [isVisible, setIsVisible] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [checkIn, setCheckIn] = useState(null);
@@ -174,47 +176,19 @@ const SearchBar = () => {
             <>
               <Divider orientation="vertical" flexItem />
 
-              <Box sx={{ flex: 1, padding: "15px 16px" }}>
-                <Typography
-                  variant="body2"
-                  sx={{ fontWeight: "bold", fontSize: "12px" }}
-                >
-                  Check in
-                </Typography>
-                <DatePicker
-                  value={checkIn}
-                  onChange={(newValue) => setCheckIn(newValue)}
-                  slotProps={{
-                    textField: {
-                      variant: "standard",
-                      InputProps: { disableUnderline: true },
-                      placeholder: "Add dates",
-                    },
-                  }}
-                />
-              </Box>
-
-              <Divider orientation="vertical" flexItem />
-
-              <Box sx={{ flex: 1, padding: "15px 16px" }}>
-                <Typography
-                  variant="body2"
-                  sx={{ fontWeight: "bold", fontSize: "12px" }}
-                >
-                  Check out
-                </Typography>
-                <DatePicker
-                  value={checkOut}
-                  onChange={(newValue) => setCheckOut(newValue)}
-                  slotProps={{
-                    textField: {
-                      variant: "standard",
-                      InputProps: { disableUnderline: true },
-                      placeholder: "Add dates",
-                    },
-                  }}
-                />
-              </Box>
+              <Box sx={{ flex: 2, padding: "15px 16px" }}>
+              <Typography
+                variant="body2"
+                sx={{ fontWeight: "bold", fontSize: "12px" }}
+              >
+                Check in / Check out
+              </Typography>
+              <RangePicker
+                onChange={(dates) => setDates(dates)}
+                style={{ width: "100%" }}
+                placeholder={["Check in", "Check out"]}
+              />
+            </Box>
 
               <Divider orientation="vertical" flexItem />
 
