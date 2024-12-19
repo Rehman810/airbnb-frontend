@@ -30,7 +30,7 @@ const LoginModal = ({ open, onClose }) => {
         Swal.fire({
           icon: "success",
           title: "Login Successful",
-          text: `Welcome back, ${data.userName}!`,
+          text: `Welcome , ${data.userName}!`,
         });
         onClose(); 
         setTimeout(() => {
