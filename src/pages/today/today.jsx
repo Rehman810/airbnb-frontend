@@ -1,11 +1,11 @@
 import React from 'react'
 
-const News = () => {
+const Today = () => {
   return (
     <div>
-      
+      today
     </div>
   )
 }
 
-export default News
+export default Today

@@ -181,7 +181,7 @@ const SearchBar = () => {
                 variant="body2"
                 sx={{ fontWeight: "bold", fontSize: "12px" }}
               >
-                Check in / Check out
+                Add Dates
               </Typography>
               <RangePicker
                 onChange={(dates) => setDates(dates)}

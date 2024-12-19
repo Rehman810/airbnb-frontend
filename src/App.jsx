@@ -1,10 +1,11 @@
 import React, { lazy, Suspense } from "react";
+import Loader from "./components/loader/loader";
 
 const Router = lazy(() => import("./config/router/router"));
 
 const App = () => {
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense fallback={<Loader open={true} />}>
       <Router />
     </Suspense>
   );

@@ -11,10 +11,10 @@ import {
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
-import { loginUser } from "../../config/ServiceApi/serviceApi"; // Assume `loginUser` is your API function.
+import { loginUser } from "../../config/ServiceApi/serviceApi";
 import { useNavigate } from "react-router-dom";
 
-const LoginModal = ({ open, onClose }) => {
+const LoginModal = ({ open, onClose, signUp, isSignUp }) => {
   const {
     register,
     handleSubmit,
@@ -22,32 +22,33 @@ const LoginModal = ({ open, onClose }) => {
   } = useForm();
   const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data) => {    
     try {
-      const res = await loginUser("signup", data.userName, data.email, data.password);
-      if (res) {
+      const res = await (signUp
+        ? loginUser("signup", {
+            userName: data.userName,
+            email: data.email,
+            password: data.password,
+          })
+        : loginUser("login", { email: data.email, password: data.password }));
+      if (res) {        
         localStorage.setItem("token", res.token);
         Swal.fire({
           icon: "success",
           title: "Login Successful",
-          text: `Welcome , ${data.userName}!`,
+          text: `Welcome ${res.user.userName}!`,
         });
-        onClose(); 
+        onClose();
         setTimeout(() => {
           navigate("/");
         }, 500);
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Login Failed",
-          text: "Invalid credentials. Please try again.",
-        });
       }
     } catch (error) {
+      onClose();
       Swal.fire({
         icon: "error",
-        title: "An Error Occurred",
-        text: "Please check your connection or try again later.",
+        title: "Login Failed",
+        text: "Invalid credentials. Please try again.",
       });
       console.error("Login Error:", error);
     }
@@ -75,7 +76,6 @@ const LoginModal = ({ open, onClose }) => {
           p: 3,
         }}
       >
-        {/* Header */}
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6" fontWeight="bold">
             Log in or sign up
@@ -88,23 +88,22 @@ const LoginModal = ({ open, onClose }) => {
           </Button>
         </Box>
 
-        {/* Welcome Message */}
         <Typography variant="h5" mt={2} mb={2} fontWeight="bold">
           Welcome to Airbnb
         </Typography>
 
-        {/* Name Field */}
-        <TextField
-          fullWidth
-          label="Name"
-          variant="outlined"
-          margin="normal"
-          {...register("userName", { required: "Name is required" })}
-          error={!!errors.userName}
-          helperText={errors.userName?.message}
-        />
+        {signUp && (
+          <TextField
+            fullWidth
+            label="Name"
+            variant="outlined"
+            margin="normal"
+            {...register("userName", { required: "Name is required" })}
+            error={!!errors.userName}
+            helperText={errors.userName?.message}
+          />
+        )}
 
-        {/* Email Field */}
         <TextField
           fullWidth
           label="Email"
@@ -115,7 +114,6 @@ const LoginModal = ({ open, onClose }) => {
           helperText={errors.email?.message}
         />
 
-        {/* Password Field */}
         <TextField
           fullWidth
           label="Password"
@@ -127,7 +125,6 @@ const LoginModal = ({ open, onClose }) => {
           helperText={errors.password?.message}
         />
 
-        {/* Continue Button */}
         <Button
           type="submit"
           fullWidth
@@ -144,10 +141,30 @@ const LoginModal = ({ open, onClose }) => {
           Continue
         </Button>
 
-        {/* Divider */}
+        {signUp ? (
+          <Typography>
+            Already have an account?{" "}
+            <span
+              style={{ color: "#1976d2", cursor: "pointer" }}
+              onClick={() => isSignUp(false)}
+            >
+              Log in
+            </span>
+          </Typography>
+        ) : (
+          <Typography>
+            Don’t have an account?{" "}
+            <span
+              style={{ color: "#1976d2", cursor: "pointer" }}
+              onClick={() => isSignUp(true)}
+            >
+              Sign up
+            </span>
+          </Typography>
+        )}
+
         <Divider>or</Divider>
 
-        {/* Social Buttons */}
         <Grid container spacing={2} mt={2}>
           <Grid item xs={12}>
             <SocialButton icon={<FaGoogle />} text="Continue with Google" />
@@ -164,7 +181,6 @@ const LoginModal = ({ open, onClose }) => {
   );
 };
 
-// Social Button Component
 const SocialButton = ({ icon, text }) => {
   return (
     <Button

@@ -5,9 +5,9 @@ import API_CONFIG from '../Api/Api';
 const { apiKey } = API_CONFIG;
 
 
-export const loginUser = async (endpoint ,userName,email, password) => {
+export const loginUser = async (endpoint , data) => {
   try {    
-    const response = await axios.post(`${apiKey}/${endpoint}`, { userName,email, password });    
+    const response = await axios.post(`${apiKey}/${endpoint}`, data);    
     return response.data;
   } catch (error) {
     // showErrorToast(error.message)

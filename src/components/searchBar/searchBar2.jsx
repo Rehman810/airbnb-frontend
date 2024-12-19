@@ -16,7 +16,7 @@ const SearchBar2 = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
   const { setSearchVisible } = useAppContext();
-  const isMobile = useMediaQuery("(max-width:900px)");
+  const isMobile = useMediaQuery("(max-width:1100px)");
 
   useEffect(() => {
     const handleScroll = () => {
