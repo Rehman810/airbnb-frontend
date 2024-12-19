@@ -15,6 +15,8 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import Img1 from "../../assets/images/img1.jpg"
 import Img2 from "../../assets/images/img2.jpg"
+import useDocumentTitle from "../../hooks/dynamicTitle/dynamicTitle";
+import { useNavigate } from "react-router-dom";
 
 const listings = [
   {
@@ -34,6 +36,9 @@ const listings = [
 ];
 
 const ListingPage = () => {
+    const navigate = useNavigate()
+    useDocumentTitle("Listings - Airbnb");
+
   return (
     <Box>
       <AppBar position="static" color="transparent" elevation={0}>
@@ -51,7 +56,7 @@ const ListingPage = () => {
                 startAdornment: <SearchIcon sx={{ marginRight: 1 }} />,
               }}
             />
-            <IconButton color="primary" sx={{ backgroundColor: "#f5f5f5", borderRadius: "50%" }}>
+            <IconButton color="primary" sx={{ backgroundColor: "#f5f5f5", borderRadius: "50%" }} onClick={()=>navigate("/listingSteps")}>
               <AddIcon sx={{color: "black"}}/>
             </IconButton>
           </Box>
