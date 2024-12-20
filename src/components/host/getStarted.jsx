@@ -10,19 +10,19 @@ const steps = [
     id: 1,
     title: ' 1. Tell us about your place',
     description: 'Share some basic info, like where it is and how many guests can stay.',
-    image: bed, // Replace with actual image path
+    image: bed, 
   },
   {
     id: 2,
     title: '2. Make it stand out',
     description: 'Add 5 or more photos plus a title and description—we’ll help you out.',
-    image: sofa, // Replace with actual image path
+    image: sofa, 
   },
   {
     id: 3,
     title: '3. Finish up and publish',
     description: 'Choose a starting price, verify a few details, then publish your listing.',
-    image: door, // Replace with actual image path
+    image: door, 
   },
 ];
 
