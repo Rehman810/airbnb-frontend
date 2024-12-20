@@ -10,27 +10,26 @@ const steps = [
     id: 1,
     title: ' 1. Tell us about your place',
     description: 'Share some basic info, like where it is and how many guests can stay.',
-    image: bed, // Replace with actual image path
+    image: bed, 
   },
   {
     id: 2,
     title: '2. Make it stand out',
     description: 'Add 5 or more photos plus a title and description—we’ll help you out.',
-    image: sofa, // Replace with actual image path
+    image: sofa,
   },
   {
     id: 3,
     title: '3. Finish up and publish',
     description: 'Choose a starting price, verify a few details, then publish your listing.',
-    image: door, // Replace with actual image path
+    image: door,
   },
 ];
 
 const GetStarted = () => {
   return (
-    <Box sx={{ py: 5, px: 5,}}>
+    <Box sx={{ py: 5, px: 5, paddingTop: "100px"}}>
       <Grid container spacing={8} alignItems="center">
-        {/* Heading Section */}
         <Grid item xs={12} md={6}>
           <Typography
             variant="h3"
@@ -40,7 +39,6 @@ const GetStarted = () => {
           </Typography>
         </Grid>
 
-        {/* Cards Section */}
         <Grid item xs={12} md={6}>
           <Grid container spacing={2}>
             {steps.map((step) => (
