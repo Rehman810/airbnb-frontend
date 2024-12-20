@@ -91,7 +91,7 @@ const steps = [
       />
     ),
   },
-  { label: "Step 3", content: <PropertyType type={propertyTypes} /> },
+  { label: "Step 3", content: <PropertyType type={propertyTypes} heading={"Which of these best describes your place?"}/> },
   { label: "Step 4", content: <PlaceType /> },
   { label: "Step 5", content: <MapLocation /> },
   { label: "Step 6", content: <AddressForm /> },
@@ -106,12 +106,13 @@ const steps = [
       />
     ),
   },
-  { label: "Step 9", content: <PropertyType type={amenities} /> },
+  { label: "Step 9", content: <PropertyType type={amenities} heading={"Tell guests what your place has to offer"} isAmenties={true}/> },
   { label: "Step 10", content: <ImageUploader /> },
   {
     label: "Step 11",
     content: (
       <DescriptionInput
+        isTitle={true}
         heading={"Now, let's give your house a title"}
         para={`Short titles work best. Have fun with it – you can always change it later.`}
         max={32}
@@ -143,7 +144,7 @@ const steps = [
       />
     ),
   },
-  { label: "Step 14", content: <Pricing heading={"Now, set a weekday base price"} para={`Tip: $20. You’ll set a weekend price next.`} pricing={20}/> },
+  { label: "Step 14", content: <Pricing isWeekDay={true} heading={"Now, set a weekday base price"} para={`Tip: $20. You’ll set a weekend price next.`} pricing={20}/> },
   { label: "Step 15", content: <Pricing heading={"Set a weekend price"} para={`Add a premium for Fridays and Saturdays.`} pricing={21}/> },
   { label: "Step 16", content: <ListingPreview /> },
 ];

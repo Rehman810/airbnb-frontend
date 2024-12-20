@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import HouseIcon from "@mui/icons-material/House";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import BarnIcon from "@mui/icons-material/StoreMallDirectory";
+import { useAppContext } from "../../context/context";
 
 const StyledPaper = styled(Paper)(({ theme, selected }) => ({
   padding: theme.spacing(2),
@@ -31,6 +32,12 @@ const propertyTypes = [
 
 const PlaceType = () => {
   const [selected, setSelected] = useState("House");
+  const { setPlaceType } = useAppContext();
+
+  const select = (type)=>{
+    setSelected(type);
+    setPlaceType(type)
+  }
 
   return (
     <Box sx={{ py: 5, px: 5 }}>
@@ -42,7 +49,7 @@ const PlaceType = () => {
           <Grid item xs={12} sm={12} md={8} key={property.name}>
             <StyledPaper
               selected={selected === property.name}
-              onClick={() => setSelected(property.name)}
+              onClick={() => select(property.name)}
               elevation={selected === property.name ? 6 : 1}
             >
               <Box>

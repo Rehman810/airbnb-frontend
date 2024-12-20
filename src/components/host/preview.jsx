@@ -10,12 +10,37 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useAppContext } from "../../context/context";
 
 const ListingCard = () => {
   const [isModalOpen, setModalOpen] = useState(false);
+  const { 
+    placeType, 
+    propertyType, 
+    address, 
+    amenties, 
+    guestCount, 
+    description, 
+    title, 
+    uploadedImages, 
+    weekDayPrice, 
+    weekendPrice 
+  } = useAppContext();
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
+
+
+  console.log("placeType:", placeType);
+    console.log("propertyType:", propertyType);
+    console.log("address:", address);
+    console.log("amenties:", amenties);
+    console.log("guestCount:", guestCount);
+    console.log("description:", description);
+    console.log("title:", title);
+    console.log("uploadedImages:", uploadedImages);
+    console.log("weekDayPrice:", weekDayPrice);
+    console.log("weekendPrice:", weekendPrice);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: 2, marginTop: "100px" }}>

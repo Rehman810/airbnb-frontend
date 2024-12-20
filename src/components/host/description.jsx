@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, TextField } from "@mui/material";
+import { useAppContext } from "../../context/context";
 
-const DescriptionInput = ({ max, heading, para, placholder}) => {    
-  const [description, setDescription] = useState("");
+const DescriptionInput = ({ max, heading, para, placholder, isTitle }) => {
+  const [description, setDescriptions] = useState("");
   const maxCharacters = max;
+  const { setDescription, setTitle } = useAppContext();
 
   useEffect(() => {
-    setDescription(placholder); 
-    }, [placholder]);
+    setDescriptions(placholder);
+  }, [placholder]);
 
   const handleChange = (e) => {
     if (e.target.value.length <= maxCharacters) {
-      setDescription(e.target.value);
+      setDescriptions(e.target.value);
+      isTitle ? setTitle(e.target.value) : setDescription(e.target.value);
     }
   };
 
@@ -40,7 +43,10 @@ const DescriptionInput = ({ max, heading, para, placholder}) => {
         }}
       />
 
-      <Typography variant="body2" sx={{ textAlign: "right", mt: 1, color: "#757575" }}>
+      <Typography
+        variant="body2"
+        sx={{ textAlign: "right", mt: 1, color: "#757575" }}
+      >
         {description.length}/{maxCharacters}
       </Typography>
     </Box>

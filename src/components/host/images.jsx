@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { Dropzone } from "@files-ui/react";
 import { Box, Typography, Grid, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useAppContext } from "../../context/context";
 
 const ImageUploader = () => {
   const [files, setFiles] = useState([]);
-
+  const { setUploadedImages } = useAppContext();
+  
   const updateFiles = (incomingFiles) => {
     const newFiles = incomingFiles.slice(0, 6); 
     setFiles(newFiles);
+    setUploadedImages(newFiles);
   };
 
   const removeFile = (index) => {

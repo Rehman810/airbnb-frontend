@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Grid, Divider, IconButton } from "@mui/material";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import { useAppContext } from "../../context/context";
 
 const CounterRow = ({ label, value, onDecrement, onIncrement }) => (
   <Grid
@@ -62,6 +63,11 @@ const GuestCounter = () => {
   const [guests, setGuests] = useState(4);
   const [bedrooms, setBedrooms] = useState(1);
   const [beds, setBeds] = useState(1);
+  const { setGuestCount } = useAppContext();
+
+  useEffect(() => {
+    setGuestCount({ guests, bedrooms, beds });
+  }, [guests, bedrooms, beds, setGuestCount]);
 
   return (
     <Box sx={{ p: 4, width: "600px", margin: "auto", backgroundColor: "#fff" }}>

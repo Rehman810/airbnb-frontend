@@ -7,10 +7,12 @@ import {
   InputAdornment,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import { useAppContext } from "../../context/context";
 
-const PriceSection = ({pricing, heading, para}) => {
-    const [price, setPrice] = useState(20); 
+const PriceSection = ({pricing, heading, para, isWeekDay}) => {
+  const [price, setPrice] = useState(20); 
   const [isEditable, setIsEditable] = useState(false);
+  const { setWeekEndPrice, setWeekDayPrice } = useAppContext();
 
   useEffect(() => {
     setPrice(pricing); 
@@ -18,7 +20,8 @@ const PriceSection = ({pricing, heading, para}) => {
 
   const handlePriceChange = (event) => {
     const value = parseFloat(event.target.value) || 0;
-    setPrice(value);
+    setPrice(value);    
+    isWeekDay ? setWeekDayPrice(value) : setWeekEndPrice(value)
   };
 
   const toggleEditable = () => {

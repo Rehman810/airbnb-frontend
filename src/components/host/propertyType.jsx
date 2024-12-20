@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography, Grid, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useAppContext } from "../../context/context";
 
 const StyledPaper = styled(Paper)(({ theme, selected }) => ({
   padding: theme.spacing(3),
@@ -15,20 +16,26 @@ const StyledPaper = styled(Paper)(({ theme, selected }) => ({
   },
 }));
 
-const PropertyType = ({type}) => {
+const PropertyType = ({type, heading, isAmenties}) => {
   const [selected, setSelected] = useState("House");
+  const { setAmenties, setPropertyType } = useAppContext();
+
+  const select = (type)=>{
+    setSelected(type);
+    isAmenties ? setAmenties(type) : setPropertyType(type)
+  }
 
   return (
     <Box sx={{ py: 5, px: 3, paddingTop: "150px" }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom textAlign="center">
-        Which of these best describes your place?
+        {heading}
       </Typography>
       <Grid container spacing={4} justifyContent="center">
         {type.map((property) => (
           <Grid item xs={12} sm={4} key={property.name}>
             <StyledPaper
               selected={selected === property.name}
-              onClick={() => setSelected(property.name)}
+              onClick={() => select(property.name)}
               elevation={selected === property.name ? 6 : 2}
             >
               {property.icon}
