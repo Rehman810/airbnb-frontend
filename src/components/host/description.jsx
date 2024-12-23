@@ -9,6 +9,7 @@ const DescriptionInput = ({ max, heading, para, placholder, isTitle }) => {
 
   useEffect(() => {
     setDescriptions(placholder);
+    isTitle ? setTitle(placholder) : setDescription(placholder);
   }, [placholder]);
 
   const handleChange = (e) => {

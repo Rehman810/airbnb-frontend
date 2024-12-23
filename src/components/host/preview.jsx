@@ -30,17 +30,20 @@ const ListingCard = () => {
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
 
+    // console.log("placeType:", placeType);
+    // console.log("propertyType:", propertyType);
+    // console.log("address:", address);
+    // console.log("amenties:", amenties);
+    // console.log("guestCount:", guestCount);
+    // console.log("description:", description);
+    // console.log("title:", title);
+    // console.log("uploadedImages:", uploadedImages);
+    // console.log("weekDayPrice:", weekDayPrice);
+    // console.log("weekendPrice:", weekendPrice);
 
-  console.log("placeType:", placeType);
-    console.log("propertyType:", propertyType);
-    console.log("address:", address);
-    console.log("amenties:", amenties);
-    console.log("guestCount:", guestCount);
-    console.log("description:", description);
-    console.log("title:", title);
-    console.log("uploadedImages:", uploadedImages);
-    console.log("weekDayPrice:", weekDayPrice);
-    console.log("weekendPrice:", weekendPrice);
+    const formatAddress = (address) => {
+      return `${address?.flat}, ${address?.streetAddress}, ${address?.area}, ${address?.city}, ${address?.postcode}, ${address?.country}`;
+    };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", p: 2, marginTop: "100px" }}>
@@ -66,7 +69,7 @@ const ListingCard = () => {
         <CardMedia
           component="img"
           height="250"
-          image="https://via.placeholder.com/400x250"
+          image={URL.createObjectURL(uploadedImages[0].file)}
           alt="Listing Image"
           sx={{ cursor: "pointer" }}
           onClick={openModal}
@@ -92,16 +95,19 @@ const ListingCard = () => {
         <CardContent sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
           <Box>
             <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-              dsz
+              {title}
             </Typography>
-            <Typography
+            {/* <Typography
               variant="body2"
               sx={{ textDecoration: "line-through", color: "gray", fontSize: "14px" }}
             >
               $20
+            </Typography> */}
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            <Typography component="span" variant="body1"> Week Day </Typography>${weekDayPrice} <Typography component="span" variant="body2">/ night</Typography>
             </Typography>
-            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-              $16 <Typography component="span" variant="body2">/ night</Typography>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            <Typography component="span" variant="body1"> Week End </Typography>${weekendPrice} <Typography component="span" variant="body2">/ night</Typography>
             </Typography>
           </Box>
           <Typography
@@ -195,29 +201,29 @@ const ListingCard = () => {
               <CardMedia
                 component="img"
                 height="200"
-                image="https://via.placeholder.com/400x250"
+                image={URL.createObjectURL(uploadedImages[0].file)}
                 alt="Listing Image"
                 sx={{ borderRadius: 2 }}
               />
             </Box>
             <Box sx={{ flex: 2 }}>
               <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
-                dsz
+                {title}
               </Typography>
               <Typography variant="body2" sx={{ color: "gray", mb: 2 }}>
                 Place to stay in a home hosted by Abdul
               </Typography>
               <Typography variant="body2" sx={{ color: "gray", mb: 2 }}>
-                4 guests · 1 bedroom · 1 bed · 2 bathrooms
+                {`${guestCount.guests} guests · ${guestCount.bedrooms} bedroom · ${guestCount.beds} bed`}
               </Typography>
               <Typography variant="body2" sx={{ mb: 2 }}>
-                You'll have a great time at this comfortable place to stay.
+                {description}
               </Typography>
               <Typography variant="subtitle2" sx={{ fontWeight: "bold", mb: 1 }}>
                 Location
               </Typography>
               <Typography variant="body2" sx={{ color: "gray" }}>
-                Karachi, Karachi City, Sindh, Pakistan
+                {formatAddress(address)}
               </Typography>
             </Box>
           </Box>

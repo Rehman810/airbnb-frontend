@@ -17,7 +17,7 @@ export const AppProvider = ({ children }) => {
   const [title, setTitle] = useState("");
   const [uploadedImages, setUploadedImages] = useState([]);
   const [weekDayPrice, setWeekDayPrice] = useState();
-  const [weekendPrice, setWeekEndPrice] = useState("");
+  const [weekendPrice, setWeekEndPrice] = useState();
 
   const value = {
     searchVisible,

@@ -25,9 +25,9 @@ const StyledPaper = styled(Paper)(({ theme, selected }) => ({
 }));
 
 const propertyTypes = [
-  { name: "House", text: "Guests have the whole place to themselves", icon: <HouseIcon fontSize="large" /> },
-  { name: "Flat/apartment", text: "Guests have the whole place to themselves", icon: <ApartmentIcon fontSize="large" /> },
-  { name: "Barn", text: "Guests have the whole place to themselves", icon: <BarnIcon fontSize="large" /> },
+  { name: "Entire Place", text: "Guests have the whole place to themselves", icon: <HouseIcon fontSize="large" /> },
+  { name: "A Room", text: "Guests have the whole place to themselves", icon: <ApartmentIcon fontSize="large" /> },
+  { name: "A Shared Room", text: "Guests have the whole place to themselves", icon: <BarnIcon fontSize="large" /> },
 ];
 
 const PlaceType = () => {

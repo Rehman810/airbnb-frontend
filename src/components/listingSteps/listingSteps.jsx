@@ -41,13 +41,16 @@ import ImageUploader from "../host/images";
 import DescriptionInput from "../host/description";
 import Pricing from "../host/pricing";
 import ListingPreview from "../host/preview";
+import { useAppContext } from "../../context/context";
+import { postData } from "../../config/ServiceApi/serviceApi";
+import { useNavigate } from "react-router-dom";
 
 const GetStarted = lazy(() => import("../../components/host/getStarted"));
 
 const propertyTypes = [
   { name: "House", icon: <HouseIcon fontSize="large" /> },
-  { name: "Flat/apartment", icon: <ApartmentIcon fontSize="large" /> },
-  { name: "Barn", icon: <BarnIcon fontSize="large" /> },
+  { name: "Apartment", icon: <ApartmentIcon fontSize="large" /> },
+  { name: "Shared Room", icon: <BarnIcon fontSize="large" /> },
   { name: "Bed & breakfast", icon: <BreakfastDiningIcon fontSize="large" /> },
   { name: "Boat", icon: <DirectionsBoatIcon fontSize="large" /> },
   { name: "Cabin", icon: <CabinIcon fontSize="large" /> },
@@ -58,23 +61,23 @@ const propertyTypes = [
 
 const amenities = [
   { name: "Wifi", icon: <WifiIcon fontSize="large" /> },
-  { name: "Tv", icon: <TvIcon fontSize="large" /> },
-  { name: "Kitchen", icon: <KitchenIcon fontSize="large" /> },
+  { name: "Pool", icon: <TvIcon fontSize="large" /> },
+  { name: "Gym", icon: <KitchenIcon fontSize="large" /> },
+  // {
+  //   name: "Washing Machine",
+  //   icon: <LocalLaundryServiceIcon fontSize="large" />,
+  // },
+  // {
+  //   name: "Free parking on premises",
+  //   icon: <DirectionsCarIcon fontSize="large" />,
+  // },
   {
-    name: "Washing Machine",
-    icon: <LocalLaundryServiceIcon fontSize="large" />,
-  },
-  {
-    name: "Free parking on premises",
-    icon: <DirectionsCarIcon fontSize="large" />,
-  },
-  {
-    name: "Paid parking on premises",
+    name: "Parking",
     icon: <LocalParkingIcon fontSize="large" />,
   },
-  { name: "Air conditioning", icon: <AcUnitIcon fontSize="large" /> },
-  { name: "Dedicated workspace", icon: <WorkIcon fontSize="large" /> },
-  { name: "Castle", icon: <CastleIcon fontSize="large" /> },
+  { name: "Air Conditioning", icon: <AcUnitIcon fontSize="large" /> },
+  // { name: "Dedicated workspace", icon: <WorkIcon fontSize="large" /> },
+  // { name: "Castle", icon: <CastleIcon fontSize="large" /> },
 ];
 
 const steps = [
@@ -91,7 +94,15 @@ const steps = [
       />
     ),
   },
-  { label: "Step 3", content: <PropertyType type={propertyTypes} heading={"Which of these best describes your place?"}/> },
+  {
+    label: "Step 3",
+    content: (
+      <PropertyType
+        type={propertyTypes}
+        heading={"Which of these best describes your place?"}
+      />
+    ),
+  },
   { label: "Step 4", content: <PlaceType /> },
   { label: "Step 5", content: <MapLocation /> },
   { label: "Step 6", content: <AddressForm /> },
@@ -106,7 +117,16 @@ const steps = [
       />
     ),
   },
-  { label: "Step 9", content: <PropertyType type={amenities} heading={"Tell guests what your place has to offer"} isAmenties={true}/> },
+  {
+    label: "Step 9",
+    content: (
+      <PropertyType
+        type={amenities}
+        heading={"Tell guests what your place has to offer"}
+        isAmenties={true}
+      />
+    ),
+  },
   { label: "Step 10", content: <ImageUploader /> },
   {
     label: "Step 11",
@@ -144,18 +164,88 @@ const steps = [
       />
     ),
   },
-  { label: "Step 14", content: <Pricing isWeekDay={true} heading={"Now, set a weekday base price"} para={`Tip: $20. You’ll set a weekend price next.`} pricing={20}/> },
-  { label: "Step 15", content: <Pricing heading={"Set a weekend price"} para={`Add a premium for Fridays and Saturdays.`} pricing={21}/> },
+  {
+    label: "Step 14",
+    content: (
+      <Pricing
+        isWeekDay={true}
+        heading={"Now, set a weekday base price"}
+        para={`Tip: $20. You’ll set a weekend price next.`}
+        pricing={20}
+      />
+    ),
+  },
+  {
+    label: "Step 15",
+    content: (
+      <Pricing
+        heading={"Set a weekend price"}
+        para={`Add a premium for Fridays and Saturdays.`}
+        pricing={21}
+      />
+    ),
+  },
   { label: "Step 16", content: <ListingPreview /> },
 ];
 
 function ListingSteps() {
+  const {
+    placeType,
+    propertyType,
+    address,
+    amenties,
+    guestCount,
+    description,
+    title,
+    uploadedImages,
+    weekDayPrice,
+    weekendPrice,
+  } = useAppContext();
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate()
   useDocumentTitle("Create your listing - Airbnb");
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
+  const sendDataToApi = async () => {
+    const formData = new FormData();
+  
+    formData.append("placeType", propertyType || "House");
+    formData.append("roomType", placeType || "Entire Place");
+    formData.append("street", address?.streetAddress || "");
+    formData.append("flat", address?.flat || "");
+    formData.append("city", address?.city || "");
+    formData.append("town", address?.area || "");
+    formData.append("postcode", address?.postcode || "");
+    formData.append("guestCapacity", guestCount?.guests || 0);
+    formData.append("bedrooms", guestCount?.bedrooms || 0);
+    formData.append("beds", guestCount?.beds || 0);
+    formData.append("amenities", JSON.stringify(amenties || []));
+    formData.append("title", title || "Untitled Listing");
+    formData.append("description", description || "No description provided.");
+    formData.append("weekdayPrice", weekDayPrice || 0);
+    formData.append("weekendPrice", weekendPrice || 0);
+    if (uploadedImages.length > 0) {
+      uploadedImages.forEach((image) => {
+        formData.append("photos", image.file);
+      });
+    }
+  
+    try {
+      const response = await postData("listings", formData, token, true);
+      console.log("API Response:", response);
+      navigate("/hosting/listings")
+    } catch (error) {
+      console.error("API Error:", error.message);
+    }
+  };
+  
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (activeStep === steps.length - 1) {
+      sendDataToApi();
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
   };
 
   const handleBack = () => {
@@ -164,7 +254,6 @@ function ListingSteps() {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      {/* Navbar */}
       <AppBar
         position="static"
         sx={{ backgroundColor: "white", color: "black" }}
@@ -236,10 +325,10 @@ function ListingSteps() {
             <Button
               size="small"
               onClick={handleNext}
-              disabled={activeStep === steps.length - 1}
+              // disabled={activeStep === steps.length - 1}
               color="black"
             >
-              Next
+             {activeStep === steps.length - 1 ? "Finish" : "Next"}
               {theme.direction === "rtl" ? (
                 <KeyboardArrowLeft />
               ) : (

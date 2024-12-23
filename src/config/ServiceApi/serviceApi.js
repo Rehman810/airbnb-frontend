@@ -110,21 +110,22 @@ export const updateDataById = async (endpoint, token, id, data, id2) => {
   }
 };
 
-export const postData = async (endpoint, data, token) => {
+export const postData = async (endpoint, data, token, isMultipart = false) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      ...(isMultipart
+        ? {}
+        : { "Content-Type": "application/json" }),
     },
   };
 
   try {
     const response = await axios.post(`${apiKey}/${endpoint}`, data, config);
-    emitEvent('send_message', response.data);
     return response.data;
   } catch (error) {
-    // showErrorToast(error.message)
-    throw new Error('Error posting data: ' + error);
+    console.error("Error posting data:", error.response?.data || error.message);
+    throw new Error("Error posting data: " + (error.response?.data?.message || error.message));
   }
 };
 

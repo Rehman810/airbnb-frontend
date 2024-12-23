@@ -16,12 +16,13 @@ const PriceSection = ({pricing, heading, para, isWeekDay}) => {
 
   useEffect(() => {
     setPrice(pricing); 
+    isWeekDay ? setWeekDayPrice(pricing) : setWeekEndPrice(pricing)    
   }, [pricing]);
 
   const handlePriceChange = (event) => {
     const value = parseFloat(event.target.value) || 0;
     setPrice(value);    
-    isWeekDay ? setWeekDayPrice(value) : setWeekEndPrice(value)
+    isWeekDay ? setWeekDayPrice(value) : setWeekEndPrice(value)    
   };
 
   const toggleEditable = () => {
