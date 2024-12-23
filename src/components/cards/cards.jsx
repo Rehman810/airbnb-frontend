@@ -12,6 +12,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import StarIcon from "@mui/icons-material/Star";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useNavigate } from "react-router-dom";
 
 const CardItem = ({ data }) => {
   const settings = {
@@ -25,6 +26,8 @@ const CardItem = ({ data }) => {
     arrows: false,
   };
 
+  const navigate = useNavigate()
+
   return (
     <Card
       sx={{
@@ -35,7 +38,9 @@ const CardItem = ({ data }) => {
         boxShadow: 3,
         overflow: "hidden",
         "&:hover": { boxShadow: 6 },
+        cursor: "pointer"
       }}
+      onClick={()=>navigate(`/rooms/${data._id}`)}
     >
       <IconButton
         sx={{
@@ -52,7 +57,7 @@ const CardItem = ({ data }) => {
 
       <Box sx={{ position: "relative" }}>
         <Slider {...settings}>
-          {data.images.map((img, index) => (
+          {data.photos.map((img, index) => (
             <Box key={index} sx={{ height: 220, overflow: "hidden" }}>
               <img
                 src={img}
@@ -63,33 +68,35 @@ const CardItem = ({ data }) => {
           ))}
         </Slider>
 
-        <Box
-          sx={{
-            position: "absolute",
-            bottom: 10,
-            left: 10,
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            backgroundColor: "rgba(255, 255, 255, 0.9)",
-            borderRadius: "8px",
-            px: 1.5,
-            py: 2.5,
-            boxShadow: 1,
-            transform: "perspective(600px) rotateY(0deg)",
-            transformOrigin: "left center",
-            transition: "transform 0.5s ease",
-            "&:hover": {
-              transform: "perspective(200px) rotateY(-20deg)",
-            },
-          }}
-        >
-          <Avatar
-            src={data.profileImg}
-            alt="Host"
-            sx={{ width: 40, height: 40 }}
-          />
-        </Box>
+        {data?.host && (
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 10,
+              left: 10,
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              backgroundColor: "rgba(255, 255, 255, 0.9)",
+              borderRadius: "8px",
+              px: 1.5,
+              py: 2.5,
+              boxShadow: 1,
+              transform: "perspective(600px) rotateY(0deg)",
+              transformOrigin: "left center",
+              transition: "transform 0.5s ease",
+              "&:hover": {
+                transform: "perspective(200px) rotateY(-20deg)",
+              },
+            }}
+          >
+            <Avatar
+              src={data.profileImg}
+              alt="Host"
+              sx={{ width: 40, height: 40 }}
+            />
+          </Box>
+        )}
       </Box>
 
       {data.guestFavourite && (

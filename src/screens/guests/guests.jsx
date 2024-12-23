@@ -15,7 +15,7 @@ const Guests = () => {
           <Route path="/" element={<Home />} />
 
            {/* Rooms Page */}
-           <Route path="/rooms" element={<Rooms />} />
+           <Route path="/rooms/:roomId" element={<Rooms />} />
         </Routes>
         <Footer />
     </>

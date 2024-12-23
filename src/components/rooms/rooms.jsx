@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -13,67 +13,65 @@ import {
 import { DatePicker } from "antd";
 import "antd/dist/reset.css";
 import LeafletMap from "../map/map";
-import Img from "../../assets/images/img2.jpg"
+import Img from "../../assets/images/img2.jpg";
 import HostSection from "../hostSection/hostSection";
 import Amenities from "../amenities/amenities";
+import { useParams } from "react-router-dom";
+import { fetchDataById } from "../../config/ServiceApi/serviceApi";
 
 const { RangePicker } = DatePicker;
 
 const backendAmenities = ["Wifi", "TV", "Parking", "Air Conditioning"];
 
-
 const RoomPage = () => {
+  const [place, setPlace] = useState({});
+  const { roomId } = useParams();
+
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const response = await fetchDataById("listing", token, roomId);
+        if (response && response.listing) {
+          setPlace(response.listing);
+        } else {
+          console.error("Unexpected response format:", response);
+        }
+      } catch (error) {
+        console.error("Failed to fetch options:", error);
+      }
+    };
+    fetchOptions();
+  }, []);
+
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
       <Typography variant="h4" fontWeight="bold" gutterBottom>
-        "The Willow" Stunning Location, Amazing Views
+        {place.title}
       </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <CardMedia
-            component="img"
-            height="500"
-            image={Img}
-            alt="Cover Image"
-            sx={{ borderRadius: 2 }}
-          />
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <CardMedia
-            component="img"
-            height="150"
-            image={Img}
-            alt="Small Image 1"
-            sx={{ borderRadius: 2 }}
-          />
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <CardMedia
-            component="img"
-            height="150"
-            image={Img}
-            alt="Small Image 2"
-            sx={{ borderRadius: 2 }}
-          />
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <CardMedia
-            component="img"
-            height="150"
-            image={Img}
-            alt="Small Image 3"
-            sx={{ borderRadius: 2 }}
-          />
-        </Grid>
-        <Grid item xs={6} sm={3}>
-          <CardMedia
-            component="img"
-            height="150"
-            image={Img}
-            alt="Small Image 4"
-            sx={{ borderRadius: 2 }}
-          />
-        </Grid>
+        {place && place.photos && place.photos.length > 0 && (
+          <Grid item xs={12}>
+            <CardMedia
+              component="img"
+              height="500"
+              image={place.photos[0]}
+              alt="Cover Image"
+              sx={{ borderRadius: 2 }}
+            />
+          </Grid>
+        )}
+        {place?.photos?.map((a, index) => (
+          <Grid item xs={6} sm={3} key={index}>
+            <CardMedia
+              component="img"
+              height="150"
+              image={a}
+              alt="Small Image 1"
+              sx={{ borderRadius: 2 }}
+            />
+          </Grid>
+        ))}
       </Grid>
 
       <Grid container spacing={2} sx={{ mt: 3 }}>
@@ -82,18 +80,20 @@ const RoomPage = () => {
             Farm stay in Pembroke, United Kingdom
           </Typography>
           <Typography variant="body2" gutterBottom>
-            <strong>Guest:</strong> 4 | <strong>Beds:</strong> 2 | <strong>Bedrooms:</strong> 1
+            <strong>Guest:</strong> {place.guestCapacity} |{" "}
+            <strong>Beds:</strong> {place.guestCapacity} |{" "}
+            <strong>Bedrooms:</strong> 1
           </Typography>
           <Divider sx={{ my: 2 }} />
           <Typography variant="body1" gutterBottom>
-            The Willow is the ultimate luxury pod stay located on a farm, offering stunning views of the countryside.
+            {place.description}
           </Typography>
           <Divider sx={{ my: 2 }} />
 
           <Typography variant="h6" gutterBottom>
             Amenities
           </Typography>
-          <Amenities backendAmenities={backendAmenities} />
+          {/* <Amenities backendAmenities={place.amenities} /> */}
 
           <Divider sx={{ my: 2 }} />
           <Typography variant="h6" sx={{ mt: 2 }}>
@@ -103,7 +103,8 @@ const RoomPage = () => {
             <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
               <Avatar sx={{ mr: 2 }}>C</Avatar>
               <Typography>
-                <strong>Charlotte:</strong> Amazing stay! Everything was perfect.
+                <strong>Charlotte:</strong> Amazing stay! Everything was
+                perfect.
               </Typography>
             </Box>
           </Box>
@@ -136,14 +137,13 @@ const RoomPage = () => {
       </Grid>
 
       <Box sx={{ mt: 4 }}>
-      <Typography variant="h6">Location</Typography>
-      <LeafletMap
-        latitude={24.8607}
-        longitude={67.0011}
-        popupText="Karachi, Pakistan"
-      />
-    </Box>
-
+        <Typography variant="h6">Location</Typography>
+        <LeafletMap
+          latitude={24.8607}
+          longitude={67.0011}
+          popupText="Karachi, Pakistan"
+        />
+      </Box>
 
       <Box sx={{ mt: 4 }}>
         <Divider sx={{ mb: 2 }} />

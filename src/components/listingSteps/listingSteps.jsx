@@ -35,12 +35,6 @@ import KitchenIcon from "@mui/icons-material/Kitchen";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
 
-import WifiIcon from "@mui/icons-material/Wifi";
-import TvIcon from "@mui/icons-material/Tv";
-import KitchenIcon from "@mui/icons-material/Kitchen";
-import LocalParkingIcon from "@mui/icons-material/LocalParking";
-import AcUnitIcon from "@mui/icons-material/AcUnit";
-
 import ImageUploader from "../host/images";
 import DescriptionInput from "../host/description";
 import Pricing from "../host/pricing";
@@ -207,10 +201,12 @@ function ListingSteps() {
     formData.append("city", address?.city || "");
     formData.append("town", address?.area || "");
     formData.append("postcode", address?.postcode || "");
+    formData.append("latitude", address?.latitude || null);
+    formData.append("longitude", address?.longitude || null);
     formData.append("guestCapacity", guestCount?.guests || 0);
     formData.append("bedrooms", guestCount?.bedrooms || 0);
     formData.append("beds", guestCount?.beds || 0);
-    formData.append("amenities", JSON.stringify(amenties || []));
+    formData.append("amenities", amenties || []);
     formData.append("title", title || "Untitled Listing");
     formData.append("description", description || "No description provided.");
     formData.append("weekdayPrice", weekDayPrice || 0);
@@ -224,12 +220,11 @@ function ListingSteps() {
     try {
       const response = await postData("listings", formData, token, true);
       console.log("API Response:", response);
-      navigate("/hosting/listings")
+      // navigate("/hosting/listings")
     } catch (error) {
       console.error("API Error:", error.message);
     }
   };
-  
 
   const handleNext = () => {
     if (activeStep === steps.length - 1) {

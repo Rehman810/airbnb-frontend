@@ -18,7 +18,7 @@ const StyledPaper = styled(Paper)(({ theme, selected }) => ({
 
 const PropertyType = ({type, heading, isAmenties}) => {
   const [selected, setSelected] = useState("House");
-  const { setAmenties, setPropertyType } = useAppContext();
+  const { setAmenties, setPropertyType } = useAppContext([]);
 
   const select = (type)=>{
     setSelected(type);
