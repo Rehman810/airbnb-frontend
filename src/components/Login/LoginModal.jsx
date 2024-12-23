@@ -31,17 +31,18 @@ const LoginModal = ({ open, onClose, signUp, isSignUp }) => {
             password: data.password,
           })
         : loginUser("login", { email: data.email, password: data.password }));
-      if (res) {        
+      if (res) {                
         localStorage.setItem("token", res.token);
+        localStorage.setItem("user", JSON.stringify(res.user));
         Swal.fire({
           icon: "success",
           title: "Login Successful",
           text: `Welcome ${res.user.userName}!`,
         });
         onClose();
-        setTimeout(() => {
-          navigate("/");
-        }, 500);
+        // setTimeout(() => {
+        //   navigate("/");
+        // }, 500);
       }
     } catch (error) {
       onClose();
