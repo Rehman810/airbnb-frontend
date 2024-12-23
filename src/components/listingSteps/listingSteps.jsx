@@ -32,11 +32,15 @@ import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import WifiIcon from "@mui/icons-material/Wifi";
 import TvIcon from "@mui/icons-material/Tv";
 import KitchenIcon from "@mui/icons-material/Kitchen";
-import LocalLaundryServiceIcon from "@mui/icons-material/LocalLaundryService";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import LocalParkingIcon from "@mui/icons-material/LocalParking";
 import AcUnitIcon from "@mui/icons-material/AcUnit";
-import WorkIcon from "@mui/icons-material/Work";
+
+import WifiIcon from "@mui/icons-material/Wifi";
+import TvIcon from "@mui/icons-material/Tv";
+import KitchenIcon from "@mui/icons-material/Kitchen";
+import LocalParkingIcon from "@mui/icons-material/LocalParking";
+import AcUnitIcon from "@mui/icons-material/AcUnit";
+
 import ImageUploader from "../host/images";
 import DescriptionInput from "../host/description";
 import Pricing from "../host/pricing";
@@ -61,23 +65,10 @@ const propertyTypes = [
 
 const amenities = [
   { name: "Wifi", icon: <WifiIcon fontSize="large" /> },
-  { name: "Pool", icon: <TvIcon fontSize="large" /> },
+  { name: "TV", icon: <TvIcon fontSize="large" /> },
   { name: "Gym", icon: <KitchenIcon fontSize="large" /> },
-  // {
-  //   name: "Washing Machine",
-  //   icon: <LocalLaundryServiceIcon fontSize="large" />,
-  // },
-  // {
-  //   name: "Free parking on premises",
-  //   icon: <DirectionsCarIcon fontSize="large" />,
-  // },
-  {
-    name: "Parking",
-    icon: <LocalParkingIcon fontSize="large" />,
-  },
+  { name: "Parking", icon: <LocalParkingIcon fontSize="large" /> },
   { name: "Air Conditioning", icon: <AcUnitIcon fontSize="large" /> },
-  // { name: "Dedicated workspace", icon: <WorkIcon fontSize="large" /> },
-  // { name: "Castle", icon: <CastleIcon fontSize="large" /> },
 ];
 
 const steps = [
