@@ -180,6 +180,9 @@ const RoomPage = () => {
     setLoadingImages(false);
   };
 
+  // console.log(place.longitude, place.latitude);
+  
+
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
       {loadingText ? (
@@ -432,9 +435,9 @@ const RoomPage = () => {
       <Box sx={{ mt: 4 }}>
         <Typography variant="h6">Location</Typography>
         <LeafletMap
-          latitude={24.8607}
-          longitude={67.0011}
-          popupText="Karachi, Pakistan"
+          latitude={place.latitude ? place.latitude : 24.8607}
+          longitude={place.longitude ? place.longitude :67.0011}
+          // popupText="Karachi, Pakistan"
         />
       </Box>
 

@@ -24,11 +24,16 @@ const ListingCard = () => {
     title, 
     uploadedImages, 
     weekDayPrice, 
-    weekendPrice 
+    weekendPrice ,
+    contextLatitude,
+    contextLongitude
   } = useAppContext();
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
+
+  console.log(contextLatitude, contextLongitude);
+  
 
     console.log("placeType:", placeType);
     console.log("propertyType:", propertyType);

@@ -10,11 +10,13 @@ import {
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useAppContext } from "../../context/context";
+import LeafletMap from "../map/map";
 
 const AddressForm = () => {
   const [showLocation, setShowLocation] = React.useState(true);
   const [country, setCountry] = React.useState("Pakistan - PK");
-  const { setAddress } = useAppContext();
+  const { setAddress, contextLatitude, contextLongitude } = useAppContext();
+console.log(contextLatitude, contextLongitude);
 
   const [addressData, setAddressData] = React.useState({
     country: "Pakistan - PK",
@@ -108,38 +110,14 @@ const AddressForm = () => {
         </Typography>
       </Typography>
 
-      {showLocation && (
-        <Paper
-          sx={{
-            height: 300,
-            mt: 3,
-            borderRadius: 3,
-            overflow: "hidden",
-            position: "relative",
-          }}
-        >
-          <Box
-            component="img"
-            src="https://maps.googleapis.com/maps/api/staticmap?center=Karachi,Sindh&zoom=15&size=600x300&markers=color:red%7Clabel:H%7CKarachi,Sindh&key=YOUR_API_KEY"
-            alt="Map"
-            sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+      <LeafletMap
+      steps={true}
+            latitude={contextLatitude}
+            longitude={contextLongitude}
+            // popupText="Karachi, Pakistan"
           />
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              backgroundColor: "primary.main",
-              color: "#fff",
-              borderRadius: "50%",
-              p: 1.5,
-            }}
-          >
-            <LocationOnIcon fontSize="large" />
-          </Box>
-        </Paper>
-      )}
+
+     
     </Box>
   );
 };

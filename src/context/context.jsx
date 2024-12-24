@@ -18,6 +18,8 @@ export const AppProvider = ({ children }) => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [weekDayPrice, setWeekDayPrice] = useState();
   const [weekendPrice, setWeekEndPrice] = useState();
+  const [contextLatitude, setContextLatitude] = useState();
+  const [contextLongitude, setContextLongitude] = useState();
 
   const resetListingState = () => {
     setPlaceType(null);
@@ -30,6 +32,8 @@ export const AppProvider = ({ children }) => {
     setUploadedImages([]);
     setWeekDayPrice(null);
     setWeekEndPrice(null);
+    setContextLatitude(null);
+    setContextLongitude(null);
   };
 
   const value = {
@@ -55,7 +59,11 @@ export const AppProvider = ({ children }) => {
     setWeekDayPrice,
     weekendPrice,
     setWeekEndPrice,
-    resetListingState
+    resetListingState,
+    setContextLatitude,
+    setContextLongitude,
+    contextLatitude,
+    contextLongitude
   };
 
   return (

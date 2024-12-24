@@ -43,6 +43,7 @@ import { useAppContext } from "../../context/context";
 import { postData } from "../../config/ServiceApi/serviceApi";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import LeafletMap from "../map/map2";
 
 const GetStarted = lazy(() => import("../../components/host/getStarted"));
 
@@ -90,7 +91,13 @@ const steps = [
     ),
   },
   { label: "Step 4", content: <PlaceType /> },
-  { label: "Step 5", content: <MapLocation /> },
+  {
+    label: "Step 5",
+    content: (
+      <LeafletMap
+      />
+    ),
+  },
   { label: "Step 6", content: <AddressForm /> },
   { label: "Step 7", content: <GuestCounter /> },
   {
@@ -187,6 +194,8 @@ function ListingSteps() {
     weekDayPrice,
     weekendPrice,
     resetListingState,
+    contextLatitude,
+    contextLongitude
   } = useAppContext();
 
   const token = localStorage.getItem("token");
@@ -220,8 +229,8 @@ function ListingSteps() {
     formData.append("city", address?.city || "");
     formData.append("town", address?.area || "");
     formData.append("postcode", address?.postcode || "");
-    // formData.append("latitude", address?.latitude);
-    // formData.append("longitude", address?.longitude );
+    formData.append("latitude", contextLatitude);
+    formData.append("longitude", contextLongitude );
     formData.append("guestCapacity", guestCount?.guests || 0);
     formData.append("bedrooms", guestCount?.bedrooms || 0);
     formData.append("beds", guestCount?.beds || 0);

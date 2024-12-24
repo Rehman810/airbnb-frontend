@@ -54,8 +54,8 @@ const PropertyType = ({ type, heading, isAmenties }) => {
             <StyledPaper
               selected={
                 isAmenties
-                  ? selected.includes(property.name)
-                  : selected === property.name
+                  ? selected.includes(property.name) // For amenities (array)
+                  : selected === property.name // For property type (string)
               }
               onClick={() => select(property.name)}
               elevation={

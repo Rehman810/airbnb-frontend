@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-const LeafletMap = ({ latitude, longitude, popupText }) => {
+const LeafletMap = ({ latitude, longitude, popupText, steps = false }) => {
   useEffect(() => {
     const map = L.map("map").setView([latitude, longitude], 12);
 
@@ -26,11 +26,12 @@ const LeafletMap = ({ latitude, longitude, popupText }) => {
     <div
       id="map"
       style={{
-        height: "300px",
+        height:"300px",
         width: "100%",
         borderRadius: "8px",
         marginTop: "16px",
-        zIndex: -10
+        zIndex: steps ? 10: -10,
+        backgroundClip: "red"
       }}
     ></div>
   );
