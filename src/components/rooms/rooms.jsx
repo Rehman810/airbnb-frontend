@@ -130,7 +130,6 @@ const RoomPage = () => {
       endDate: endDate.format("YYYY-MM-DD"),
       guestCapacity: guests.adults
     };
-    console.log(data);
 
     try {
       const response = await postDataById("post-bookings", data, token, roomId);
