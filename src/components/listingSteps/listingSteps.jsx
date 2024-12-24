@@ -1,4 +1,4 @@
-import React, { lazy, useState } from "react";
+import React, { lazy, useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -42,6 +42,7 @@ import ListingPreview from "../host/preview";
 import { useAppContext } from "../../context/context";
 import { postData } from "../../config/ServiceApi/serviceApi";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const GetStarted = lazy(() => import("../../components/host/getStarted"));
 
@@ -185,15 +186,33 @@ function ListingSteps() {
     uploadedImages,
     weekDayPrice,
     weekendPrice,
+    resetListingState,
   } = useAppContext();
+
   const token = localStorage.getItem("token");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   useDocumentTitle("Create your listing - Airbnb");
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
+  const [isNextDisabled, setIsNextDisabled] = useState(true);
+
+  useEffect(() => {
+    if (activeStep === 5) {
+      const { flat, city, postcode } = address || {};
+      const isAddressComplete = flat && city && postcode;
+      setIsNextDisabled(!isAddressComplete);
+    } else if (activeStep === 9) {
+      const isValid =
+        uploadedImages.length >= 3 || activeStep === steps.length - 1;
+      setIsNextDisabled(!isValid);
+    } else {
+      setIsNextDisabled(false);
+    }
+  }, [address, uploadedImages, guestCount, activeStep]);
+
   const sendDataToApi = async () => {
     const formData = new FormData();
-  
+
     formData.append("placeType", propertyType || "House");
     formData.append("roomType", placeType || "Entire Place");
     formData.append("street", address?.streetAddress || "");
@@ -216,11 +235,17 @@ function ListingSteps() {
         formData.append("photos", image.file);
       });
     }
-  
     try {
       const response = await postData("listings", formData, token, true);
-      console.log("API Response:", response);
-      navigate("/hosting/listings")
+      Swal.fire({
+        title: "Success!",
+        text: "Your listing has been successfully created!",
+        icon: "success",
+        confirmButtonText: "Go to Listings",
+      }).then(() => {
+        resetListingState();
+        navigate("/hosting/listings");
+      });
     } catch (error) {
       console.error("API Error:", error.message);
     }
@@ -311,10 +336,14 @@ function ListingSteps() {
             <Button
               size="small"
               onClick={handleNext}
-              // disabled={activeStep === steps.length - 1}
+              disabled={isNextDisabled}
               color="black"
             >
-             {activeStep === steps.length - 1 ? "Finish" : "Next"}
+              {activeStep === 0
+                ? "Get Started"
+                : activeStep === steps.length - 1
+                ? "Finish"
+                : "Next"}
               {theme.direction === "rtl" ? (
                 <KeyboardArrowLeft />
               ) : (

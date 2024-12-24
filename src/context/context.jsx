@@ -19,6 +19,19 @@ export const AppProvider = ({ children }) => {
   const [weekDayPrice, setWeekDayPrice] = useState();
   const [weekendPrice, setWeekEndPrice] = useState();
 
+  const resetListingState = () => {
+    setPlaceType(null);
+    setPropertyType(null);
+    setAddress({});
+    setAmenties([]);
+    setGuestCount({});
+    setDescription("");
+    setTitle("");
+    setUploadedImages([]);
+    setWeekDayPrice(null);
+    setWeekEndPrice(null);
+  };
+
   const value = {
     searchVisible,
     setSearchVisible,
@@ -41,7 +54,8 @@ export const AppProvider = ({ children }) => {
     weekDayPrice,
     setWeekDayPrice,
     weekendPrice,
-    setWeekEndPrice
+    setWeekEndPrice,
+    resetListingState
   };
 
   return (
