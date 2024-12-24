@@ -201,8 +201,8 @@ function ListingSteps() {
     formData.append("city", address?.city || "");
     formData.append("town", address?.area || "");
     formData.append("postcode", address?.postcode || "");
-    formData.append("latitude", address?.latitude || null);
-    formData.append("longitude", address?.longitude || null);
+    // formData.append("latitude", address?.latitude);
+    // formData.append("longitude", address?.longitude );
     formData.append("guestCapacity", guestCount?.guests || 0);
     formData.append("bedrooms", guestCount?.bedrooms || 0);
     formData.append("beds", guestCount?.beds || 0);

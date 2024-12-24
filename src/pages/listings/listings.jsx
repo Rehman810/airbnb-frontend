@@ -64,8 +64,8 @@ const ListingPage = () => {
     
       const formatted = [
         address?.flat,
-        address?.streetAddress,
-        address?.area,
+        // address?.streetAddress,
+        // address?.area,
         address?.city,
         address?.postcode,
         address?.country,
@@ -128,7 +128,7 @@ const ListingPage = () => {
                     {listing.title}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" sx={{ marginTop: 1 }}>
-                    {formatAddress(listing.location)}
+                    {formatAddress(listing)}
                   </Typography>
                 </CardContent>
               </Card>
