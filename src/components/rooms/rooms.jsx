@@ -123,12 +123,14 @@ const RoomPage = () => {
       });
       return;
     }
-
+    
     const [startDate, endDate] = dates;
     const data = {
       startDate: startDate.format("YYYY-MM-DD"),
       endDate: endDate.format("YYYY-MM-DD"),
+      guestCapacity: guests.adults
     };
+    console.log(data);
 
     try {
       const response = await postDataById("post-bookings", data, token, roomId);
