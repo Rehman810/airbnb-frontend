@@ -220,7 +220,7 @@ function ListingSteps() {
     try {
       const response = await postData("listings", formData, token, true);
       console.log("API Response:", response);
-      // navigate("/hosting/listings")
+      navigate("/hosting/listings")
     } catch (error) {
       console.error("API Error:", error.message);
     }

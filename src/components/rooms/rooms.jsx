@@ -9,31 +9,75 @@ import {
   CardMedia,
   Divider,
   Avatar,
+  MenuItem,
+  TextField,
+  Menu,
+  Skeleton,
 } from "@mui/material";
-import { DatePicker } from "antd";
+import { DatePicker, Select } from "antd";
 import "antd/dist/reset.css";
 import LeafletMap from "../map/map";
-import Img from "../../assets/images/img2.jpg";
 import HostSection from "../hostSection/hostSection";
-import Amenities from "../amenities/amenities";
-import { useParams } from "react-router-dom";
-import { fetchDataById } from "../../config/ServiceApi/serviceApi";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  fetchDataById,
+  postDataById,
+} from "../../config/ServiceApi/serviceApi";
+import dayjs from "dayjs";
+import Swal from "sweetalert2";
 
 const { RangePicker } = DatePicker;
 
-const backendAmenities = ["Wifi", "TV", "Parking", "Air Conditioning"];
-
 const RoomPage = () => {
   const [place, setPlace] = useState({});
+  const [dates, setDates] = useState(null);
+  const [maxGuests, setMaxGuests] = useState(1);
+  const [bookedDates, setBookedDates] = useState([]);
+  const [weekDayPrice, setWeekdayPrice] = useState(0);
+  const [weekendDayPrice, setWeekenddayPrice] = useState(0);
+  const serviceFeePercentage = 13;
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [numofDays, setNumofDays] = useState(0);
+  const [guestsAnchorEl, setGuestsAnchorEl] = useState(null);
+  const openGuestsMenu = (event) => setGuestsAnchorEl(event.currentTarget);
+  const closeGuestsMenu = () => setGuestsAnchorEl(null);
+  const [guests, setGuests] = useState({
+    adults: 0,
+  });
+  const [loadingImages, setLoadingImages] = useState(true);
+  const [loadingText, setLoadingText] = useState(true);
   const { roomId } = useParams();
-
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const incrementGuest = (type) => {
+    if (guests[type] < maxGuests) {
+      setGuests((prev) => ({ ...prev, [type]: prev[type] + 1 }));
+    }
+  };
+
+  const decrementGuest = (type) => {
+    if (guests[type] > 0) {
+      setGuests((prev) => ({ ...prev, [type]: Math.max(0, prev[type] - 1) }));
+    }
+  };
+
   useEffect(() => {
     const fetchOptions = async () => {
       try {
         const response = await fetchDataById("listing", token, roomId);
         if (response && response.listing) {
           setPlace(response.listing);
+          setMaxGuests(response.listing.guestCapacity);
+          setBookedDates(
+            response.listing.bookings.map((booking) => ({
+              startDate: dayjs(booking.startDate),
+              endDate: dayjs(booking.endDate),
+            }))
+          );
+          setWeekdayPrice(response.listing.weekdayPrice);
+          setWeekenddayPrice(response.listing.weekendPrice);
+          setLoadingText(false);
+          console.log(response.listing);
         } else {
           console.error("Unexpected response format:", response);
         }
@@ -42,14 +86,120 @@ const RoomPage = () => {
       }
     };
     fetchOptions();
-  }, []);
+  }, [roomId, token]);
+
+  const handleDateChange = (value) => {
+    setDates(value);
+    if (value && value.length === 2) {
+      const startDate = value[0];
+      const endDate = value[1];
+      let total = 0;
+
+      const numOfDays = endDate.diff(startDate, "days");
+      setNumofDays(numOfDays);
+
+      for (
+        let date = startDate;
+        date.isBefore(endDate, "day");
+        date = date.add(1, "day")
+      ) {
+        if (date.day() === 0 || date.day() === 6) {
+          total += weekendDayPrice;
+        } else {
+          total += weekDayPrice;
+        }
+      }
+
+      setTotalPrice(total);
+    }
+  };
+
+  const handleReserve = async () => {
+    if (!dates || dates.length < 2) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select a check-in and check-out date.",
+      });
+      return;
+    }
+
+    const [startDate, endDate] = dates;
+    const data = {
+      startDate: startDate.format("YYYY-MM-DD"),
+      endDate: endDate.format("YYYY-MM-DD"),
+    };
+
+    try {
+      const response = await postDataById("post-bookings", data, token, roomId);
+      console.log("API Response:", response);
+      if (response) {
+        Swal.fire({
+          icon: "success",
+          title: "Booking Confirmed",
+          text: "Your booking has been successfully confirmed. We're looking forward to hosting you.",
+        });
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Error sending data to API:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Booking Failed",
+        text: "There was an issue with your booking. Please try again later.",
+      });
+    }
+  };
+
+  const disabledDate = (current) => {
+    if (!current || !bookedDates || bookedDates.length === 0) {
+      return false;
+    }
+
+    return bookedDates.some(({ startDate, endDate }) => {
+      return current.isBetween(startDate, endDate, "day", "[]");
+    });
+  };
+
+  const formatAddress = (address) => {
+    if (!address) return "";
+
+    const formatted = [
+      address?.flat,
+      address?.city,
+      address?.postcode,
+      address?.country,
+    ]
+      .filter((field) => field)
+      .join(", ");
+
+    return formatted || "Address not available";
+  };
+
+  const handleImageLoad = () => {
+    setLoadingImages(false);
+  };
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
-      <Typography variant="h4" fontWeight="bold" gutterBottom>
-        {place.title}
-      </Typography>
+      {loadingText ? (
+        <Skeleton variant="text" width="60%" height={40} animation="wave" />
+      ) : (
+        <Typography variant="h4" fontWeight="bold" gutterBottom>
+          "{place.title}"
+        </Typography>
+      )}
       <Grid container spacing={2}>
+        {loadingImages && (
+          <Grid item xs={12}>
+            <Skeleton
+              variant="rectangular"
+              width="100%"
+              height={500}
+              animation="wave"
+            />
+          </Grid>
+        )}
         {place && place.photos && place.photos.length > 0 && (
           <Grid item xs={12}>
             <CardMedia
@@ -58,18 +208,28 @@ const RoomPage = () => {
               image={place.photos[0]}
               alt="Cover Image"
               sx={{ borderRadius: 2 }}
+              onLoad={handleImageLoad}
             />
           </Grid>
         )}
         {place?.photos?.map((a, index) => (
           <Grid item xs={6} sm={3} key={index}>
-            <CardMedia
-              component="img"
-              height="150"
-              image={a}
-              alt="Small Image 1"
-              sx={{ borderRadius: 2 }}
-            />
+            {loadingImages ? (
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={150}
+                animation="wave"
+              />
+            ) : (
+              <CardMedia
+                component="img"
+                height="150"
+                image={a}
+                alt={`Small Image ${index + 1}`}
+                sx={{ borderRadius: 2 }}
+              />
+            )}
           </Grid>
         ))}
       </Grid>
@@ -77,24 +237,21 @@ const RoomPage = () => {
       <Grid container spacing={2} sx={{ mt: 3 }}>
         <Grid item xs={12} md={8}>
           <Typography variant="h6" gutterBottom>
-            Farm stay in Pembroke, United Kingdom
+            {formatAddress(place)}
           </Typography>
           <Typography variant="body2" gutterBottom>
             <strong>Guest:</strong> {place.guestCapacity} |{" "}
             <strong>Beds:</strong> {place.guestCapacity} |{" "}
-            <strong>Bedrooms:</strong> 1
+            <strong>Bedrooms:</strong> {place.bedrooms}
           </Typography>
           <Divider sx={{ my: 2 }} />
           <Typography variant="body1" gutterBottom>
             {place.description}
           </Typography>
           <Divider sx={{ my: 2 }} />
-
           <Typography variant="h6" gutterBottom>
             Amenities
           </Typography>
-          {/* <Amenities backendAmenities={place.amenities} /> */}
-
           <Divider sx={{ my: 2 }} />
           <Typography variant="h6" sx={{ mt: 2 }}>
             Guest Reviews
@@ -111,24 +268,160 @@ const RoomPage = () => {
         </Grid>
 
         <Grid item xs={12} md={4}>
-          <Card sx={{ position: { md: "sticky" }, top: { md: 150 } }}>
-            <CardContent>
-              <Typography variant="h5" fontWeight="bold">
-                €169 / night
+          <Card
+            sx={{
+              position: { md: "sticky" },
+              top: { md: 150 },
+              borderRadius: 2,
+              boxShadow: 2,
+            }}
+          >
+            <CardContent sx={{ padding: 3 }}>
+              <Typography
+                variant="h5"
+                fontWeight="bold"
+                sx={{ color: "primary.main", mb: 2 }}
+              >
+                €{weekDayPrice} / night
               </Typography>
+
               <RangePicker
-                style={{ width: "100%", marginTop: 16 }}
+                style={{ width: "100%", marginBottom: 16 }}
                 placeholder={["Check-in", "Check-out"]}
+                onChange={handleDateChange}
+                disabledDate={disabledDate}
+                format="DD MMM, YYYY"
               />
+
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  cursor: "pointer",
+                  mb: 2,
+                }}
+                onClick={openGuestsMenu}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: "bold", color: "text.primary" }}
+                >
+                  Guests
+                </Typography>
+                &nbsp;
+                <TextField
+                  placeholder="How many guests"
+                  variant="standard"
+                  fullWidth
+                  InputProps={{ disableUnderline: true }}
+                  sx={{
+                    color: "text.secondary",
+                    fontWeight: "bold",
+                    textAlign: "right",
+                  }}
+                  value={
+                    guests.adults ? `${guests.adults} Guests` : "Select guests"
+                  }
+                  readOnly
+                />
+              </Box>
+
+              <Menu
+                anchorEl={guestsAnchorEl}
+                open={Boolean(guestsAnchorEl)}
+                onClose={closeGuestsMenu}
+                sx={{ width: 200 }}
+              >
+                {[{ label: "Adults", type: "adults" }].map((guest) => (
+                  <MenuItem key={guest.type}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography>{guest.label}</Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <Button
+                          onClick={() => decrementGuest(guest.type)}
+                          disabled={guests[guest.type] === 0}
+                          sx={{ minWidth: 32 }}
+                        >
+                          -
+                        </Button>
+                        <Typography variant="body2">
+                          {guests[guest.type]}
+                        </Typography>
+                        <Button
+                          onClick={() => incrementGuest(guest.type)}
+                          disabled={guests[guest.type] === maxGuests}
+                          sx={{ minWidth: 32 }}
+                        >
+                          +
+                        </Button>
+                      </Box>
+                    </Box>
+                  </MenuItem>
+                ))}
+              </Menu>
+
+              <Typography variant="body2" sx={{ mt: 2 }}>
+                <strong>Weekday Price:</strong> €{weekDayPrice} / night
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                <strong>Weekend Price:</strong> €{weekendDayPrice} / night
+              </Typography>
+              <Typography variant="body1" sx={{ mt: 2 }}>
+                <strong>Total for {numofDays} days:</strong> €
+                {totalPrice.toFixed(2)}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                <strong>Service Fee:</strong> €
+                {((totalPrice * serviceFeePercentage) / 100).toFixed(2)}
+              </Typography>
+
+              <Divider sx={{ my: 2 }} />
+
+              <Typography variant="body2" color="text.secondary">
+                <strong>Total:</strong> €
+                {(
+                  totalPrice +
+                  (totalPrice * serviceFeePercentage) / 100
+                ).toFixed(2)}
+              </Typography>
+
               <Button
                 variant="contained"
                 color="primary"
                 fullWidth
-                sx={{ mt: 2 }}
+                sx={{
+                  mt: 3,
+                  padding: "14px",
+                  fontWeight: "bold",
+                  letterSpacing: 1,
+                  textTransform: "uppercase",
+                  "&:hover": {
+                    backgroundColor: "primary.dark",
+                  },
+                }}
+                onClick={handleReserve}
               >
-                Reserve
+                Reserve Now
               </Button>
-              <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
+
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{ mt: 2, textAlign: "center" }}
+              >
                 You won’t be charged yet.
               </Typography>
             </CardContent>
@@ -147,8 +440,7 @@ const RoomPage = () => {
 
       <Box sx={{ mt: 4 }}>
         <Divider sx={{ mb: 2 }} />
-        <Typography variant="h6">Meet Your Host</Typography>
-        <HostSection />
+        <HostSection data={place} />
       </Box>
     </Box>
   );

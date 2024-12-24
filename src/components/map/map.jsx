@@ -30,6 +30,7 @@ const LeafletMap = ({ latitude, longitude, popupText }) => {
         width: "100%",
         borderRadius: "8px",
         marginTop: "16px",
+        zIndex: -10
       }}
     ></div>
   );

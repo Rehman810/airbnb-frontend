@@ -19,31 +19,12 @@ import useDocumentTitle from "../../hooks/dynamicTitle/dynamicTitle";
 import { useNavigate } from "react-router-dom";
 import { fetchDataById } from "../../config/ServiceApi/serviceApi";
 
-const listings = [
-  {
-    id: 1,
-    title: "Good House",
-    location: "Karachi, Sindh",
-    img: Img1, 
-    status: "Action required",
-  },
-  {
-    id: 2,
-    title: "Stylish Apartment",
-    location: "Karachi, Sindh",
-    img: Img2,
-    status: "Action required",
-  },
-];
-
 const ListingPage = () => {
   const [listing, setListing] = useState([])
     const navigate = useNavigate()
     useDocumentTitle("Listings - Airbnb");
     const token = localStorage.getItem("token")
     const user = JSON.parse(localStorage.getItem("user"));
-    // console.log(user?._id);
-
 
     useEffect(() => {
       const fetchOptions = async () => {
@@ -64,8 +45,6 @@ const ListingPage = () => {
     
       const formatted = [
         address?.flat,
-        // address?.streetAddress,
-        // address?.area,
         address?.city,
         address?.postcode,
         address?.country,
@@ -75,7 +54,6 @@ const ListingPage = () => {
     
       return formatted || 'Address not available'; 
     };
-    
     
   return (
     <Box>

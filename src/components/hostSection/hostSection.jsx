@@ -3,7 +3,7 @@ import { Box, Typography, Avatar, Button, Divider, Grid } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import VerifiedIcon from "@mui/icons-material/Verified";
 
-const HostSection = () => {
+const HostSection = ({data}) => {
   return (
     <Box sx={{ mt: 4, p: 2 }}>
       <Typography variant="h6" gutterBottom>

@@ -140,11 +140,10 @@ export const postDataById = async (endpoint, data, token, id, id2) => {
   };
 
   const url = id2 ? `${apiKey}/${endpoint}/${id}/${id2}` : `${apiKey}/${endpoint}/${id}`;
-console.log(id2);
+// console.log(id2);
 
   try {
     const response = await axios.post(url, data, config);
-    emitEvent('send_message', response.data);    
     return response.data;
   } catch (error) {
     // showErrorToast(error.message)
