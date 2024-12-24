@@ -31,7 +31,7 @@ const propertyTypes = [
 ];
 
 const PlaceType = () => {
-  const [selected, setSelected] = useState("House");
+  const [selected, setSelected] = useState("Entire Place");
   const { setPlaceType } = useAppContext();
 
   const select = (type)=>{

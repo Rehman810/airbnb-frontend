@@ -16,27 +16,57 @@ const StyledPaper = styled(Paper)(({ theme, selected }) => ({
   },
 }));
 
-const PropertyType = ({type, heading, isAmenties}) => {
-  const [selected, setSelected] = useState("House");
+const PropertyType = ({ type, heading, isAmenties }) => {
+  const [selected, setSelected] = useState(isAmenties ? [] : "House");
   const { setAmenties, setPropertyType } = useAppContext([]);
 
-  const select = (type)=>{
-    setSelected(type);
-    isAmenties ? setAmenties(type) : setPropertyType(type)
-  }
+  const select = (name) => {
+    if (isAmenties) {
+      setSelected((prevSelected) =>
+        prevSelected.includes(name)
+          ? prevSelected.filter((item) => item !== name)
+          : [...prevSelected, name]
+      );
+      setAmenties((prevSelected) =>
+        prevSelected.includes(name)
+          ? prevSelected.filter((item) => item !== name)
+          : [...prevSelected, name]
+      );
+    } else {
+      setSelected(name);
+      setPropertyType(name);
+    }
+  };
 
   return (
     <Box sx={{ py: 5, px: 3, paddingTop: "150px" }}>
-      <Typography variant="h4" fontWeight="bold" gutterBottom textAlign="center">
+      <Typography
+        variant="h4"
+        fontWeight="bold"
+        gutterBottom
+        textAlign="center"
+      >
         {heading}
       </Typography>
       <Grid container spacing={4} justifyContent="center">
         {type.map((property) => (
           <Grid item xs={12} sm={4} key={property.name}>
             <StyledPaper
-              selected={selected === property.name}
+              selected={
+                isAmenties
+                  ? selected.includes(property.name)
+                  : selected === property.name
+              }
               onClick={() => select(property.name)}
-              elevation={selected === property.name ? 6 : 2}
+              elevation={
+                isAmenties
+                  ? selected.includes(property.name)
+                    ? 6
+                    : 2
+                  : selected === property.name
+                  ? 6
+                  : 2
+              }
             >
               {property.icon}
               <Typography
