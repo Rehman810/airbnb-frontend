@@ -39,6 +39,7 @@ const SearchBar = () => {
   const [whereAnchorEl, setWhereAnchorEl] = useState(null);
   const [guestsAnchorEl, setGuestsAnchorEl] = useState(null);
   const { searchVisible, setSearchVisible, setSearchParams } = useAppContext();
+  const [isSearchDisabled, setIsSearchDisabled] = useState(true);
 
   const openWhereMenu = (event) => setWhereAnchorEl(event.currentTarget);
   const closeWhereMenu = () => setWhereAnchorEl(null);
@@ -52,6 +53,14 @@ const SearchBar = () => {
     setGuests((prev) => ({ ...prev, [type]: Math.max(0, prev[type] - 1) }));
 
   const isMobile = useMediaQuery("(max-width:600px)");
+
+  useEffect(() => {
+    // Check if all required fields are filled
+    const isFormComplete =
+      selectedDestination && dates && guests.adults + guests.children > 0;
+
+    setIsSearchDisabled(!isFormComplete);
+  }, [selectedDestination, dates, guests]);
 
   const cities = [
     {
@@ -293,6 +302,7 @@ const SearchBar = () => {
                 height: 50,
               }}
               onClick={handleSearch}
+              disabled={isSearchDisabled}
             >
               <SearchIcon />
             </IconButton>

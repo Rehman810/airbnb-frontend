@@ -7,21 +7,54 @@ import { useWishlist } from "../../context/wishlistProvider";
 
 const Home = () => {
   const [listing, setListing] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
   const { searchParams } = useAppContext();
-  // console.log(searchParams);
 
-   const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
-      wishlist.map((a)=>console.log(a)
-      )
+  //  const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
+  //     wishlist.map((a)=>console.log(a)
+  //     )
+  useEffect(() => {
+    if (listing.length === 0) {
+      setFilteredData([]);
+      return;
+    }
   
+    if (!searchParams.destination || !searchParams.checkIn || !searchParams.checkOut) {
+      console.error("Missing or invalid booking dates in searchParams");
+      return; 
+    }
+  
+    const filteredProducts = listing.filter((product) => {
+      const cityMatches = searchParams.destination.split(",")[0].trim().toLowerCase() == product.city.trim().toLowerCase();
+
+      const checkInDate = new Date(searchParams.checkIn);
+      const checkOutDate = new Date(searchParams.checkOut);
+  
+      const isAvailable = !product.bookings.some((booking) => {
+        const bookingStart = new Date(booking.startDate);
+        const bookingEnd = new Date(booking.endDate);
+  
+        const isOverlap = (checkInDate < bookingEnd && checkOutDate > bookingStart);
+        return isOverlap;
+      });
+
+      const guests = searchParams.guests <= product.guestCapacity
+  
+      return cityMatches && isAvailable && guests; 
+    });
+  
+    setFilteredData(filteredProducts);
+  }, [searchParams, listing]);
+
   useEffect(() => {
     const fetchOptions = async () => {
       try {
         const response = await fetchData("all-listring", token);
-        // console.log(response);
+        console.log(response);
         setListing(response);
+        setFilteredData(response);
       } catch (error) {
         console.error("Failed to fetch options:", error);
       } finally {
@@ -29,7 +62,7 @@ const Home = () => {
       }
     };
     fetchOptions();
-  }, []);
+  }, []); 
 
   return (
     <div>
@@ -83,20 +116,18 @@ const Home = () => {
                 </Box>
               </Grid>
             ))
+          ) : listing.length === 0 ? (
+            <Grid item xs={12}>
+              <Typography variant="h6" align="center" color="text.secondary">
+                No listings present
+              </Typography>
+            </Grid>
           ) : (
-            listing.length === 0 ? (
-              <Grid item xs={12}>
-                <Typography variant="h6" align="center" color="text.secondary">
-                  No listings present
-                </Typography>
+            filteredData.map((item) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
+                <Card data={item} />
               </Grid>
-            ) : (
-              listing.map((item) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
-                  <Card data={item} />
-                </Grid>
-              ))
-            )
+            ))
           )}
         </Grid>
       </Box>
