@@ -20,16 +20,15 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Icon1 from "../../assets/icons/icons1.png";
 import Icon2 from "../../assets/icons/icons2.png";
 import Icon3 from "../../assets/icons/icons3.png";
-import "../../assets/styles/navbar.css"
+import "../../assets/styles/navbar.css";
 import { useAppContext } from "../../context/context";
-import { DatePicker } from 'antd';
+import { DatePicker } from "antd";
 
 const SearchBar = () => {
   const { RangePicker } = DatePicker;
   const [isVisible, setIsVisible] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [checkIn, setCheckIn] = useState(null);
-  const [checkOut, setCheckOut] = useState(null);
+  const [dates, setDates] = useState(null);
   const [guests, setGuests] = useState({
     adults: 0,
     children: 0,
@@ -39,7 +38,7 @@ const SearchBar = () => {
   const [selectedDestination, setSelectedDestination] = useState("");
   const [whereAnchorEl, setWhereAnchorEl] = useState(null);
   const [guestsAnchorEl, setGuestsAnchorEl] = useState(null);
-  const { searchVisible, setSearchVisible } = useAppContext();
+  const { searchVisible, setSearchVisible, setSearchParams } = useAppContext();
 
   const openWhereMenu = (event) => setWhereAnchorEl(event.currentTarget);
   const closeWhereMenu = () => setWhereAnchorEl(null);
@@ -78,7 +77,8 @@ const SearchBar = () => {
       if (currentScrollPos === 0) {
         setIsVisible(true);
       } else if (currentScrollPos > scrollPosition) {
-        setSearchVisible(false)
+        setSearchParams(null);
+        setSearchVisible(false);
         setIsVisible(false);
       }
       setScrollPosition(currentScrollPos);
@@ -88,15 +88,32 @@ const SearchBar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [scrollPosition]);
 
+  const handleSearch = () => {
+    const [startDate, endDate] = dates;
+    const searchParams = {
+      destination: selectedDestination,
+      checkIn: startDate.format("YYYY-MM-DD"),
+      checkOut: endDate.format("YYYY-MM-DD"),
+      guests: guests.adults + guests.children + guests.infants,
+    };
+    setSearchParams(searchParams);
+  };
+
   return (
     <Box
-      className={`${searchVisible ? !isVisible : isVisible ? "search-visible" : "search-hidden"}`}
+      className={`${
+        searchVisible
+          ? !isVisible
+          : isVisible
+          ? "search-visible"
+          : "search-hidden"
+      }`}
       sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
-        paddingBottom: "20px"
+        paddingBottom: "20px",
       }}
     >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -177,18 +194,18 @@ const SearchBar = () => {
               <Divider orientation="vertical" flexItem />
 
               <Box sx={{ flex: 2, padding: "15px 16px" }}>
-              <Typography
-                variant="body2"
-                sx={{ fontWeight: "bold", fontSize: "12px" }}
-              >
-                Add Dates
-              </Typography>
-              <RangePicker
-                onChange={(dates) => setDates(dates)}
-                style={{ width: "100%" }}
-                placeholder={["Check in", "Check out"]}
-              />
-            </Box>
+                <Typography
+                  variant="body2"
+                  sx={{ fontWeight: "bold", fontSize: "12px" }}
+                >
+                  Add Dates
+                </Typography>
+                <RangePicker
+                  onChange={(dates) => setDates(dates)}
+                  style={{ width: "100%" }}
+                  placeholder={["Check in", "Check out"]}
+                />
+              </Box>
 
               <Divider orientation="vertical" flexItem />
 
@@ -275,6 +292,7 @@ const SearchBar = () => {
                 width: 50,
                 height: 50,
               }}
+              onClick={handleSearch}
             >
               <SearchIcon />
             </IconButton>

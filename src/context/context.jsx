@@ -20,6 +20,17 @@ export const AppProvider = ({ children }) => {
   const [weekendPrice, setWeekEndPrice] = useState();
   const [contextLatitude, setContextLatitude] = useState();
   const [contextLongitude, setContextLongitude] = useState();
+  const [searchParams, setSearchParams] = useState({
+    destination: "",
+    checkIn: null,
+    checkOut: null,
+    guests: {
+      adults: 0,
+      children: 0,
+      infants: 0,
+      pets: 0,
+    },
+  });
 
   const resetListingState = () => {
     setPlaceType(null);
@@ -63,7 +74,9 @@ export const AppProvider = ({ children }) => {
     setContextLatitude,
     setContextLongitude,
     contextLatitude,
-    contextLongitude
+    contextLongitude,
+    searchParams, 
+    setSearchParams
   };
 
   return (

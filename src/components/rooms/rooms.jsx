@@ -26,6 +26,7 @@ import {
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
 import Amenities from "../amenities/amenities";
+import { useWishlist } from "../../context/wishlistProvider";
 
 const { RangePicker } = DatePicker;
 
@@ -50,6 +51,11 @@ const RoomPage = () => {
   const { roomId } = useParams();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  
+   const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
+    wishlist.map((a)=>console.log(a)
+    )
+
   const incrementGuest = (type) => {
     if (guests[type] < maxGuests) {
       setGuests((prev) => ({ ...prev, [type]: prev[type] + 1 }));
@@ -78,7 +84,7 @@ const RoomPage = () => {
           setWeekdayPrice(response.listing.weekdayPrice);
           setWeekenddayPrice(response.listing.weekendPrice);
           setLoadingText(false);
-          console.log(response.listing);
+          // console.log(response.listing);
         } else {
           console.error("Unexpected response format:", response);
         }
@@ -180,10 +186,7 @@ const RoomPage = () => {
 
   const handleImageLoad = () => {
     setLoadingImages(false);
-  };
-
-  // console.log(place.longitude, place.latitude);
-  
+  };  
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>

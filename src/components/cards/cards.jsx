@@ -13,6 +13,7 @@ import StarIcon from "@mui/icons-material/Star";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom";
+import { useWishlist } from "../../context/wishlistProvider";
 
 const CardItem = ({ data }) => {
   const settings = {
@@ -26,7 +27,8 @@ const CardItem = ({ data }) => {
     arrows: false,
   };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { addToWishlist } = useWishlist();
 
   return (
     <Card
@@ -38,9 +40,9 @@ const CardItem = ({ data }) => {
         boxShadow: 3,
         overflow: "hidden",
         "&:hover": { boxShadow: 6 },
-        cursor: "pointer"
+        cursor: "pointer",
       }}
-      onClick={()=>navigate(`/rooms/${data._id}`)}
+      onClick={() => navigate(`/rooms/${data._id}`)}
     >
       <IconButton
         sx={{
@@ -51,6 +53,7 @@ const CardItem = ({ data }) => {
           backgroundColor: "white",
           "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.8)" },
         }}
+        onClick={() => addToWishlist(data)}
       >
         <FavoriteBorderIcon />
       </IconButton>

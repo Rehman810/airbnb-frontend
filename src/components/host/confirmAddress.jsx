@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Typography,
@@ -7,16 +7,30 @@ import {
   Switch,
   FormControlLabel,
   Paper,
+  FormControl,
+  InputLabel,
+  Select,
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useAppContext } from "../../context/context";
 import LeafletMap from "../map/map";
 
 const AddressForm = () => {
-  const [showLocation, setShowLocation] = React.useState(true);
-  const [country, setCountry] = React.useState("Pakistan - PK");
+  const [showLocation, setShowLocation] = useState(true);
+  const [country, setCountry] = useState("Pakistan - PK");
   const { setAddress, contextLatitude, contextLongitude } = useAppContext();
-console.log(contextLatitude, contextLongitude);
+  const [selectedCity, setSelectedCity] = useState("Karachi");
+
+  const cities = [
+    { name: "Karachi", label: "Karachi" },
+    { name: "Islamabad", label: "Islamabad" },
+    { name: "Lahore", label: "Lahore" },
+  ];
+
+  const handleCityChange = (event) => {
+    setSelectedCity(event.target.value);
+    handleFieldChange("city", event.target.value)
+  };
 
   const [addressData, setAddressData] = React.useState({
     country: "Pakistan - PK",
@@ -55,8 +69,8 @@ console.log(contextLatitude, contextLongitude);
           variant="outlined"
         >
           <MenuItem value="Pakistan - PK">Pakistan - PK</MenuItem>
-          <MenuItem value="India - IN">India - IN</MenuItem>
-          <MenuItem value="USA - US">USA - US</MenuItem>
+          {/* <MenuItem value="India - IN">India - IN</MenuItem>
+          <MenuItem value="USA - US">USA - US</MenuItem> */}
         </TextField>
         <TextField
           label="Street address"
@@ -68,12 +82,28 @@ console.log(contextLatitude, contextLongitude);
           variant="outlined"
           onChange={(e) => handleFieldChange("flat", e.target.value)}
         />
-        <TextField
+        {/* <TextField
           label="City/town/village"
           defaultValue="Karachi"
           variant="outlined"
           onChange={(e) => handleFieldChange("city", e.target.value)}
-        />
+        /> */}
+
+        <FormControl fullWidth variant="outlined">
+          <InputLabel>City</InputLabel>
+          <Select
+            value={selectedCity}
+            onChange={handleCityChange}
+            label="City/town/village"
+          >
+            {cities.map((city) => (
+              <MenuItem key={city.name} value={city.name}>
+                {city.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
         <TextField
           label="Town / county / area (if applicable)"
           defaultValue="Sindh"
@@ -111,13 +141,11 @@ console.log(contextLatitude, contextLongitude);
       </Typography>
 
       <LeafletMap
-      steps={true}
-            latitude={contextLatitude}
-            longitude={contextLongitude}
-            // popupText="Karachi, Pakistan"
-          />
-
-     
+        steps={true}
+        latitude={contextLatitude}
+        longitude={contextLongitude}
+        // popupText="Karachi, Pakistan"
+      />
     </Box>
   );
 };

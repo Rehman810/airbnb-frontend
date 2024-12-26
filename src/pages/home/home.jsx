@@ -2,17 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Box, Grid, Skeleton, Typography } from "@mui/material";
 import Card from "../../components/cards/cards";
 import { fetchData } from "../../config/ServiceApi/serviceApi";
+import { useAppContext } from "../../context/context";
+import { useWishlist } from "../../context/wishlistProvider";
 
 const Home = () => {
   const [listing, setListing] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
+  const { searchParams } = useAppContext();
+  // console.log(searchParams);
 
+   const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
+      wishlist.map((a)=>console.log(a)
+      )
+  
   useEffect(() => {
     const fetchOptions = async () => {
       try {
         const response = await fetchData("all-listring", token);
-        console.log(response);
+        // console.log(response);
         setListing(response);
       } catch (error) {
         console.error("Failed to fetch options:", error);
