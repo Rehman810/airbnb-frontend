@@ -51,10 +51,9 @@ const RoomPage = () => {
   const { roomId } = useParams();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
-  
-   const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
-    wishlist.map((a)=>console.log(a)
-    )
+
+  const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
+  wishlist.map((a) => console.log(a));
 
   const incrementGuest = (type) => {
     if (guests[type] < maxGuests) {
@@ -130,12 +129,12 @@ const RoomPage = () => {
       });
       return;
     }
-    
+
     const [startDate, endDate] = dates;
     const data = {
       startDate: startDate.format("YYYY-MM-DD"),
       endDate: endDate.format("YYYY-MM-DD"),
-      guestCapacity: guests.adults
+      guestCapacity: guests.adults,
     };
 
     try {
@@ -164,9 +163,14 @@ const RoomPage = () => {
       return false;
     }
 
-    return bookedDates.some(({ startDate, endDate }) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const isBooked = bookedDates.some(({ startDate, endDate }) => {
       return current.isBetween(startDate, endDate, "day", "[]");
     });
+
+    return isBooked || current < today;
   };
 
   const formatAddress = (address) => {
@@ -186,7 +190,7 @@ const RoomPage = () => {
 
   const handleImageLoad = () => {
     setLoadingImages(false);
-  };  
+  };
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
@@ -260,8 +264,7 @@ const RoomPage = () => {
           <Typography variant="h6" gutterBottom>
             Amenities
           </Typography>
-          {console.log(place.amenities)
-          }
+          {console.log(place.amenities)}
           {/* <Amenities backendAmenities={place.amenities}/> */}
           <Divider sx={{ my: 2 }} />
           <Typography variant="h6" sx={{ mt: 2 }}>
@@ -444,7 +447,7 @@ const RoomPage = () => {
         <Typography variant="h6">Location</Typography>
         <LeafletMap
           latitude={place.latitude ? place.latitude : 24.8607}
-          longitude={place.longitude ? place.longitude :67.0011}
+          longitude={place.longitude ? place.longitude : 67.0011}
           // popupText="Karachi, Pakistan"
         />
       </Box>

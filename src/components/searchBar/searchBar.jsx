@@ -55,7 +55,6 @@ const SearchBar = () => {
   const isMobile = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
-    // Check if all required fields are filled
     const isFormComplete =
       selectedDestination && dates && guests.adults + guests.children > 0;
 
@@ -106,6 +105,11 @@ const SearchBar = () => {
       guests: guests.adults + guests.children + guests.infants,
     };
     setSearchParams(searchParams);
+  };
+
+  const disableDates = (current) => {
+    const today = new Date();
+    return current && current < today.setHours(0, 0, 0, 0);
   };
 
   return (
@@ -213,6 +217,7 @@ const SearchBar = () => {
                   onChange={(dates) => setDates(dates)}
                   style={{ width: "100%" }}
                   placeholder={["Check in", "Check out"]}
+                  disabledDate={disableDates}
                 />
               </Box>
 
