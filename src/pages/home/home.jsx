@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Box, Grid, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Grid, Skeleton, Typography } from "@mui/material";
 import Card from "../../components/cards/cards";
 import { fetchData } from "../../config/ServiceApi/serviceApi";
 import { useAppContext } from "../../context/context";
 import { useWishlist } from "../../context/wishlistProvider";
+import LeafletMap from "../../components/map/map";
 
 const Home = () => {
   const [listing, setListing] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [mapVisible, setMapVisible] = useState(false);
   const token = localStorage.getItem("token");
   const { searchParams } = useAppContext();
-
   //  const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
   //     wishlist.map((a)=>console.log(a)
   //     )
@@ -63,6 +64,10 @@ const Home = () => {
     };
     fetchOptions();
   }, []); 
+
+  const toggleMapVisibility = () => {
+    setMapVisible((prev) => !prev); 
+  };
 
   return (
     <div>
@@ -131,6 +136,38 @@ const Home = () => {
           )}
         </Grid>
       </Box>
+    
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{
+          position: "fixed",
+          bottom: "20px",
+          left: '50%',
+          transform: 'translateX(-50%)',  
+          borderRadius: "25px",
+          padding: 1.5,
+          boxShadow: 2,
+          zIndex: 10,
+          backgroundColor: "#222222",
+          paddingLeft: "25px",
+          paddingRight: "25px",
+          fontSize: "12px"
+        }}
+        onClick={toggleMapVisibility}
+      >
+        {mapVisible ? "Show list" : "Show map"}
+      </Button>
+
+      {/* {mapVisible && (
+        <Box sx={{ position: "fixed", bottom: 0, left: 0, right: 0, height: 400 }}>
+          <LeafletMap
+            latitude={filteredData[0]?.latitude || 24.8607}  
+            longitude={filteredData[0]?.longitude || 67.0011} 
+            steps={true}
+          />
+        </Box>
+      )} */}
     </div>
   );
 };
