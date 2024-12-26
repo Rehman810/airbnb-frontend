@@ -287,7 +287,7 @@ function ListingSteps() {
           />
           <Box sx={{ flexGrow: 1 }} />
           <Box>
-            <Button
+            {/* <Button
               color="inherit"
               sx={{
                 textTransform: "none",
@@ -298,7 +298,7 @@ function ListingSteps() {
               }}
             >
               Questions?
-            </Button>
+            </Button> */}
             <Button
               color="inherit"
               sx={{
@@ -307,8 +307,9 @@ function ListingSteps() {
                 borderRadius: "20px",
                 padding: "8px",
               }}
+              onClick={()=>navigate(-1)}
             >
-              Save & Exit
+              Exit
             </Button>
           </Box>
         </Toolbar>

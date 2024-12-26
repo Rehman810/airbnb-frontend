@@ -16,9 +16,10 @@ const StyledPaper = styled(Paper)(({ theme, selected }) => ({
   },
 }));
 
-const PropertyType = ({ type, heading, isAmenties }) => {
+
+const PropertyType = ({ type = [], heading, isAmenties }) => {
   const [selected, setSelected] = useState(isAmenties ? [] : "House");
-  const { setAmenties, setPropertyType } = useAppContext([]);
+  const { setAmenties, setPropertyType } = useAppContext();
 
   const select = (name) => {
     if (isAmenties) {
@@ -51,11 +52,13 @@ const PropertyType = ({ type, heading, isAmenties }) => {
       <Grid container spacing={4} justifyContent="center">
         {type.map((property) => (
           <Grid item xs={12} sm={4} key={property.name}>
+            {console.log(property.name)}
             <StyledPaper
               selected={
+                
                 isAmenties
-                  ? selected.includes(property.name) // For amenities (array)
-                  : selected === property.name // For property type (string)
+                  ? selected.includes(property.name) 
+                  : selected === property.name
               }
               onClick={() => select(property.name)}
               elevation={

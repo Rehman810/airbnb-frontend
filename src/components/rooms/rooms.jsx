@@ -25,6 +25,7 @@ import {
 } from "../../config/ServiceApi/serviceApi";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
+import Amenities from "../amenities/amenities";
 
 const { RangePicker } = DatePicker;
 
@@ -256,6 +257,9 @@ const RoomPage = () => {
           <Typography variant="h6" gutterBottom>
             Amenities
           </Typography>
+          {console.log(place.amenities)
+          }
+          {/* <Amenities backendAmenities={place.amenities}/> */}
           <Divider sx={{ my: 2 }} />
           <Typography variant="h6" sx={{ mt: 2 }}>
             Guest Reviews

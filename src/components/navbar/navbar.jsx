@@ -21,13 +21,64 @@ import SearchBar from "../searchBar/searchBar";
 import SearchBar2 from "../searchBar/searchBar2";
 import { useNavigate } from "react-router-dom";
 import handleLogout from "../logout/logout";
+import VerifyToken from "../protected/verifyToken";
+
+const VerifiedMenu = ({
+  anchorEl,
+  handleMenuClose,
+  navigate,
+  handleLogout,
+}) => (
+  <Menu
+    anchorEl={anchorEl}
+    open={Boolean(anchorEl)}
+    onClose={handleMenuClose}
+    keepMounted
+  >
+    <MenuItem>Messages</MenuItem>
+    <MenuItem>Notifications</MenuItem>
+    <MenuItem>Trips</MenuItem>
+    <MenuItem>Wishlists</MenuItem>
+    <Divider />
+    <MenuItem onClick={() => navigate("/hosting/listings")}>
+      Manage Listings
+    </MenuItem>
+    <MenuItem>Account</MenuItem>
+    <Divider />
+    <MenuItem>Gift cards</MenuItem>
+    <MenuItem>Help center</MenuItem>
+    <MenuItem onClick={() => handleLogout(navigate)}>Logout</MenuItem>
+  </Menu>
+);
+
+const UnverifiedMenu = ({
+  anchorEl,
+  handleMenuClose,
+  handleLoginModalOpen,
+  handleSignUpModalOpen,
+}) => (
+  <Menu
+    anchorEl={anchorEl}
+    open={Boolean(anchorEl)}
+    onClose={handleMenuClose}
+    keepMounted
+  >
+    <MenuItem onClick={handleLoginModalOpen}>Login</MenuItem>
+    <MenuItem onClick={handleSignUpModalOpen}>Sign up</MenuItem>
+    <Divider />
+    <MenuItem>Gift cards</MenuItem>
+    <MenuItem>Airbnb your home</MenuItem>
+    <MenuItem>Host an experience</MenuItem>
+    <MenuItem>Help center</MenuItem>
+  </Menu>
+);
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [signUp, isSignUp] = useState()
-  const navigate = useNavigate()
-  const token = localStorage.getItem("token")
+  const [signUp, isSignUp] = useState();
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,15 +89,15 @@ const Navbar = () => {
   };
 
   const handleLoginModalOpen = () => {
-    isSignUp(false)
+    isSignUp(false);
     setIsLoginModalOpen(true);
-    handleMenuClose(); 
+    handleMenuClose();
   };
 
   const handleSignUpModalOpen = () => {
-    isSignUp(true)
+    isSignUp(true);
     setIsLoginModalOpen(true);
-    handleMenuClose(); 
+    handleMenuClose();
   };
 
   const handleLoginModalClose = () => {
@@ -56,7 +107,14 @@ const Navbar = () => {
   return (
     <AppBar
       position="static"
-      sx={{ backgroundColor: "white", color: "black", boxShadow: "none", position: "sticky", top: 0, zIndex: 10 }}
+      sx={{
+        backgroundColor: "white",
+        color: "black",
+        boxShadow: "none",
+        position: "sticky",
+        top: 0,
+        zIndex: 10,
+      }}
     >
       <Toolbar
         sx={{
@@ -65,13 +123,15 @@ const Navbar = () => {
           padding: "0 16px",
         }}
       >
-        <Box >
+        <Box>
           <Typography
             variant="h6"
             component="div"
             sx={{ fontWeight: "bold", color: "red", cursor: "pointer" }}
             className="airbnbBold"
-            onClick={()=>{navigate("/")}}
+            onClick={() => {
+              navigate("/");
+            }}
           >
             airbnb
           </Typography>
@@ -92,7 +152,7 @@ const Navbar = () => {
                 display: { xs: "none", sm: "inline-flex" },
                 fontSize: "14px",
               }}
-              onClick={()=>navigate("/hosting/today")}
+              onClick={() => navigate("/hosting/today")}
             >
               {!token ? "Airbnb your home" : "Switch to hosting"}
             </Button>
@@ -134,28 +194,28 @@ const Navbar = () => {
               </Avatar>
             </Box>
 
-            <Menu
+            <VerifyToken
+              VerifiedComponent={VerifiedMenu}
+              UnverifiedComponent={UnverifiedMenu}
               anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              keepMounted
-            >
-              <MenuItem onClick={handleLoginModalOpen}>Login</MenuItem>
-              <MenuItem onClick={handleSignUpModalOpen}>Sign up</MenuItem>
-              <Divider />
-              <MenuItem>Gift cards</MenuItem>
-              <MenuItem>Airbnb your home</MenuItem>
-              <MenuItem>Host an experience</MenuItem>
-              <MenuItem>Help center</MenuItem>
-              <MenuItem onClick={() => handleLogout(navigate)}>Logout</MenuItem>
-            </Menu>
+              handleMenuClose={handleMenuClose}
+              navigate={navigate}
+              handleLogout={handleLogout}
+              handleLoginModalOpen={handleLoginModalOpen}
+              handleSignUpModalOpen={handleSignUpModalOpen}
+            />
           </Box>
         </Box>
       </Toolbar>
       <SearchBar />
       <Divider />
       {isLoginModalOpen && (
-        <LoginModal open={isLoginModalOpen} onClose={handleLoginModalClose} signUp={signUp} isSignUp={isSignUp}/>
+        <LoginModal
+          open={isLoginModalOpen}
+          onClose={handleLoginModalClose}
+          signUp={signUp}
+          isSignUp={isSignUp}
+        />
       )}
     </AppBar>
   );

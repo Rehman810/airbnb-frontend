@@ -11,7 +11,7 @@ export const AppProvider = ({ children }) => {
   const [placeType, setPlaceType] = useState();
   const [propertyType, setPropertyType] = useState();
   const [address, setAddress] = useState({});
-  const [amenties, setAmenties] = useState();
+  const [amenties, setAmenties] = useState([]);
   const [guestCount, setGuestCount] = useState({});
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");

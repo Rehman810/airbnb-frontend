@@ -7,27 +7,31 @@ import {
   Paper,
   TextField,
   InputAdornment,
-  Button,
   IconButton,
   Alert,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
 } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import SearchIcon from "@mui/icons-material/Search";
 import { useAppContext } from "../../context/context";
 
 const LeafletMap = ({
-  initialLatitude = 24.8607, 
+  initialLatitude = 24.8607,
   initialLongitude = 67.0011,
   popupText = "Location",
 }) => {
-  const mapRef = useRef(null); 
+  const mapRef = useRef(null);
   const markerRef = useRef(null);
-  const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
   const [latitude, setLocalLatitude] = useState(initialLatitude);
-  const [longitude, setLocalLongitude] = useState(initialLongitude); 
-  const [alertShown, setAlertShown] = useState(false); 
-  const [locationDenied, setLocationDenied] = useState(false); 
-  const { setContextLatitude, setContextLongitude } = useAppContext(); 
+  const [longitude, setLocalLongitude] = useState(initialLongitude);
+  const [alertShown, setAlertShown] = useState(false);
+  const [locationDenied, setLocationDenied] = useState(false);
+  const { setContextLatitude, setContextLongitude } = useAppContext();
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -77,39 +81,48 @@ const LeafletMap = ({
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+
+    if (e.target.value.length > 2) {
+      fetchSuggestions(e.target.value);
+    } else {
+      setSuggestions([]);
+    }
   };
 
-  const handleSearch = async () => {
-    const query = searchQuery.trim();
-    if (!query) return;
-
+  const fetchSuggestions = async (query) => {
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
           query
-        )}&format=json`
+        )}&countrycodes=pk&format=json`
       );
       const data = await response.json();
+console.log(response);
 
       if (data.length > 0) {
-        const { lat, lon, display_name } = data[0];
-        const newLat = parseFloat(lat);
-        const newLon = parseFloat(lon);
-        setLocalLatitude(newLat);
-        setLocalLongitude(newLon);
-        setContextLatitude(newLat);
-        setContextLongitude(newLon);
-        markerRef.current.bindPopup(display_name).openPopup();
+        setSuggestions(data);
         setAlertShown(false);
       } else {
+        setSuggestions([]);
         if (!alertShown) {
           setAlertShown(true);
           console.log("Location not found");
         }
       }
     } catch (error) {
-      console.error("Error fetching location:", error);
+      console.error("Error fetching suggestions:", error);
     }
+  };
+
+  const handleSuggestionClick = (lat, lon, display_name) => {
+    const newLat = parseFloat(lat);
+    const newLon = parseFloat(lon);
+    setLocalLatitude(newLat);
+    setLocalLongitude(newLon);
+    setContextLatitude(newLat);
+    setContextLongitude(newLon);
+    markerRef.current.bindPopup(display_name).openPopup();
+    setSuggestions([]);
   };
 
   return (
@@ -152,7 +165,7 @@ const LeafletMap = ({
               ),
               endAdornment: (
                 <InputAdornment position="end">
-                  <IconButton onClick={handleSearch}>
+                  <IconButton onClick={() => fetchSuggestions(searchQuery)}>
                     <SearchIcon />
                   </IconButton>
                 </InputAdornment>
@@ -164,6 +177,35 @@ const LeafletMap = ({
               },
             }}
           />
+          {suggestions.length>0 && (
+          <List
+            sx={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              right: 0,
+              backgroundColor: "white",
+              boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.2)",
+              maxHeight: "200px",
+              overflowY: "auto",
+            }}
+          >
+            {suggestions.map((suggestion, index) => (
+              <ListItem key={index} disablePadding>
+                <ListItemButton
+                  onClick={() =>
+                    handleSuggestionClick(
+                      suggestion.lat,
+                      suggestion.lon,
+                      suggestion.display_name
+                    )
+                  }
+                >
+                  <ListItemText primary={suggestion.display_name} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>)}
         </Box>
 
         {locationDenied && (
