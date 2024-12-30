@@ -13,6 +13,9 @@ import {
   TextField,
   Menu,
   Skeleton,
+  Dialog,
+  DialogContent,
+  IconButton,
 } from "@mui/material";
 import { DatePicker, Select } from "antd";
 import "antd/dist/reset.css";
@@ -26,11 +29,15 @@ import {
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
 import Amenities from "../amenities/amenities";
-import { useWishlist } from "../../context/wishlistProvider";
+import useDocumentTitle from "../../hooks/dynamicTitle/dynamicTitle";
+import CloseIcon from "@mui/icons-material/Close";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const { RangePicker } = DatePicker;
 
 const RoomPage = () => {
+  
   const [place, setPlace] = useState({});
   const [dates, setDates] = useState(null);
   const [maxGuests, setMaxGuests] = useState(1);
@@ -52,14 +59,45 @@ const RoomPage = () => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
-  wishlist.map((a) => console.log(a));
+  const [openImageModal, setOpenImageModal] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleOpenModal = () => {
+    setCurrentImageIndex(0);
+    setOpenImageModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenImageModal(false);
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex + 1 < place.photos.length ? prevIndex + 1 : 0
+    );
+  };
+
+  const handlePreviousImage = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex - 1 >= 0 ? prevIndex - 1 : place.photos.length - 1
+    );
+  };
+  
+  const toPascalCase = (str) => {
+    return str
+      ?.split(' ')
+      ?.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) 
+      ?.join(' ');
+  };
+  
 
   const incrementGuest = (type) => {
     if (guests[type] < maxGuests) {
       setGuests((prev) => ({ ...prev, [type]: prev[type] + 1 }));
     }
   };
+
+  useDocumentTitle(place.title ? toPascalCase(place.title) : "Airbnb");
 
   const decrementGuest = (type) => {
     if (guests[type] > 0) {
@@ -83,7 +121,7 @@ const RoomPage = () => {
           setWeekdayPrice(response.listing.weekdayPrice);
           setWeekenddayPrice(response.listing.weekendPrice);
           setLoadingText(false);
-          // console.log(response.listing);
+          console.log(response.listing);
         } else {
           console.error("Unexpected response format:", response);
         }
@@ -177,15 +215,15 @@ const RoomPage = () => {
     if (!address) return "";
 
     const formatted = [
-      address?.flat,
+      // address?.flat,
       address?.city,
-      address?.postcode,
-      address?.country,
+      // address?.postcode,
+      // address?.country,
     ]
       .filter((field) => field)
       .join(", ");
 
-    return formatted || "Address not available";
+    return formatted + ", Pakistan" || "Address not available";
   };
 
   const handleImageLoad = () => {
@@ -198,63 +236,134 @@ const RoomPage = () => {
         <Skeleton variant="text" width="60%" height={40} animation="wave" />
       ) : (
         <Typography variant="h4" fontWeight="bold" gutterBottom>
-          "{place.title}"
+          {toPascalCase(place.title)}
         </Typography>
       )}
-      <Grid container spacing={2}>
+     <Grid container spacing={2} onClick={handleOpenModal} style={{cursor: "pointer"}}>
+      <Grid item xs={12} md={6}>
         {loadingImages && (
-          <Grid item xs={12}>
-            <Skeleton
-              variant="rectangular"
-              width="100%"
-              height={500}
-              animation="wave"
-            />
-          </Grid>
-        )}
-        {place && place.photos && place.photos.length > 0 && (
-          <Grid item xs={12}>
-            <CardMedia
-              component="img"
-              height="500"
-              image={place.photos[0]}
-              alt="Cover Image"
-              sx={{ borderRadius: 2 }}
-              onLoad={handleImageLoad}
-            />
-          </Grid>
-        )}
-        {place?.photos?.map((a, index) => (
-          <Grid item xs={6} sm={3} key={index}>
-            {loadingImages ? (
-              <Skeleton
-                variant="rectangular"
-                width="100%"
-                height={150}
-                animation="wave"
-              />
-            ) : (
-              <CardMedia
-                component="img"
-                height="150"
-                image={a}
-                alt={`Small Image ${index + 1}`}
-                sx={{ borderRadius: 2 }}
-              />
-            )}
-          </Grid>
-        ))}
+          <Skeleton
+            variant="rectangular"
+            width="100%"
+            height={500}
+            animation="wave"
+          />
+        ) }
+          <CardMedia
+            component="img"
+            height="500"
+            image={place?.photos?.[0]}
+            alt="Main Image"
+            sx={{ borderRadius: 2 }}
+            onLoad={handleImageLoad}
+            onError={(e) => (e.target.src = "/fallback-image.jpg")}
+          />
+        
       </Grid>
+
+      <Grid item xs={12} md={6}>
+        <Grid container spacing={2}>
+          {place?.photos?.slice(1, 5).map((photo, index) => (
+            <Grid item xs={6} key={index}>
+              {loadingImages ? (
+                <Skeleton
+                  variant="rectangular"
+                  width="100%"
+                  height={240}
+                  animation="wave"
+                />
+              ) : (
+                <CardMedia
+                  component="img"
+                  height="240"
+                  image={photo}
+                  alt={`Small Image ${index + 1}`}
+                  sx={{ borderRadius: 2 }}
+                  onError={(e) => (e.target.src = "/fallback-image.jpg")}
+                />
+              )}
+            </Grid>
+          ))}
+        </Grid>
+      </Grid>
+    </Grid>
+
+    <Dialog
+        fullScreen
+        open={openImageModal}
+        onClose={handleCloseModal}
+        sx={{ textAlign: "center" }}
+      >
+        <DialogContent
+          sx={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)", // Black with 80% opacity
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "relative",
+          }}
+        >
+          <IconButton
+            sx={{
+              position: "absolute",
+              top: 16,
+              right: 16,
+              color: "white",
+            }}
+            onClick={handleCloseModal}
+          >
+            <CloseIcon />
+          </IconButton>
+
+          <IconButton
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: 16,
+              color: "white",
+              transform: "translateY(-50%)",
+            }}
+            onClick={handlePreviousImage}
+          >
+            <ArrowBackIcon />
+          </IconButton>
+
+          <IconButton
+            sx={{
+              position: "absolute",
+              top: "50%",
+              right: 16,
+              color: "white",
+              transform: "translateY(-50%)",
+            }}
+            onClick={handleNextImage}
+          >
+            <ArrowForwardIcon />
+          </IconButton>
+
+          <img
+            src={place?.photos?.[currentImageIndex] || "/fallback-image.jpg"}
+            alt={`Image ${currentImageIndex + 1}`}
+            style={{
+              // maxWidth: "90%",
+              // maxHeight: "90%",
+              borderRadius: "8px",
+              width: "70%"
+            }}
+          />
+        </DialogContent>
+      </Dialog>
 
       <Grid container spacing={2} sx={{ mt: 3 }}>
         <Grid item xs={12} md={8}>
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h5" fontWeight={"bold"} gutterBottom>
+            {place.roomType} in{" "}
             {formatAddress(place)}
           </Typography>
           <Typography variant="body2" gutterBottom>
-            <strong>Guest:</strong> {place.guestCapacity} |{" "}
-            <strong>Beds:</strong> {place.guestCapacity} |{" "}
-            <strong>Bedrooms:</strong> {place.bedrooms}
+            <strong>{place.guestCapacity} guest</strong> |{" "}
+            <strong>{place.guestCapacity} beds</strong> |{" "}
+            <strong>{place.bedrooms} bedrooms</strong>
           </Typography>
           <Divider sx={{ my: 2 }} />
           <Typography variant="body1" gutterBottom>
@@ -264,7 +373,6 @@ const RoomPage = () => {
           <Typography variant="h6" gutterBottom>
             Amenities
           </Typography>
-          {console.log(place.amenities)}
           {/* <Amenities backendAmenities={place.amenities}/> */}
           <Divider sx={{ my: 2 }} />
           <Typography variant="h6" sx={{ mt: 2 }}>

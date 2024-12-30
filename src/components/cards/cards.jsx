@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import {
   Card,
@@ -15,8 +15,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useNavigate } from "react-router-dom";
 import { useWishlist } from "../../context/wishlistProvider";
+import VerifyToken from "../protected/verifyToken";
+import LoginModal from "../Login/LoginModal";
 
 const CardItem = ({ data }) => {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [signUp, isSignUp] = useState();
+
   const settings = {
     dots: true,
     infinite: true,
@@ -34,7 +39,7 @@ const CardItem = ({ data }) => {
   const isWishlisted = wishlist.some((item) => item._id === data._id);
 
   const handleWishlistClick = (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
     if (isWishlisted) {
       removeFromWishlist(data._id);
     } else {
@@ -42,7 +47,31 @@ const CardItem = ({ data }) => {
     }
   };
 
+  const handleLoginModalOpen = () => {
+    isSignUp(false);
+    setIsLoginModalOpen(true);
+    handleMenuClose();
+  };
+
+  const handleLoginModalClose = () => {
+    setIsLoginModalOpen(false);
+  };
+
+  const VerifiedComponent = () =>
+    isWishlisted ? (
+      <FavoriteIcon sx={{ color: "red" }} />
+    ) : (
+      <FavoriteBorderIcon />
+    );
+
+  const UnverifiedComponent = ({ handleLoginModalOpen }) => (
+    <span onClick={handleLoginModalOpen}>
+      <FavoriteBorderIcon />
+    </span>
+  );
+
   return (
+    <>
     <Card
       sx={{
         maxWidth: 360,
@@ -62,19 +91,21 @@ const CardItem = ({ data }) => {
           top: 10,
           right: 10,
           zIndex: 2,
-          // backgroundColor: "white",
-          "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.8)" },
+          // "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.8)" },
         }}
         onClick={handleWishlistClick}
       >
-        {isWishlisted ? (
-          <FavoriteIcon sx={{ color: "red" }} />
-        ) : (
-          <FavoriteBorderIcon />
-        )}
+        <VerifyToken
+          VerifiedComponent={VerifiedComponent}
+          UnverifiedComponent={UnverifiedComponent}
+          handleLoginModalOpen={handleLoginModalOpen}
+        />
       </IconButton>
 
-      <Box sx={{ position: "relative" }}>
+      <Box
+        sx={{ position: "relative", cursor: "default" }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <Slider {...settings}>
           {data.photos.map((img, index) => (
             <Box key={index} sx={{ height: 220, overflow: "hidden" }}>
@@ -155,6 +186,17 @@ const CardItem = ({ data }) => {
         </Box>
       </CardContent>
     </Card>
+      <span        onClick={(e) => e.stopPropagation()}>
+      {isLoginModalOpen && (
+        <LoginModal
+          open={isLoginModalOpen}
+          onClose={handleLoginModalClose}
+          signUp={signUp}
+          isSignUp={isSignUp}
+        />
+      )}
+      </span>
+      </>
   );
 };
 

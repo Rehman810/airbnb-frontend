@@ -3,7 +3,6 @@ import { Box, Button, Grid, Skeleton, Typography } from "@mui/material";
 import Card from "../../components/cards/cards";
 import { fetchData } from "../../config/ServiceApi/serviceApi";
 import { useAppContext } from "../../context/context";
-import { useWishlist } from "../../context/wishlistProvider";
 import LeafletMap from "../../components/map/map";
 
 const Home = () => {
@@ -13,9 +12,7 @@ const Home = () => {
   const [mapVisible, setMapVisible] = useState(false);
   const token = localStorage.getItem("token");
   const { searchParams } = useAppContext();
-  // const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
-      // wishlist.map((a)=>console.log(a)
-      // )
+
   useEffect(() => {
     if (listing.length === 0) {
       setFilteredData([]);
