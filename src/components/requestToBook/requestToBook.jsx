@@ -132,7 +132,6 @@ const BookingComponent = () => {
       return;
     }
   
-    // Proceed with the booking if no missing fields
     const data = {
       startDate: bookingData?.startDate,
       endDate: bookingData?.endDate,
