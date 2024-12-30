@@ -4,13 +4,11 @@ const WishlistContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
   const [wishlist, setWishlist] = useState(() => {
-    // Initialize state from localStorage
     const savedWishlist = localStorage.getItem("wishlist");
     return savedWishlist ? JSON.parse(savedWishlist) : [];
   });
 
   useEffect(() => {
-    // Persist wishlist state to localStorage
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
   }, [wishlist]);
 

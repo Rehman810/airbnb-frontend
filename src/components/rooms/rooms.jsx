@@ -33,11 +33,11 @@ import useDocumentTitle from "../../hooks/dynamicTitle/dynamicTitle";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { useBookingContext } from "../../context/booking";
 
 const { RangePicker } = DatePicker;
 
 const RoomPage = () => {
-  
   const [place, setPlace] = useState({});
   const [dates, setDates] = useState(null);
   const [maxGuests, setMaxGuests] = useState(1);
@@ -55,12 +55,12 @@ const RoomPage = () => {
   });
   const [loadingImages, setLoadingImages] = useState(true);
   const [loadingText, setLoadingText] = useState(true);
+  const [openImageModal, setOpenImageModal] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { setBookingData, setBookListing } = useBookingContext();
   const { roomId } = useParams();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
-
-  const [openImageModal, setOpenImageModal] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleOpenModal = () => {
     setCurrentImageIndex(0);
@@ -168,32 +168,40 @@ const RoomPage = () => {
       return;
     }
 
+    
     const [startDate, endDate] = dates;
     const data = {
       startDate: startDate.format("YYYY-MM-DD"),
       endDate: endDate.format("YYYY-MM-DD"),
       guestCapacity: guests.adults,
+      priceForHouse: totalPrice,
+      serviceFee: ((totalPrice * serviceFeePercentage) / 100).toFixed(2),
+      nights: numofDays, 
+      total: (totalPrice + (totalPrice * serviceFeePercentage) / 100 ).toFixed(2)
     };
 
-    try {
-      const response = await postDataById("post-bookings", data, token, roomId);
-      console.log("API Response:", response);
-      if (response) {
-        Swal.fire({
-          icon: "success",
-          title: "Booking Confirmed",
-          text: "Your booking has been successfully confirmed. We're looking forward to hosting you.",
-        });
-        navigate("/");
-      }
-    } catch (error) {
-      console.error("Error sending data to API:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Booking Failed",
-        text: "There was an issue with your booking. Please try again later.",
-      });
-    }
+    setBookListing(place)
+    setBookingData(data)
+    navigate(`/requestToBook/${place._id}`)
+    // try {
+    //   const response = await postDataById("post-bookings", data, token, roomId);
+    //   console.log("API Response:", response);
+    //   if (response) {
+    //     Swal.fire({
+    //       icon: "success",
+    //       title: "Booking Confirmed",
+    //       text: "Your booking has been successfully confirmed. We're looking forward to hosting you.",
+    //     });
+    //     navigate("/");
+    //   }
+    // } catch (error) {
+    //   console.error("Error sending data to API:", error);
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Booking Failed",
+    //     text: "There was an issue with your booking. Please try again later.",
+    //   });
+    // }
   };
 
   const disabledDate = (current) => {
@@ -502,7 +510,7 @@ const RoomPage = () => {
                 <strong>Weekend Price:</strong> €{weekendDayPrice} / night
               </Typography>
               <Typography variant="body1" sx={{ mt: 2 }}>
-                <strong>Total for {numofDays} days:</strong> €
+                <strong>Total for {numofDays} nights:</strong> €
                 {totalPrice.toFixed(2)}
               </Typography>
               <Typography variant="body2" color="text.secondary">
