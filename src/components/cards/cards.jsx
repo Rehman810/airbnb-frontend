@@ -9,6 +9,7 @@ import {
   IconButton,
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import StarIcon from "@mui/icons-material/Star";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -28,7 +29,18 @@ const CardItem = ({ data }) => {
   };
 
   const navigate = useNavigate();
-  const { addToWishlist } = useWishlist();
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+
+  const isWishlisted = wishlist.some((item) => item._id === data._id);
+
+  const handleWishlistClick = (e) => {
+    e.stopPropagation(); 
+    if (isWishlisted) {
+      removeFromWishlist(data._id);
+    } else {
+      addToWishlist(data);
+    }
+  };
 
   return (
     <Card
@@ -50,12 +62,16 @@ const CardItem = ({ data }) => {
           top: 10,
           right: 10,
           zIndex: 2,
-          backgroundColor: "white",
+          // backgroundColor: "white",
           "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.8)" },
         }}
-        onClick={() => addToWishlist(data)}
+        onClick={handleWishlistClick}
       >
-        <FavoriteBorderIcon />
+        {isWishlisted ? (
+          <FavoriteIcon sx={{ color: "red" }} />
+        ) : (
+          <FavoriteBorderIcon />
+        )}
       </IconButton>
 
       <Box sx={{ position: "relative" }}>

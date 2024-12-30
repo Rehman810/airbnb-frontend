@@ -36,7 +36,7 @@ const VerifyToken = ({ VerifiedComponent, UnverifiedComponent, ...props }) => {
   }, [token]);
 
   return isAuthenticated === null
-    ? <p>Verifying your session...</p> 
+    ? <p></p> 
     : isAuthenticated
     ? <VerifiedComponent {...props} />
     : <UnverifiedComponent {...props} />;

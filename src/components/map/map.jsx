@@ -26,12 +26,12 @@ const LeafletMap = ({ latitude, longitude, popupText, steps = false }) => {
     <div
       id="map"
       style={{
-        height:"300px",
+        height: steps ? "100%" : "300px",
         width: "100%",
         borderRadius: "8px",
         marginTop: "16px",
         zIndex: steps ? 10: -10,
-        backgroundClip: "red"
+       backgroundClip: "padding-box"
       }}
     ></div>
   );

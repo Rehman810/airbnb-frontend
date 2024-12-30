@@ -1,9 +1,18 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 const WishlistContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
-  const [wishlist, setWishlist] = useState([]);
+  const [wishlist, setWishlist] = useState(() => {
+    // Initialize state from localStorage
+    const savedWishlist = localStorage.getItem("wishlist");
+    return savedWishlist ? JSON.parse(savedWishlist) : [];
+  });
+
+  useEffect(() => {
+    // Persist wishlist state to localStorage
+    localStorage.setItem("wishlist", JSON.stringify(wishlist));
+  }, [wishlist]);
 
   const addToWishlist = (item) => {
     setWishlist((prevWishlist) => [...prevWishlist, item]);
@@ -11,17 +20,13 @@ export const WishlistProvider = ({ children }) => {
 
   const removeFromWishlist = (itemId) => {
     setWishlist((prevWishlist) =>
-      prevWishlist.filter((item) => item.id !== itemId)
+      prevWishlist.filter((item) => item._id !== itemId)
     );
-  };
-
-  const clearWishlist = () => {
-    setWishlist([]);
   };
 
   return (
     <WishlistContext.Provider
-      value={{ wishlist, addToWishlist, removeFromWishlist, clearWishlist }}
+      value={{ wishlist, addToWishlist, removeFromWishlist }}
     >
       {children}
     </WishlistContext.Provider>
