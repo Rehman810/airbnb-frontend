@@ -34,6 +34,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useBookingContext } from "../../context/booking";
+import ShareIcon from "@mui/icons-material/Share";
+import toast from "react-hot-toast";
 
 const { RangePicker } = DatePicker;
 
@@ -83,14 +85,15 @@ const RoomPage = () => {
       prevIndex - 1 >= 0 ? prevIndex - 1 : place.photos.length - 1
     );
   };
-  
+
   const toPascalCase = (str) => {
     return str
-      ?.split(' ')
-      ?.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) 
-      ?.join(' ');
+      ?.split(" ")
+      ?.map(
+        (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+      )
+      ?.join(" ");
   };
-  
 
   const incrementGuest = (type) => {
     if (guests[type] < maxGuests) {
@@ -111,10 +114,10 @@ const RoomPage = () => {
       try {
         const response = await fetchDataById("listing", token, roomId);
         console.log(response);
-        
+
         if (response && response.listing) {
           setPlace(response.listing);
-          setHost(response.hostData)
+          setHost(response.hostData);
           setMaxGuests(response.listing.guestCapacity);
           setBookedDates(
             response.listing.bookings.map((booking) => ({
@@ -172,7 +175,6 @@ const RoomPage = () => {
       return;
     }
 
-    
     const [startDate, endDate] = dates;
     const data = {
       startDate: startDate.format("YYYY-MM-DD"),
@@ -180,32 +182,15 @@ const RoomPage = () => {
       guestCapacity: guests.adults,
       priceForHouse: totalPrice,
       serviceFee: ((totalPrice * serviceFeePercentage) / 100).toFixed(2),
-      nights: numofDays, 
-      total: (totalPrice + (totalPrice * serviceFeePercentage) / 100 ).toFixed(2)
+      nights: numofDays,
+      total: (totalPrice + (totalPrice * serviceFeePercentage) / 100).toFixed(
+        2
+      ),
     };
 
-    setBookListing(place)
-    setBookingData(data)
-    navigate(`/requestToBook/${place._id}`)
-    // try {
-    //   const response = await postDataById("post-bookings", data, token, roomId);
-    //   console.log("API Response:", response);
-    //   if (response) {
-    //     Swal.fire({
-    //       icon: "success",
-    //       title: "Booking Confirmed",
-    //       text: "Your booking has been successfully confirmed. We're looking forward to hosting you.",
-    //     });
-    //     navigate("/");
-    //   }
-    // } catch (error) {
-    //   console.error("Error sending data to API:", error);
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Booking Failed",
-    //     text: "There was an issue with your booking. Please try again later.",
-    //   });
-    // }
+    setBookListing(place);
+    setBookingData(data);
+    navigate(`/requestToBook/${place._id}`);
   };
 
   const disabledDate = (current) => {
@@ -242,25 +227,66 @@ const RoomPage = () => {
     setLoadingImages(false);
   };
 
+  const handleShareClick = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      toast.success("URL copied to clipboard!");  
+      showSuccessToast("URL copied to clipboard!")
+    }).catch((error) => {
+      console.error("Error copying URL:", error);
+      showErrorToast(error.message)
+    });
+  };
+
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
-      {loadingText ? (
-        <Skeleton variant="text" width="60%" height={40} animation="wave" />
-      ) : (
-        <Typography variant="h4" fontWeight="bold" gutterBottom>
-          {toPascalCase(place.title)}
-        </Typography>
-      )}
-     <Grid container spacing={2} onClick={handleOpenModal} style={{cursor: "pointer"}}>
-      <Grid item xs={12} md={6}>
-        {loadingImages && (
-          <Skeleton
-            variant="rectangular"
-            width="100%"
-            height={500}
-            animation="wave"
-          />
-        ) }
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        {loadingText ? (
+          <Skeleton variant="text" width="60%" height={40} animation="wave" />
+        ) : (
+          <Typography variant="h4" fontWeight="bold" gutterBottom>
+            {toPascalCase(place.title)}
+          </Typography>
+        )}
+
+        <IconButton
+          onClick={handleShareClick}
+          sx={{
+            ml: 2,
+            backgroundColor: "transparent",
+            "&:hover": {
+              backgroundColor: "transparent",
+            },
+          }}
+        >
+          <ShareIcon />
+          <Typography variant="body1" sx={{ ml: 1 }}>
+            Share
+          </Typography>
+        </IconButton>
+      </Box>
+
+      <Grid
+        container
+        spacing={2}
+        onClick={handleOpenModal}
+        style={{ cursor: "pointer" }}
+      >
+        <Grid item xs={12} md={6}>
+          {loadingImages && (
+            <Skeleton
+              variant="rectangular"
+              width="100%"
+              height={500}
+              animation="wave"
+            />
+          )}
           <CardMedia
             component="img"
             height="500"
@@ -270,37 +296,36 @@ const RoomPage = () => {
             onLoad={handleImageLoad}
             onError={(e) => (e.target.src = "/fallback-image.jpg")}
           />
-        
-      </Grid>
+        </Grid>
 
-      <Grid item xs={12} md={6}>
-        <Grid container spacing={2}>
-          {place?.photos?.slice(1, 5).map((photo, index) => (
-            <Grid item xs={6} key={index}>
-              {loadingImages ? (
-                <Skeleton
-                  variant="rectangular"
-                  width="100%"
-                  height={240}
-                  animation="wave"
-                />
-              ) : (
-                <CardMedia
-                  component="img"
-                  height="240"
-                  image={photo}
-                  alt={`Small Image ${index + 1}`}
-                  sx={{ borderRadius: 2 }}
-                  onError={(e) => (e.target.src = "/fallback-image.jpg")}
-                />
-              )}
-            </Grid>
-          ))}
+        <Grid item xs={12} md={6}>
+          <Grid container spacing={2}>
+            {place?.photos?.slice(1, 5).map((photo, index) => (
+              <Grid item xs={6} key={index}>
+                {loadingImages ? (
+                  <Skeleton
+                    variant="rectangular"
+                    width="100%"
+                    height={240}
+                    animation="wave"
+                  />
+                ) : (
+                  <CardMedia
+                    component="img"
+                    height="240"
+                    image={photo}
+                    alt={`Small Image ${index + 1}`}
+                    sx={{ borderRadius: 2 }}
+                    onError={(e) => (e.target.src = "/fallback-image.jpg")}
+                  />
+                )}
+              </Grid>
+            ))}
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
 
-    <Dialog
+      <Dialog
         fullScreen
         open={openImageModal}
         onClose={handleCloseModal}
@@ -360,7 +385,7 @@ const RoomPage = () => {
               // maxWidth: "90%",
               // maxHeight: "90%",
               borderRadius: "8px",
-              width: "70%"
+              width: "70%",
             }}
           />
         </DialogContent>
@@ -369,8 +394,7 @@ const RoomPage = () => {
       <Grid container spacing={2} sx={{ mt: 3 }}>
         <Grid item xs={12} md={8}>
           <Typography variant="h5" fontWeight={"bold"} gutterBottom>
-            {place.roomType} in{" "}
-            {formatAddress(place)}
+            {place.roomType} in {formatAddress(place)}
           </Typography>
           <Typography variant="body2" gutterBottom>
             <strong>{place.guestCapacity} guest</strong> |{" "}
@@ -574,7 +598,7 @@ const RoomPage = () => {
 
       <Box sx={{ mt: 4 }}>
         <Divider sx={{ mb: 2 }} />
-        <HostSection data={host} listing={place}/>
+        <HostSection data={host} listing={place} />
       </Box>
     </Box>
   );
