@@ -26,7 +26,7 @@ export const fetchData = async (endpoint, token) => {
 
   try {
     const response = await axios.get(`${apiKey}/${endpoint}`, config);
-    const initialData = response.data.data;   
+    const initialData = response.data;   
     return initialData;
   } catch (error) {
     throw new Error('Error fetching data: ' + error.message);

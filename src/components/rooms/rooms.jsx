@@ -39,6 +39,7 @@ const { RangePicker } = DatePicker;
 
 const RoomPage = () => {
   const [place, setPlace] = useState({});
+  const [host, setHost] = useState({});
   const [dates, setDates] = useState(null);
   const [maxGuests, setMaxGuests] = useState(1);
   const [bookedDates, setBookedDates] = useState([]);
@@ -109,8 +110,11 @@ const RoomPage = () => {
     const fetchOptions = async () => {
       try {
         const response = await fetchDataById("listing", token, roomId);
+        console.log(response);
+        
         if (response && response.listing) {
           setPlace(response.listing);
+          setHost(response.hostData)
           setMaxGuests(response.listing.guestCapacity);
           setBookedDates(
             response.listing.bookings.map((booking) => ({
@@ -570,7 +574,7 @@ const RoomPage = () => {
 
       <Box sx={{ mt: 4 }}>
         <Divider sx={{ mb: 2 }} />
-        <HostSection data={place} />
+        <HostSection data={host} listing={place}/>
       </Box>
     </Box>
   );

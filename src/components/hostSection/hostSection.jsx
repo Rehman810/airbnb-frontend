@@ -3,7 +3,7 @@ import { Box, Typography, Avatar, Button, Divider, Grid } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import VerifiedIcon from "@mui/icons-material/Verified";
 
-const HostSection = ({data}) => {
+const HostSection = ({data, listing}) => {
   return (
     <Box sx={{ mt: 4, p: 2 }}>
       <Typography variant="h6" gutterBottom>
@@ -23,7 +23,7 @@ const HostSection = ({data}) => {
           >
             <Box display="flex" alignItems="center" gap={2}>
               <Avatar
-                src="https://via.placeholder.com/80" 
+                src={data?.photoProfile}
                 alt="Host"
                 sx={{ width: 80, height: 80 }}
               />
@@ -32,7 +32,7 @@ const HostSection = ({data}) => {
                   variant="h6"
                   sx={{ display: "flex", alignItems: "center" }}
                 >
-                  Manolis
+                 {data.userName}
                   <VerifiedIcon
                     color="primary"
                     sx={{
@@ -69,7 +69,7 @@ const HostSection = ({data}) => {
               color="textSecondary"
               sx={{ mt: 2, display: "flex", alignItems: "center" }}
             >
-              Lives in Heraklion, Greece
+              Lives in {listing.city}, Pakistan
             </Typography>
 
             <Typography
@@ -88,14 +88,14 @@ const HostSection = ({data}) => {
 
         <Grid item xs={12} sm={6}>
           <Typography variant="body1" sx={{ mb: 2 }}>
-            Manolis is a Superhost
+            {data.userName} is a Superhost
           </Typography>
           <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
             Superhosts are experienced, highly rated hosts who are committed to
             providing great stays for guests.
           </Typography>
 
-          <Typography variant="body1" sx={{ mt: 2, mb: 1 }}>
+          {/* <Typography variant="body1" sx={{ mt: 2, mb: 1 }}>
             Co-Hosts
           </Typography>
           <Box display="flex" gap={1}>
@@ -109,7 +109,7 @@ const HostSection = ({data}) => {
               alt="Co-host 2"
               sx={{ width: 50, height: 50 }}
             />
-          </Box>
+          </Box> */}
 
           <Typography variant="body1" sx={{ mt: 3, mb: 1 }}>
             Host details
@@ -134,7 +134,7 @@ const HostSection = ({data}) => {
             Message Host
           </Button>
 
-          <Typography
+          {/* <Typography
             variant="body2"
             color="textSecondary"
             sx={{ mt: 2, textDecoration: "underline", cursor: "pointer" }}
@@ -142,8 +142,8 @@ const HostSection = ({data}) => {
             Individual Host
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Registration number: 00001759425
-          </Typography>
+            Registration number: {listing.id}
+          </Typography> */}
         </Grid>
       </Grid>
     </Box>

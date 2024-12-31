@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import { postDataById } from "../../config/ServiceApi/serviceApi";
 import { useBookingContext } from "../../context/booking";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 const BookingComponent = () => {
   const { bookListing, bookingData } = useBookingContext();
@@ -22,11 +23,19 @@ const BookingComponent = () => {
   const { roomId } = useParams();
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isLoading, setIsLoading] = useState(false);
 
   const formatCardNumber = (cardNumber) => {
     return cardNumber
       .replace(/\D/g, "") 
       .replace(/(\d{4})(?=\d)/g, "$1 "); 
+  };
+
+  const validateForm = () => {
+    if (!stripe || !elements) return false;
+    return true;
   };
 
   const [expiration, setExpiration] = useState("");
@@ -60,32 +69,32 @@ const BookingComponent = () => {
     setCardNumber(formattedCardNumber);
   };
 
-  const validateForm = () => {
-    const newErrors = {};
+  // const validateForm = () => {
+  //   const newErrors = {};
 
-    const cardNumberWithoutSpaces = cardNumber.replace(/\s/g, "");
-    if (!cardNumberWithoutSpaces) {
-      newErrors.cardNumber = "Card Number is required";
-    } else if (
-      cardNumberWithoutSpaces.length < 13 ||
-      cardNumberWithoutSpaces.length > 19
-    ) {
-      newErrors.cardNumber = "Card number must be between 13 and 19 digits";
-    } else if (!/^\d{13,19}$/.test(cardNumberWithoutSpaces)) {
-      newErrors.cardNumber = "Card number can only contain digits";
-    }
+  //   const cardNumberWithoutSpaces = cardNumber.replace(/\s/g, "");
+  //   if (!cardNumberWithoutSpaces) {
+  //     newErrors.cardNumber = "Card Number is required";
+  //   } else if (
+  //     cardNumberWithoutSpaces.length < 13 ||
+  //     cardNumberWithoutSpaces.length > 19
+  //   ) {
+  //     newErrors.cardNumber = "Card number must be between 13 and 19 digits";
+  //   } else if (!/^\d{13,19}$/.test(cardNumberWithoutSpaces)) {
+  //     newErrors.cardNumber = "Card number can only contain digits";
+  //   }
 
-    if (!expiration) {
-      newErrors.expiration = "Expiration date is required";
-    }
+  //   if (!expiration) {
+  //     newErrors.expiration = "Expiration date is required";
+  //   }
 
-    if (!cvv) {
-      newErrors.cvv = "CVV is required";
-    }
+  //   if (!cvv) {
+  //     newErrors.cvv = "CVV is required";
+  //   }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  //   setErrors(newErrors);
+  //   return Object.keys(newErrors).length === 0;
+  // };
 
   const formatDateRange = (startDate, endDate) => {
     const start = new Date(startDate);
@@ -110,53 +119,124 @@ const BookingComponent = () => {
   };
 
   const handleReserve = async () => {
-    const isValid = validateForm();
-    if (!isValid) return;
-  
-    let errorMessage = "";
-    
-    if (!user?.phoneNumber && !user?.photoProfile) {
-      errorMessage = "Please add your phone number and upload a profile photo to proceed with the booking.";
-    } else if (!user?.phoneNumber) {
-      errorMessage = "Please add your phone number to proceed with the booking.";
-    } else if (!user?.photoProfile) {
-      errorMessage = "Please upload a profile photo to proceed with the booking.";
-    }
-  
-    if (errorMessage) {
+    if (!validateForm()) {
       Swal.fire({
         icon: "error",
-        title: "Missing Information",
-        text: errorMessage,
+        title: "Stripe Not Loaded",
+        text: "Please wait for the payment gateway to load.",
       });
       return;
     }
-  
-    const data = {
-      startDate: bookingData?.startDate,
-      endDate: bookingData?.endDate,
-      guestCapacity: bookingData?.guestCapacity,
-    };
-  
+
+    const cardElement = elements.getElement(CardElement);
+
+    setIsLoading(true);
     try {
-      const response = await postDataById("post-bookings", data, token, roomId);
+      const { paymentMethod, error } = await stripe.createPaymentMethod({
+        type: "card",
+        card: cardElement,
+      });
+
+      if (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Payment Error",
+          text: error.message,
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // const paymentData = {
+      //   paymentMethodId: paymentMethod.id,
+      //   // amount: bookingData?.total,
+      //   // currency: "PKR",
+      // };
+
+      const data = {
+            startDate: bookingData?.startDate,
+            endDate: bookingData?.endDate,
+            guestCapacity: bookingData?.guestCapacity,
+            paymentMethodId: paymentMethod.id,
+          };
+        
+
+      const response = await postDataById("create-bookings", data, token, roomId);
+  //     const response = await postDataById("post-bookings", data, token, roomId);
+
       if (response) {
         Swal.fire({
           icon: "success",
           title: "Booking Confirmed",
-          text: "Your booking has been successfully confirmed. We're looking forward to hosting you.",
+          text: "Your booking and payment were successful. We're looking forward to hosting you.",
         });
         navigate("/");
       }
     } catch (error) {
-      console.error("Error sending data to API:", error);
+      console.error("Error during payment:", error);
       Swal.fire({
         icon: "error",
         title: "Booking Failed",
-        text: "There was an issue with your booking. Please try again later.",
+        text: "There was an issue with your booking or payment. Please try again later.",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
+
+
+
+
+
+
+  // const handleReserve = async () => {
+  //   const isValid = validateForm();
+  //   if (!isValid) return;
+  
+  //   let errorMessage = "";
+    
+  //   if (!user?.phoneNumber && !user?.photoProfile) {
+  //     errorMessage = "Please add your phone number and upload a profile photo to proceed with the booking.";
+  //   } else if (!user?.phoneNumber) {
+  //     errorMessage = "Please add your phone number to proceed with the booking.";
+  //   } else if (!user?.photoProfile) {
+  //     errorMessage = "Please upload a profile photo to proceed with the booking.";
+  //   }
+  
+  //   if (errorMessage) {
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Missing Information",
+  //       text: errorMessage,
+  //     });
+  //     return;
+  //   }
+  
+  //   const data = {
+  //     startDate: bookingData?.startDate,
+  //     endDate: bookingData?.endDate,
+  //     guestCapacity: bookingData?.guestCapacity,
+  //   };
+  
+  //   try {
+  //     const response = await postDataById("post-bookings", data, token, roomId);
+  //     if (response) {
+  //       Swal.fire({
+  //         icon: "success",
+  //         title: "Booking Confirmed",
+  //         text: "Your booking has been successfully confirmed. We're looking forward to hosting you.",
+  //       });
+  //       navigate("/");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error sending data to API:", error);
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Booking Failed",
+  //       text: "There was an issue with your booking. Please try again later.",
+  //     });
+  //   }
+  // };
   
 
   return (
@@ -168,6 +248,29 @@ const BookingComponent = () => {
               Request to book
             </Typography>
           </Box>
+
+          <Divider sx={{ my: 2 }} />
+            <Typography variant="h6" fontWeight="bold">
+              Pay with Card
+            </Typography>
+            <Box mt={2}>
+              <CardElement
+                options={{
+                  style: {
+                    base: {
+                      fontSize: "16px",
+                      color: "#424770",
+                      "::placeholder": {
+                        color: "#aab7c4",
+                      },
+                    },
+                    invalid: {
+                      color: "#9e2146",
+                    },
+                  },
+                }}
+              />
+            </Box>
 
           <Box mt={4}>
             <Typography variant="h6" fontWeight="bold">
@@ -194,7 +297,7 @@ const BookingComponent = () => {
             </Grid>
           </Box>
 
-          <Box mt={4}>
+          {/* <Box mt={4}>
             <Typography variant="h6" fontWeight="bold">
               Pay with
             </Typography>
@@ -233,7 +336,7 @@ const BookingComponent = () => {
                 />
               </Grid>
             </Grid>
-          </Box>
+          </Box> */}
           <Box mt={4}>
             <Typography variant="h6" fontWeight="bold">
               Required for your trip

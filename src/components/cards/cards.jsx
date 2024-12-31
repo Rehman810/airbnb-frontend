@@ -118,7 +118,7 @@ const CardItem = ({ data }) => {
           ))}
         </Slider>
 
-        {data?.host && (
+        {data?.hostData && (
           <Box
             sx={{
               position: "absolute",

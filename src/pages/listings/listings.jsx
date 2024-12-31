@@ -31,6 +31,8 @@ const ListingPage = () => {
       try {
         const response = await fetchDataById("listings", token, user?._id);
         setListing(response.listing);
+        console.log(response.listing);
+        
       } catch (error) {
         console.error("Failed to fetch options:", error);
       } finally {
@@ -136,7 +138,7 @@ const ListingPage = () => {
                       <CardMedia
                         component="img"
                         height="280"
-                        image={listing?.photos[0] || Img1}
+                        image={listing?.photos[0]}
                         alt={listing.title}
                         sx={{ borderRadius: "12px 12px 0 0" }}
                       />

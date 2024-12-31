@@ -51,8 +51,8 @@ const Home = () => {
       try {
         const response = await fetchData("all-listring", token);
         console.log(response);
-        setListing(response);
-        setFilteredData(response);
+        setListing(response.data);
+        setFilteredData(response.data);
       } catch (error) {
         console.error("Failed to fetch options:", error);
       } finally {
