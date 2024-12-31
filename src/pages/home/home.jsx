@@ -25,12 +25,12 @@ const Home = () => {
     }
   
     const filteredProducts = listing.filter((product) => {
-      const cityMatches = searchParams.destination.split(",")[0].trim().toLowerCase() == product.city.trim().toLowerCase();
+      const cityMatches = searchParams?.destination?.split(",")[0]?.trim().toLowerCase() == product.city?.trim().toLowerCase();
 
       const checkInDate = new Date(searchParams.checkIn);
       const checkOutDate = new Date(searchParams.checkOut);
   
-      const isAvailable = !product.bookings.some((booking) => {
+      const isAvailable = !product?.bookings?.some((booking) => {
         const bookingStart = new Date(booking.startDate);
         const bookingEnd = new Date(booking.endDate);
   

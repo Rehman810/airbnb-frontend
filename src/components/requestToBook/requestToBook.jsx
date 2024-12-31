@@ -359,7 +359,7 @@ const BookingComponent = () => {
                 </Button>
               </Box>
 
-              {!user.phoneNumber && (
+              {!user?.phoneNumber && (
                 <>
                   <Box mb={3}>
                     <Typography variant="h6" fontWeight="bold">
@@ -377,7 +377,7 @@ const BookingComponent = () => {
                   </Box>
                 </>
               )}
-              {!user.photoProfile && (
+              {!user?.photoProfile && (
                 <>
                   <Box mb={3}>
                     <Typography variant="h6" fontWeight="bold">
