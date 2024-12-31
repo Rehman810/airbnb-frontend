@@ -4,7 +4,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 const Guests = lazy(() => import("../../screens/guests/guests"));
 const Hosts = lazy(() => import("../../screens/hosts/hosts"));
 const Protected = lazy(() => import("../../components/protected/protected"));
-const ListingSteps = lazy(() => import("../../components/listingSteps/listingSteps"));
+const ListingSteps = lazy(() =>
+  import("../../components/listingSteps/listingSteps")
+);
 
 const Router = () => {
   return (

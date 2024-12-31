@@ -35,6 +35,9 @@ const NavbarHost = () => {
   ]);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const isProfilePage = location.pathname.includes("profile");
+  
   const isMobile = useMediaQuery("(max-width:900px)");
 
   const menuItems = ["Today", "Calendar", "Listings", "Messages"];
@@ -91,7 +94,7 @@ const NavbarHost = () => {
             airbnb
           </Typography>
         </Box>
-
+{!isProfilePage && (
         <Box
           sx={{
             display: { xs: "none", md: "flex" },
@@ -134,7 +137,7 @@ const NavbarHost = () => {
             </Link>
           ))}
         </Box>
-
+)}
         <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <IconButton onClick={handleNotificationsMenuOpen}>
             <Badge badgeContent={notifications.length} color="error">
@@ -194,7 +197,9 @@ const NavbarHost = () => {
                   horizontal: "right",
                 }}
               >
-                <MenuItem>Profile</MenuItem>
+                <MenuItem onClick={() => navigate("/hosting/profile")}>
+                  Profile
+                </MenuItem>
                 <MenuItem>Account</MenuItem>
                 <MenuItem>Visit the help center</MenuItem>
                 <MenuItem>Get help with safety issue</MenuItem>
