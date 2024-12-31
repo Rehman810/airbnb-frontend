@@ -102,10 +102,10 @@ export const updateDataById = async (endpoint, token, id, data, id2) => {
 
   try {
     const response = await axios.put(url, data, config); 
-    emitEvent('send_message', response.data);
+    // emitEvent('send_message', response.data);
     // console.log(response);
     
-    return response.data.data;
+    return response.data;
   } catch (error) {
     // showErrorToast(error.message);
     throw new Error('Error updating data: ' + error.message);

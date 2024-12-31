@@ -22,6 +22,7 @@ const handleLogout = async (navigate) => {
     console.log("Logout successful:", response.data);
 
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/"); 
   } catch (error) {
     console.error("Logout error:", error.message || error);
