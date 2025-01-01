@@ -1,17 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, {
+  useEffect,
+  useState,
+} from "react";
+import {
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import axios from "axios";
 import API_CONFIG from "../../config/Api/Api";
 import Loader from "../loader/loader";
 import LoginModal from "../Login/LoginModal";
 
-const Protected = ({ Component, allowedRoles }) => {
+const Protected = ({
+  Component,
+  allowedRoles,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const [signUp, setSignUp] = useState(true); 
+  const [isAuthenticated, setIsAuthenticated] =
+    useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] =
+    useState(false);
+  const [signUp, setSignUp] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -31,8 +42,7 @@ const Protected = ({ Component, allowedRoles }) => {
         );
         setIsAuthenticated(true);
       } catch (error) {
-        // console.error("Token verification failed", error);
-        setIsLoginModalOpen(true); 
+        setIsLoginModalOpen(true);
       }
     };
 
@@ -41,7 +51,7 @@ const Protected = ({ Component, allowedRoles }) => {
 
   const handleLoginModalClose = () => {
     setIsLoginModalOpen(false);
-    navigate("/"); 
+    navigate(-1);
   };
 
   return (

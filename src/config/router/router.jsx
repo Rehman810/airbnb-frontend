@@ -1,11 +1,26 @@
 import React, { lazy } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
 
-const Guests = lazy(() => import("../../screens/guests/guests"));
-const Hosts = lazy(() => import("../../screens/hosts/hosts"));
-const Protected = lazy(() => import("../../components/protected/protected"));
+const Guests = lazy(() =>
+  import("../../screens/guests/guests")
+);
+const Hosts = lazy(() =>
+  import("../../screens/hosts/hosts")
+);
+const Protected = lazy(() =>
+  import("../../components/protected/protected")
+);
 const ListingSteps = lazy(() =>
-  import("../../components/listingSteps/listingSteps")
+  import(
+    "../../components/listingSteps/listingSteps"
+  )
+);
+const CommonRoutes = lazy(() =>
+  import("../../screens/common/common")
 );
 
 const Router = () => {
@@ -13,22 +28,36 @@ const Router = () => {
     <>
       <BrowserRouter>
         <Routes>
-          {/* Guests Page */}
-          <Route path="/*" element={<Guests />} />
+          {/* Common Pages */}
+          <Route
+            path="/user/*"
+            element={<CommonRoutes />}
+          />
 
           {/* Host Pages */}
           <Route
             path="/hosting/*"
-            element={<Protected Component={Hosts} allowedRoles={["host"]} />}
+            element={
+              <Protected
+                Component={Hosts}
+                allowedRoles={["host"]}
+              />
+            }
           />
 
-          {/* Listing Steps Page */}
+          {/* Listing Steps Pages */}
           <Route
             path="/listingSteps"
             element={
-              <Protected Component={ListingSteps} allowedRoles={["host"]} />
+              <Protected
+                Component={ListingSteps}
+                allowedRoles={["host"]}
+              />
             }
           />
+
+          {/* Guests Pages */}
+          <Route path="/*" element={<Guests />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -36,7 +36,7 @@ const NavbarHost = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isProfilePage = location.pathname.includes("profile");
+  const isProfilePage = location.pathname.includes("hosting");
   
   const isMobile = useMediaQuery("(max-width:900px)");
 
@@ -94,7 +94,7 @@ const NavbarHost = () => {
             airbnb
           </Typography>
         </Box>
-{!isProfilePage && (
+{isProfilePage && (
         <Box
           sx={{
             display: { xs: "none", md: "flex" },
@@ -197,7 +197,7 @@ const NavbarHost = () => {
                   horizontal: "right",
                 }}
               >
-                <MenuItem onClick={() => navigate("/hosting/profile")}>
+                <MenuItem onClick={() => navigate("/user/profile")}>
                   Profile
                 </MenuItem>
                 <MenuItem>Account</MenuItem>

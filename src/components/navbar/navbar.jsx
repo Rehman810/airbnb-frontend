@@ -38,7 +38,7 @@ const VerifiedMenu = ({
     <MenuItem>Messages</MenuItem>
     <MenuItem>Notifications</MenuItem>
     <MenuItem>Trips</MenuItem>
-    <MenuItem>Wishlists</MenuItem>
+    <MenuItem onClick={() => navigate("/user/wishlist")}>Wishlists</MenuItem>
     <Divider />
     <MenuItem onClick={() => navigate("/hosting/listings")}>
       Manage Listings
