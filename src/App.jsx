@@ -11,5 +11,5 @@ const App = () => {
       <Router />
     </Suspense>
   );
-};
+}
 export default App
