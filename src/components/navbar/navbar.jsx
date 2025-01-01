@@ -33,21 +33,29 @@ const VerifiedMenu = ({
     anchorEl={anchorEl}
     open={Boolean(anchorEl)}
     onClose={handleMenuClose}
-    keepMounted
-  >
+    keepMounted>
     <MenuItem>Messages</MenuItem>
     <MenuItem>Notifications</MenuItem>
     <MenuItem>Trips</MenuItem>
-    <MenuItem onClick={() => navigate("/user/wishlist")}>Wishlists</MenuItem>
+    <MenuItem
+      onClick={() => navigate("/user/wishlist")}>
+      Wishlists
+    </MenuItem>
     <Divider />
-    <MenuItem onClick={() => navigate("/hosting/listings")}>
+    <MenuItem
+      onClick={() =>
+        navigate("/hosting/listings")
+      }>
       Manage Listings
     </MenuItem>
     <MenuItem>Account</MenuItem>
     <Divider />
     <MenuItem>Gift cards</MenuItem>
     <MenuItem>Help center</MenuItem>
-    <MenuItem onClick={() => handleLogout(navigate)}>Logout</MenuItem>
+    <MenuItem
+      onClick={() => handleLogout(navigate)}>
+      Logout
+    </MenuItem>
   </Menu>
 );
 
@@ -61,10 +69,13 @@ const UnverifiedMenu = ({
     anchorEl={anchorEl}
     open={Boolean(anchorEl)}
     onClose={handleMenuClose}
-    keepMounted
-  >
-    <MenuItem onClick={handleLoginModalOpen}>Login</MenuItem>
-    <MenuItem onClick={handleSignUpModalOpen}>Sign up</MenuItem>
+    keepMounted>
+    <MenuItem onClick={handleLoginModalOpen}>
+      Login
+    </MenuItem>
+    <MenuItem onClick={handleSignUpModalOpen}>
+      Sign up
+    </MenuItem>
     <Divider />
     <MenuItem>Gift cards</MenuItem>
     <MenuItem>Airbnb your home</MenuItem>
@@ -75,10 +86,14 @@ const UnverifiedMenu = ({
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] =
+    useState(false);
   const [signUp, isSignUp] = useState();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const user = JSON.parse(
+    localStorage.getItem("user")
+  );
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -114,25 +129,26 @@ const Navbar = () => {
         position: "sticky",
         top: 0,
         zIndex: 10,
-      }}
-    >
+      }}>
       <Toolbar
         sx={{
           display: "flex",
           justifyContent: "space-between",
           padding: "0 16px",
-        }}
-      >
+        }}>
         <Box>
           <Typography
             variant="h6"
             component="div"
-            sx={{ fontWeight: "bold", color: "red", cursor: "pointer" }}
+            sx={{
+              fontWeight: "bold",
+              color: "red",
+              cursor: "pointer",
+            }}
             className="airbnbBold"
             onClick={() => {
               navigate("/");
-            }}
-          >
+            }}>
             airbnb
           </Typography>
         </Box>
@@ -141,20 +157,36 @@ const Navbar = () => {
           <SearchBar2 />
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+          }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}>
             <Button
               variant="text"
               sx={{
                 fontWeight: 600,
                 textTransform: "none",
                 color: "black",
-                display: { xs: "none", sm: "inline-flex" },
+                display: {
+                  xs: "none",
+                  sm: "inline-flex",
+                },
                 fontSize: "14px",
               }}
-              onClick={() => navigate("/hosting/today")}
-            >
-              {!token ? "Airbnb your home" : "Switch to hosting"}
+              onClick={() =>
+                navigate("/hosting/today")
+              }>
+              {!token
+                ? "Airbnb your home"
+                : "Switch to hosting"}
             </Button>
             <IconButton>
               <GlobalIcon />
@@ -168,8 +200,7 @@ const Navbar = () => {
               borderRadius: "30px",
               padding: "5px 10px",
               gap: "10px",
-            }}
-          >
+            }}>
             <Box
               onClick={handleMenuOpen}
               sx={{
@@ -177,20 +208,26 @@ const Navbar = () => {
                 alignItems: "center",
                 flexDirection: "row",
                 cursor: "pointer",
-              }}
-            >
+              }}>
               <IconButton>
                 <MenuIcon />
               </IconButton>
               <Avatar
                 sx={{
-                  bgcolor: "#f2f2f2",
-                  color: "gray",
+                  bgcolor: user?.photoProfile
+                    ? "transparent"
+                    : "#f2f2f2",
+                  color: user?.photoProfile
+                    ? "inherit"
+                    : "gray",
                   width: 32,
                   height: 32,
                 }}
-              >
-                <PersonIcon />
+                src={user?.photoProfile || null}>
+                {!user?.photoProfile &&
+                  user?.userName
+                    .charAt(0)
+                    .toUpperCase()}
               </Avatar>
             </Box>
 
@@ -201,8 +238,12 @@ const Navbar = () => {
               handleMenuClose={handleMenuClose}
               navigate={navigate}
               handleLogout={handleLogout}
-              handleLoginModalOpen={handleLoginModalOpen}
-              handleSignUpModalOpen={handleSignUpModalOpen}
+              handleLoginModalOpen={
+                handleLoginModalOpen
+              }
+              handleSignUpModalOpen={
+                handleSignUpModalOpen
+              }
             />
           </Box>
         </Box>

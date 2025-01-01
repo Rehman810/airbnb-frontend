@@ -90,7 +90,7 @@ const Home = () => {
         <Box sx={{ flexGrow: 1, p: 2 }}>
           <Grid container spacing={2}>
             {loading ? (
-              Array.from({ length: 4 }).map((_, index) => (
+              Array.from({ length: 12 }).map((_, index) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                   <Box
                     sx={{

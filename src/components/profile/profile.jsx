@@ -50,19 +50,25 @@ const ProfileSection = () => {
           "user",
           JSON.stringify(updatedUser)
         );
-        console.log(file);
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        // To inspect the contents
+        for (let [
+          key,
+          value,
+        ] of formData.entries()) {
+          console.log(`${key}:`, value);
+        }
 
         try {
           const response = await updateDataById(
             "update-profile",
             token,
             user._id,
-            {
-              photoProfile: file,
-            }
+            formData
           );
-          console.log(response);
-          
           if (response && response.updatedData) {
             console.log(
               "Profile photo updated successfully:",

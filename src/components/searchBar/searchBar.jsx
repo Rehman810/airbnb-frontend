@@ -215,9 +215,14 @@ const SearchBar = () => {
                 </Typography>
                 <RangePicker
                   onChange={(dates) => setDates(dates)}
-                  style={{ width: "100%" }}
                   placeholder={["Check in", "Check out"]}
                   disabledDate={disableDates}
+                  style={{
+                    width: "100%",
+                    border: "none", 
+                    boxShadow: "none", 
+                    width: "100%"
+                  }}
                 />
               </Box>
 
