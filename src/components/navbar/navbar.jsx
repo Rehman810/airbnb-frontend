@@ -22,6 +22,7 @@ import SearchBar2 from "../searchBar/searchBar2";
 import { useNavigate } from "react-router-dom";
 import handleLogout from "../logout/logout";
 import VerifyToken from "../protected/verifyToken";
+import Language from "../language/Language";
 
 const VerifiedMenu = ({
   anchorEl,
@@ -88,6 +89,7 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoginModalOpen, setIsLoginModalOpen] =
     useState(false);
+    const [open, setOpen] = useState(false);
   const [signUp, isSignUp] = useState();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -117,6 +119,9 @@ const Navbar = () => {
 
   const handleLoginModalClose = () => {
     setIsLoginModalOpen(false);
+  };
+  const toggleModal = () => {
+    setOpen(!open);
   };
 
   return (
@@ -189,7 +194,7 @@ const Navbar = () => {
                 : "Switch to hosting"}
             </Button>
             <IconButton>
-              <GlobalIcon />
+              <GlobalIcon onClick={toggleModal} />
             </IconButton>
           </Box>
           <Box
@@ -258,6 +263,7 @@ const Navbar = () => {
           isSignUp={isSignUp}
         />
       )}
+      <Language open={open} toggleModal={toggleModal}/>
     </AppBar>
   );
 };
