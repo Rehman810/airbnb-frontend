@@ -22,6 +22,8 @@ const PendingBooking = () => {
       try {
         const response = await fetchData("temporary-booking", token);
         setPendingBookings(response.bookings);
+        console.log(response);
+        
       } catch (error) {
         console.error("Error fetching pending bookings:", error);
       } finally {
@@ -56,7 +58,7 @@ const PendingBooking = () => {
     );
   }
 
-  if (pendingBookings?.length === 0 || {}) {
+  if (pendingBookings?.length === 0 && {}) {
     return (
       <Box textAlign="center">
         <Typography variant="h6" color="textSecondary">
