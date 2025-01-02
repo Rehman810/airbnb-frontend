@@ -37,9 +37,9 @@ const CommonRoutes = () => {
           element={
             <Protected
               Component={
-                <Elements stripe={stripePromise}>
+                ()=>(<Elements stripe={stripePromise}>
                   <RequestToBook />
-                </Elements>
+                </Elements>)
               }
             />
           }

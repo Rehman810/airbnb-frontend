@@ -14,7 +14,7 @@ const Home = () => {
   const { searchParams } = useAppContext();
 
   useEffect(() => {
-    if (listing.length === 0) {
+    if (listing?.length === 0) {
       setFilteredData([]);
       return;
     }
@@ -137,14 +137,14 @@ const Home = () => {
                   </Box>
                 </Grid>
               ))
-            ) : listing.length === 0 ? (
+            ) : listing?.length === 0 ? (
               <Grid item xs={12}>
                 <Typography variant="h6" align="center" color="text.secondary">
                   No listings present
                 </Typography>
               </Grid>
             ) : (
-              filteredData.map((item) => (
+              filteredData?.map((item) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={item._id}>
                   <Card data={item} />
                 </Grid>

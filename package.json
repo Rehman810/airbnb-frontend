@@ -39,6 +39,7 @@
     "react-lottie": "^1.2.10",
     "react-router-dom": "^6.28.0",
     "react-slick": "^0.30.3",
+    "react-toastify": "^11.0.2",
     "slick-carousel": "^1.8.1",
     "sweetalert2": "^11.15.2"
   },

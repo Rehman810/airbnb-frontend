@@ -93,21 +93,15 @@ export const updateDataById = async (endpoint, token, id, data, id2) => {
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      ...(data instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
     },
   };
 
   const url = id2 ? `${apiKey}/${endpoint}/${id}/${id2}` : `${apiKey}/${endpoint}/${id}`;
-
-
   try {
-    const response = await axios.put(url, data, config); 
-    // emitEvent('send_message', response.data);
-    // console.log(response);
-    
+    const response = await axios.put(url, data, config);     
     return response.data;
   } catch (error) {
-    // showErrorToast(error.message);
     throw new Error('Error updating data: ' + error.message);
   }
 };

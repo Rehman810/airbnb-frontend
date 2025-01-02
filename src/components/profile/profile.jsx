@@ -54,14 +54,6 @@ const ProfileSection = () => {
         const formData = new FormData();
         formData.append("image", file);
 
-        // To inspect the contents
-        for (let [
-          key,
-          value,
-        ] of formData.entries()) {
-          console.log(`${key}:`, value);
-        }
-
         try {
           const response = await updateDataById(
             "update-profile",
@@ -69,12 +61,10 @@ const ProfileSection = () => {
             user._id,
             formData
           );
-          if (response && response.updatedData) {
-            console.log(
-              "Profile photo updated successfully:",
-              response.updatedData
-            );
-          }
+            // console.log(
+            //   "Profile photo updated successfully:",
+            //   response.updatedData.photoProfile
+            // );
         } catch (error) {
           console.error(
             "Error updating profile photo:",
@@ -140,7 +130,6 @@ const ProfileSection = () => {
         padding: 3,
         bgcolor: "background.default",
       }}>
-      {/* Profile Image and Name */}
       <Grid item xs={12} md={4}>
         <Paper
           elevation={3}
@@ -191,7 +180,6 @@ const ProfileSection = () => {
         </Paper>
       </Grid>
 
-      {/* About Section */}
       <Grid item xs={12} md={8}>
         <Box>
           <Typography variant="h5" sx={{ mb: 2 }}>
@@ -262,7 +250,6 @@ const ProfileSection = () => {
         </Box>
       </Grid>
 
-      {/* Confirmed Information */}
       <Grid item xs={12}>
         <Paper
           elevation={2}

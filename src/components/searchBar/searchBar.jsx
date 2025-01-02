@@ -221,7 +221,6 @@ const SearchBar = () => {
                     width: "100%",
                     border: "none", 
                     boxShadow: "none", 
-                    width: "100%"
                   }}
                 />
               </Box>
