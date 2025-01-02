@@ -56,7 +56,7 @@ const PendingBooking = () => {
     );
   }
 
-  if (pendingBookings?.length === 0 && {}) {
+  if (pendingBookings?.length === 0 || {}) {
     return (
       <Box textAlign="center">
         <Typography variant="h6" color="textSecondary">
