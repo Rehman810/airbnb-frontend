@@ -1,0 +1,17 @@
+{
+  "where": "在哪里",
+  "cities": {
+    "karachi": {
+      "name": "卡拉奇",
+      "text": "享受灯光之城"
+    },
+    "islamabad": {
+      "name": "伊斯兰堡",
+      "text": "欣赏如费萨尔清真寺的景点"
+    },
+    "lahore": {
+      "name": "拉合尔",
+      "text": "去国外旅行"
+    }
+}
+}

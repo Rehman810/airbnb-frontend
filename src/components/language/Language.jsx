@@ -8,8 +8,20 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useTranslation } from "react-i18next";
 
 const Language = ({ open, toggleModal }) => {
+  const { i18n } = useTranslation();
+
+  const languages = [
+    { code: "en", lang: "English" },
+    { code: "zh", lang: "Chinese" },
+  ];
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
   return (
     <Dialog
       open={open}
@@ -43,27 +55,20 @@ const Language = ({ open, toggleModal }) => {
           <hr />
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={6} sm={4}>
-            <Typography variant="body2">English</Typography>
-            <Typography variant="caption">United States</Typography>
-          </Grid>
-          <Grid item xs={6} sm={4}>
-            <Typography variant="body2">Azərbaycan dili</Typography>
-            <Typography variant="caption">Azerbaycan</Typography>
-          </Grid>
-          <Grid item xs={6} sm={4}>
-            <Typography variant="body2">Bahasa Indonesia</Typography>
-            <Typography variant="caption">Indonesia</Typography>
-          </Grid>
-          <Grid item xs={6} sm={4}>
-            <Typography variant="body2">Bosanski</Typography>
-            <Typography variant="caption">Bosna i Hercegovina</Typography>
-          </Grid>
-          <Grid item xs={6} sm={4}>
-            <Typography variant="body2">Català</Typography>
-            <Typography variant="caption">Espanya</Typography>
-          </Grid>
-          {/* Add more language options as needed */}
+          {languages.map((lng) => (
+            <Grid item xs={6} sm={4} key={lng.code}>
+              <Typography
+                variant="body2"
+                style={{
+                  cursor: "pointer",
+                  fontWeight: i18n.language === lng.code ? "bold" : "normal",
+                }}
+                onClick={() => changeLanguage(lng.code)}
+              >
+                {lng.lang}
+              </Typography>
+            </Grid>
+          ))}
         </Grid>
       </DialogContent>
     </Dialog>

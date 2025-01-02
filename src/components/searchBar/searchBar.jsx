@@ -23,8 +23,10 @@ import Icon3 from "../../assets/icons/icons3.png";
 import "../../assets/styles/navbar.css";
 import { useAppContext } from "../../context/context";
 import { DatePicker } from "antd";
+import { useTranslation } from "react-i18next";
 
 const SearchBar = () => {
+  const { t } = useTranslation();
   const { RangePicker } = DatePicker;
   const [isVisible, setIsVisible] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -54,6 +56,8 @@ const SearchBar = () => {
 
   const isMobile = useMediaQuery("(max-width:600px)");
 
+  const {karachi, islamabad, lahore} = t("cities");
+
   useEffect(() => {
     const isFormComplete =
       selectedDestination && dates && guests.adults + guests.children > 0;
@@ -63,8 +67,8 @@ const SearchBar = () => {
 
   const cities = [
     {
-      name: "Karachi",
-      text: "For enjoying the city of lights",
+      name: karachi.name,
+      text: karachi.text,
       icon: Icon1,
     },
     {
@@ -158,7 +162,7 @@ const SearchBar = () => {
               variant="body2"
               sx={{ fontWeight: "bold", fontSize: "12px" }}
             >
-              Where
+              {t("where")}
             </Typography>
             <TextField
               placeholder="Search destinations"
@@ -219,8 +223,8 @@ const SearchBar = () => {
                   disabledDate={disableDates}
                   style={{
                     width: "100%",
-                    border: "none", 
-                    boxShadow: "none", 
+                    border: "none",
+                    boxShadow: "none",
                   }}
                 />
               </Box>

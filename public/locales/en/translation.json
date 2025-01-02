@@ -1,0 +1,17 @@
+{
+  "where": "Where",
+  "cities": {
+    "karachi": {
+      "name": "Karachi",
+      "text": "For enjoying the city of lights"
+    },
+    "islamabad": {
+      "name": "Islamabad",
+      "text": "For sights like Faisal Mosque"
+    },
+    "lahore": {
+      "name": "Lahore",
+      "text": "For a trip abroad"
+    }
+  }
+}
