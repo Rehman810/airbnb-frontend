@@ -119,6 +119,28 @@ const BookingComponent = () => {
   };
 
   const handleReserve = async () => {
+    const isValid = validateForm();
+    if (!isValid) return;
+  
+    let errorMessage = "";
+    
+    if (!user?.phoneNumber && !user?.photoProfile) {
+      errorMessage = "Please add your phone number and upload a profile photo to proceed with the booking.";
+    } else if (!user?.phoneNumber) {
+      errorMessage = "Please add your phone number to proceed with the booking.";
+    } else if (!user?.photoProfile) {
+      errorMessage = "Please upload a profile photo to proceed with the booking.";
+    }
+  
+    if (errorMessage) {
+      Swal.fire({
+        icon: "error",
+        title: "Missing Information",
+        text: errorMessage,
+      });
+      return;
+    }
+  
     if (!validateForm()) {
       Swal.fire({
         icon: "error",
@@ -190,27 +212,27 @@ const BookingComponent = () => {
 
 
   // const handleReserve = async () => {
-  //   const isValid = validateForm();
-  //   if (!isValid) return;
+    // const isValid = validateForm();
+    // if (!isValid) return;
   
-  //   let errorMessage = "";
+    // let errorMessage = "";
     
-  //   if (!user?.phoneNumber && !user?.photoProfile) {
-  //     errorMessage = "Please add your phone number and upload a profile photo to proceed with the booking.";
-  //   } else if (!user?.phoneNumber) {
-  //     errorMessage = "Please add your phone number to proceed with the booking.";
-  //   } else if (!user?.photoProfile) {
-  //     errorMessage = "Please upload a profile photo to proceed with the booking.";
-  //   }
+    // if (!user?.phoneNumber && !user?.photoProfile) {
+    //   errorMessage = "Please add your phone number and upload a profile photo to proceed with the booking.";
+    // } else if (!user?.phoneNumber) {
+    //   errorMessage = "Please add your phone number to proceed with the booking.";
+    // } else if (!user?.photoProfile) {
+    //   errorMessage = "Please upload a profile photo to proceed with the booking.";
+    // }
   
-  //   if (errorMessage) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Missing Information",
-  //       text: errorMessage,
-  //     });
-  //     return;
-  //   }
+    // if (errorMessage) {
+    //   Swal.fire({
+    //     icon: "error",
+    //     title: "Missing Information",
+    //     text: errorMessage,
+    //   });
+    //   return;
+    // }
   
   //   const data = {
   //     startDate: bookingData?.startDate,
@@ -371,7 +393,7 @@ const BookingComponent = () => {
                   </Box>
 
                   <Box textAlign="right">
-                    <Button variant="outlined" sx={{ mb: 2 }}>
+                    <Button variant="outlined" sx={{ mb: 2 }} onClick={()=>navigate("/user/profile")}>
                       Add
                     </Button>
                   </Box>
@@ -389,7 +411,7 @@ const BookingComponent = () => {
                   </Box>
 
                   <Box textAlign="right">
-                    <Button variant="outlined" sx={{ mb: 2 }}>
+                    <Button variant="outlined" sx={{ mb: 2 }} onClick={()=>navigate("/user/profile")}>
                       Add
                     </Button>
                   </Box>

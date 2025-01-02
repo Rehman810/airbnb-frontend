@@ -107,7 +107,7 @@ const CardItem = ({ data }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <Slider {...settings}>
-          {data.photos.map((img, index) => (
+          {data.photos?.map((img, index) => (
             <Box key={index} sx={{ height: 220, overflow: "hidden" }}>
               <img
                 src={img}
@@ -141,7 +141,7 @@ const CardItem = ({ data }) => {
             }}
           >
             <Avatar
-              src={data.profileImg}
+              src={data?.profileImg}
               alt="Host"
               sx={{ width: 40, height: 40 }}
             />

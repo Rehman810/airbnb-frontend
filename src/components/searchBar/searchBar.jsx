@@ -72,13 +72,13 @@ const SearchBar = () => {
       icon: Icon1,
     },
     {
-      name: "Islamabad",
-      text: "For sights like Faisal Mosque",
+      name: islamabad.name,
+      text: islamabad.text,
       icon: Icon2,
     },
     {
-      name: "Lahore",
-      text: "For a trip abroad",
+      name: lahore.name,
+      text: lahore.text,
       icon: Icon3,
     },
   ];
