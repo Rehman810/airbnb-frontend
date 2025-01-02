@@ -12,6 +12,6 @@ const App = () => {
       <Toaster />
       <Router />
     </Suspense>
-  );
+  )
 }
 export default App
