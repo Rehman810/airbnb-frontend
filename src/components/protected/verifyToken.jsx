@@ -26,7 +26,6 @@ const VerifyToken = ({ VerifiedComponent, UnverifiedComponent, ...props }) => {
       );
       setIsAuthenticated(true);
     } catch (error) {
-      console.error("Token verification failed", error);
       setIsAuthenticated(false);
     }
   };

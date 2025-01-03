@@ -43,6 +43,8 @@ const Protected = ({
         setIsAuthenticated(true);
       } catch (error) {
         setIsLoginModalOpen(true);
+        localStorage.removeItem("token")
+        localStorage.removeItem("user")
       }
     };
 
