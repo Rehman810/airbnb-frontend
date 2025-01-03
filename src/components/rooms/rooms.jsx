@@ -1,7 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-} from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -24,10 +21,7 @@ import { DatePicker, Select } from "antd";
 import "antd/dist/reset.css";
 import LeafletMap from "../map/map";
 import HostSection from "../hostSection/hostSection";
-import {
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   fetchDataById,
   postDataById,
@@ -42,6 +36,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useBookingContext } from "../../context/booking";
 import ShareIcon from "@mui/icons-material/Share";
 import toast from "react-hot-toast";
+import MyComponent from "../date/date";
 
 const { RangePicker } = DatePicker;
 
@@ -50,37 +45,23 @@ const RoomPage = () => {
   const [host, setHost] = useState({});
   const [dates, setDates] = useState(null);
   const [maxGuests, setMaxGuests] = useState(1);
-  const [bookedDates, setBookedDates] = useState(
-    []
-  );
-  const [weekDayPrice, setWeekdayPrice] =
-    useState(0);
-  const [weekendDayPrice, setWeekenddayPrice] =
-    useState(0);
+  const [bookedDates, setBookedDates] = useState([]);
+  const [weekDayPrice, setWeekdayPrice] = useState(0);
+  const [weekendDayPrice, setWeekenddayPrice] = useState(0);
   const serviceFeePercentage = 13;
   const [totalPrice, setTotalPrice] = useState(0);
   const [numofDays, setNumofDays] = useState(0);
-  const [guestsAnchorEl, setGuestsAnchorEl] =
-    useState(null);
-  const openGuestsMenu = (event) =>
-    setGuestsAnchorEl(event.currentTarget);
-  const closeGuestsMenu = () =>
-    setGuestsAnchorEl(null);
+  const [guestsAnchorEl, setGuestsAnchorEl] = useState(null);
+  const openGuestsMenu = (event) => setGuestsAnchorEl(event.currentTarget);
+  const closeGuestsMenu = () => setGuestsAnchorEl(null);
   const [guests, setGuests] = useState({
     adults: 0,
   });
-  const [loadingImages, setLoadingImages] =
-    useState(true);
-  const [loadingText, setLoadingText] =
-    useState(true);
-  const [openImageModal, setOpenImageModal] =
-    useState(false);
-  const [
-    currentImageIndex,
-    setCurrentImageIndex,
-  ] = useState(0);
-  const { setBookingData, setBookListing } =
-    useBookingContext();
+  const [loadingImages, setLoadingImages] = useState(true);
+  const [loadingText, setLoadingText] = useState(true);
+  const [openImageModal, setOpenImageModal] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { setBookingData, setBookListing } = useBookingContext();
   const { roomId } = useParams();
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -96,17 +77,13 @@ const RoomPage = () => {
 
   const handleNextImage = () => {
     setCurrentImageIndex((prevIndex) =>
-      prevIndex + 1 < place.photos.length
-        ? prevIndex + 1
-        : 0
+      prevIndex + 1 < place.photos.length ? prevIndex + 1 : 0
     );
   };
 
   const handlePreviousImage = () => {
     setCurrentImageIndex((prevIndex) =>
-      prevIndex - 1 >= 0
-        ? prevIndex - 1
-        : place.photos.length - 1
+      prevIndex - 1 >= 0 ? prevIndex - 1 : place.photos.length - 1
     );
   };
 
@@ -114,9 +91,7 @@ const RoomPage = () => {
     return str
       ?.split(" ")
       ?.map(
-        (word) =>
-          word.charAt(0).toUpperCase() +
-          word.slice(1).toLowerCase()
+        (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
       )
       ?.join(" ");
   };
@@ -130,11 +105,7 @@ const RoomPage = () => {
     }
   };
 
-  useDocumentTitle(
-    place.title
-      ? toPascalCase(place.title)
-      : "Airbnb"
-  );
+  useDocumentTitle(place.title ? toPascalCase(place.title) : "Airbnb");
 
   const decrementGuest = (type) => {
     if (guests[type] > 0) {
@@ -145,67 +116,57 @@ const RoomPage = () => {
     }
   };
 
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedDates, setSelectedDates] = useState(null);
+
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const response = await fetchDataById(
-          "listing",
-          token,
-          roomId
-        );
+        const response = await fetchDataById("listing", token, roomId);
         console.log(response);
 
         if (response && response.listing) {
           setPlace(response.listing);
           setHost(response.hostData);
-          setMaxGuests(
-            response.listing.guestCapacity
-          );
+          setMaxGuests(response.listing.guestCapacity);
           setBookedDates(
-            response.listing.bookings.map(
-              (booking) => ({
-                startDate: dayjs(
-                  booking.startDate
-                ),
-                endDate: dayjs(booking.endDate),
-              })
-            )
+            response.listing.bookings.map((booking) => ({
+              startDate: dayjs(booking.startDate),
+              endDate: dayjs(booking.endDate),
+            }))
           );
-          setWeekdayPrice(
-            response.listing.weekdayPrice
-          );
-          setWeekenddayPrice(
-            response.listing.weekendPrice
-          );
+          setWeekdayPrice(response.listing.weekdayPrice);
+          setWeekenddayPrice(response.listing.weekendPrice);
           setLoadingText(false);
           console.log(response.listing);
         } else {
-          console.error(
-            "Unexpected response format:",
-            response
-          );
+          console.error("Unexpected response format:", response);
         }
       } catch (error) {
-        console.error(
-          "Failed to fetch options:",
-          error
-        );
+        console.error("Failed to fetch options:", error);
       }
     };
     fetchOptions();
   }, [roomId, token]);
 
   const handleDateChange = (value) => {
+    if (value && value[0]) {
+      setSelectedStartDate(value[0]);
+      setSelectedDates(value);
+    } else {
+      setSelectedStartDate(null);
+      setSelectedDates(null);
+    }
+  };
+
+  const handleDateChange2 = (value) => {
     setDates(value);
     if (value && value.length === 2) {
       const startDate = value[0];
       const endDate = value[1];
       let total = 0;
 
-      const numOfDays = endDate.diff(
-        startDate,
-        "days"
-      );
+      const numOfDays = endDate.diff(startDate, "days");
       setNumofDays(numOfDays);
 
       for (
@@ -213,10 +174,7 @@ const RoomPage = () => {
         date.isBefore(endDate, "day");
         date = date.add(1, "day")
       ) {
-        if (
-          date.day() === 0 ||
-          date.day() === 6
-        ) {
+        if (date.day() === 0 || date.day() === 6) {
           total += weekendDayPrice;
         } else {
           total += weekDayPrice;
@@ -243,15 +201,11 @@ const RoomPage = () => {
       endDate: endDate.format("YYYY-MM-DD"),
       guestCapacity: guests.adults,
       priceForHouse: totalPrice,
-      serviceFee: (
-        (totalPrice * serviceFeePercentage) /
-        100
-      ).toFixed(2),
+      serviceFee: ((totalPrice * serviceFeePercentage) / 100).toFixed(2),
       nights: numofDays,
-      total: (
-        totalPrice +
-        (totalPrice * serviceFeePercentage) / 100
-      ).toFixed(2),
+      total: (totalPrice + (totalPrice * serviceFeePercentage) / 100).toFixed(
+        2
+      ),
     };
 
     setBookListing(place);
@@ -260,29 +214,51 @@ const RoomPage = () => {
   };
 
   const disabledDate = (current) => {
-    if (
-      !current ||
-      !bookedDates ||
-      bookedDates.length === 0
-    ) {
-      return false;
+    if (!current) return false;
+
+    const currentDate = dayjs(current).startOf("day");
+
+    // Loop through all booked ranges and disable the dates falling within them
+    for (let booked of bookedDates) {
+      const { startDate: bookedStartStr, endDate: bookedEndStr } = booked;
+      const bookedStart = dayjs(bookedStartStr).startOf("day");
+      const bookedEnd = dayjs(bookedEndStr).startOf("day");
+
+      // If a start date is selected
+      if (selectedStartDate) {
+        const selectedStart = dayjs(selectedStartDate).startOf("day");
+
+        if (selectedStart < bookedStart) {
+          // If start date is before the booked range:
+          // - Disable dates from the booked start onward
+          // - Allow only dates between the selected start date and one day before the booked start
+          if (currentDate >= bookedStart || currentDate < selectedStart) {
+            return true; // Disable this date
+          }
+        }
+
+        if (selectedStart > bookedEnd) {
+          // If start date is after the booked range:
+          // - Disable dates within the booked range
+          if (currentDate >= bookedStart && currentDate <= bookedEnd) {
+            return true; // Disable this date
+          }
+        }
+      }
+
+      // Default: Disable dates within the booked range
+      if (currentDate >= bookedStart && currentDate <= bookedEnd) {
+        return true; // Disable this date
+      }
     }
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    return false; // Enable all other dates
+  };
 
-    const isBooked = bookedDates.some(
-      ({ startDate, endDate }) => {
-        return current.isBetween(
-          startDate,
-          endDate,
-          "day",
-          "[]"
-        );
-      }
-    );
-
-    return isBooked || current < today;
+  // Function to clear the selected dates
+  const clearDates = () => {
+    setSelectedStartDate(null);
+    setSelectedDates(null);
   };
 
   const formatAddress = (address) => {
@@ -297,10 +273,7 @@ const RoomPage = () => {
       .filter((field) => field)
       .join(", ");
 
-    return (
-      formatted + ", Pakistan" ||
-      "Address not available"
-    );
+    return formatted + ", Pakistan" || "Address not available";
   };
 
   const handleImageLoad = () => {
@@ -313,39 +286,28 @@ const RoomPage = () => {
       .writeText(url)
       .then(() => {
         toast.success("URL copied to clipboard!");
-        showSuccessToast(
-          "URL copied to clipboard!"
-        );
+        showSuccessToast("URL copied to clipboard!");
       })
       .catch((error) => {
-        console.error(
-          "Error copying URL:",
-          error
-        );
+        console.error("Error copying URL:", error);
         showErrorToast(error.message);
       });
   };
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
+      <MyComponent />
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-        }}>
+        }}
+      >
         {loadingText ? (
-          <Skeleton
-            variant="text"
-            width="60%"
-            height={40}
-            animation="wave"
-          />
+          <Skeleton variant="text" width="60%" height={40} animation="wave" />
         ) : (
-          <Typography
-            variant="h4"
-            fontWeight="bold"
-            gutterBottom>
+          <Typography variant="h4" fontWeight="bold" gutterBottom>
             {toPascalCase(place.title)}
           </Typography>
         )}
@@ -358,11 +320,10 @@ const RoomPage = () => {
             "&:hover": {
               backgroundColor: "transparent",
             },
-          }}>
+          }}
+        >
           <ShareIcon />
-          <Typography
-            variant="body1"
-            sx={{ ml: 1 }}>
+          <Typography variant="body1" sx={{ ml: 1 }}>
             Share
           </Typography>
         </IconButton>
@@ -372,7 +333,8 @@ const RoomPage = () => {
         container
         spacing={2}
         onClick={handleOpenModal}
-        style={{ cursor: "pointer" }}>
+        style={{ cursor: "pointer" }}
+      >
         <Grid item xs={12} md={6}>
           {loadingImages && (
             <Skeleton
@@ -389,43 +351,33 @@ const RoomPage = () => {
             alt="Main Image"
             sx={{ borderRadius: 2 }}
             onLoad={handleImageLoad}
-            onError={(e) =>
-              (e.target.src =
-                "/fallback-image.jpg")
-            }
+            onError={(e) => (e.target.src = "/fallback-image.jpg")}
           />
         </Grid>
 
         <Grid item xs={12} md={6}>
           <Grid container spacing={2}>
-            {place?.photos
-              ?.slice(1, 5)
-              .map((photo, index) => (
-                <Grid item xs={6} key={index}>
-                  {loadingImages ? (
-                    <Skeleton
-                      variant="rectangular"
-                      width="100%"
-                      height={240}
-                      animation="wave"
-                    />
-                  ) : (
-                    <CardMedia
-                      component="img"
-                      height="240"
-                      image={photo}
-                      alt={`Small Image ${
-                        index + 1
-                      }`}
-                      sx={{ borderRadius: 2 }}
-                      onError={(e) =>
-                        (e.target.src =
-                          "/fallback-image.jpg")
-                      }
-                    />
-                  )}
-                </Grid>
-              ))}
+            {place?.photos?.slice(1, 5).map((photo, index) => (
+              <Grid item xs={6} key={index}>
+                {loadingImages ? (
+                  <Skeleton
+                    variant="rectangular"
+                    width="100%"
+                    height={240}
+                    animation="wave"
+                  />
+                ) : (
+                  <CardMedia
+                    component="img"
+                    height="240"
+                    image={photo}
+                    alt={`Small Image ${index + 1}`}
+                    sx={{ borderRadius: 2 }}
+                    onError={(e) => (e.target.src = "/fallback-image.jpg")}
+                  />
+                )}
+              </Grid>
+            ))}
           </Grid>
         </Grid>
       </Grid>
@@ -434,15 +386,17 @@ const RoomPage = () => {
         fullScreen
         open={openImageModal}
         onClose={handleCloseModal}
-        sx={{ textAlign: "center" }}>
+        sx={{ textAlign: "center" }}
+      >
         <DialogContent
           sx={{
-            backgroundColor: "rgba(0, 0, 0, 0.5)", // Black with 80% opacity
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
             position: "relative",
-          }}>
+          }}
+        >
           <IconButton
             sx={{
               position: "absolute",
@@ -450,7 +404,8 @@ const RoomPage = () => {
               right: 16,
               color: "white",
             }}
-            onClick={handleCloseModal}>
+            onClick={handleCloseModal}
+          >
             <CloseIcon />
           </IconButton>
 
@@ -462,7 +417,8 @@ const RoomPage = () => {
               color: "white",
               transform: "translateY(-50%)",
             }}
-            onClick={handlePreviousImage}>
+            onClick={handlePreviousImage}
+          >
             <ArrowBackIcon />
           </IconButton>
 
@@ -474,16 +430,13 @@ const RoomPage = () => {
               color: "white",
               transform: "translateY(-50%)",
             }}
-            onClick={handleNextImage}>
+            onClick={handleNextImage}
+          >
             <ArrowForwardIcon />
           </IconButton>
 
           <img
-            src={
-              place?.photos?.[
-                currentImageIndex
-              ] || "/fallback-image.jpg"
-            }
+            src={place?.photos?.[currentImageIndex] || "/fallback-image.jpg"}
             alt={`Image ${currentImageIndex + 1}`}
             style={{
               // maxWidth: "90%",
@@ -497,32 +450,16 @@ const RoomPage = () => {
 
       <Grid container spacing={2} sx={{ mt: 3 }}>
         <Grid item xs={12} md={8}>
-          <Typography
-            variant="h5"
-            fontWeight={"bold"}
-            gutterBottom>
-            {place.roomType} in{" "}
-            {formatAddress(place)}
+          <Typography variant="h5" fontWeight={"bold"} gutterBottom>
+            {place.roomType} in {formatAddress(place)}
           </Typography>
-          <Typography
-            variant="body2"
-            gutterBottom>
-            <strong>
-              {place.guestCapacity} guest
-            </strong>{" "}
-            |{" "}
-            <strong>
-              {place.guestCapacity} beds
-            </strong>{" "}
-            |{" "}
-            <strong>
-              {place.bedrooms} bedrooms
-            </strong>
+          <Typography variant="body2" gutterBottom>
+            <strong>{place.guestCapacity} guest</strong> |{" "}
+            <strong>{place.guestCapacity} beds</strong> |{" "}
+            <strong>{place.bedrooms} bedrooms</strong>
           </Typography>
           <Divider sx={{ my: 2 }} />
-          <Typography
-            variant="body1"
-            gutterBottom>
+          <Typography variant="body1" gutterBottom>
             {place.description}
           </Typography>
           <Divider sx={{ my: 2 }} />
@@ -540,11 +477,11 @@ const RoomPage = () => {
                 display: "flex",
                 alignItems: "center",
                 mb: 2,
-              }}>
+              }}
+            >
               <Avatar sx={{ mr: 2 }}>C</Avatar>
               <Typography>
-                <strong>Charlotte:</strong>{" "}
-                Amazing stay! Everything was
+                <strong>Charlotte:</strong> Amazing stay! Everything was
                 perfect.
               </Typography>
             </Box>
@@ -558,7 +495,8 @@ const RoomPage = () => {
               top: { md: 150 },
               borderRadius: 2,
               boxShadow: 2,
-            }}>
+            }}
+          >
             <CardContent sx={{ padding: 3 }}>
               <Typography
                 variant="h5"
@@ -566,7 +504,8 @@ const RoomPage = () => {
                 sx={{
                   color: "primary.main",
                   mb: 2,
-                }}>
+                }}
+              >
                 €{weekDayPrice} / night
               </Typography>
 
@@ -575,14 +514,16 @@ const RoomPage = () => {
                   width: "100%",
                   marginBottom: 16,
                 }}
-                placeholder={[
-                  "Check-in",
-                  "Check-out",
-                ]}
-                onChange={handleDateChange}
+                placeholder={["Check-in", "Check-out"]}
+                onCalendarChange={handleDateChange}
+                onChange={handleDateChange2}
                 disabledDate={disabledDate}
                 format="DD MMM, YYYY"
+                value={selectedDates}
               />
+              <Button type="default" onClick={clearDates}>
+                Clear Dates
+              </Button>
 
               <Box
                 sx={{
@@ -592,13 +533,15 @@ const RoomPage = () => {
                   cursor: "pointer",
                   mb: 2,
                 }}
-                onClick={openGuestsMenu}>
+                onClick={openGuestsMenu}
+              >
                 <Typography
                   variant="body2"
                   sx={{
                     fontWeight: "bold",
                     color: "text.primary",
-                  }}>
+                  }}
+                >
                   Guests
                 </Typography>
                 &nbsp;
@@ -615,9 +558,7 @@ const RoomPage = () => {
                     textAlign: "right",
                   }}
                   value={
-                    guests.adults
-                      ? `${guests.adults} Guests`
-                      : "Select guests"
+                    guests.adults ? `${guests.adults} Guests` : "Select guests"
                   }
                   readOnly
                 />
@@ -627,7 +568,8 @@ const RoomPage = () => {
                 anchorEl={guestsAnchorEl}
                 open={Boolean(guestsAnchorEl)}
                 onClose={closeGuestsMenu}
-                sx={{ width: 200 }}>
+                sx={{ width: 200 }}
+              >
                 {[
                   {
                     label: "Adults",
@@ -638,46 +580,33 @@ const RoomPage = () => {
                     <Box
                       sx={{
                         display: "flex",
-                        justifyContent:
-                          "space-between",
+                        justifyContent: "space-between",
                         width: "100%",
-                      }}>
-                      <Typography>
-                        {guest.label}
-                      </Typography>
+                      }}
+                    >
+                      <Typography>{guest.label}</Typography>
                       <Box
                         sx={{
                           display: "flex",
                           alignItems: "center",
                           gap: "8px",
-                        }}>
+                        }}
+                      >
                         <Button
-                          onClick={() =>
-                            decrementGuest(
-                              guest.type
-                            )
-                          }
-                          disabled={
-                            guests[guest.type] ===
-                            0
-                          }
-                          sx={{ minWidth: 32 }}>
+                          onClick={() => decrementGuest(guest.type)}
+                          disabled={guests[guest.type] === 0}
+                          sx={{ minWidth: 32 }}
+                        >
                           -
                         </Button>
                         <Typography variant="body2">
                           {guests[guest.type]}
                         </Typography>
                         <Button
-                          onClick={() =>
-                            incrementGuest(
-                              guest.type
-                            )
-                          }
-                          disabled={
-                            guests[guest.type] ===
-                            maxGuests
-                          }
-                          sx={{ minWidth: 32 }}>
+                          onClick={() => incrementGuest(guest.type)}
+                          disabled={guests[guest.type] === maxGuests}
+                          sx={{ minWidth: 32 }}
+                        >
                           +
                         </Button>
                       </Box>
@@ -686,48 +615,28 @@ const RoomPage = () => {
                 ))}
               </Menu>
 
-              <Typography
-                variant="body2"
-                sx={{ mt: 2 }}>
-                <strong>Weekday Price:</strong> €
-                {weekDayPrice} / night
+              <Typography variant="body2" sx={{ mt: 2 }}>
+                <strong>Weekday Price:</strong> €{weekDayPrice} / night
               </Typography>
-              <Typography
-                variant="body2"
-                sx={{ mt: 1 }}>
-                <strong>Weekend Price:</strong> €
-                {weekendDayPrice} / night
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                <strong>Weekend Price:</strong> €{weekendDayPrice} / night
               </Typography>
-              <Typography
-                variant="body1"
-                sx={{ mt: 2 }}>
-                <strong>
-                  Total for {numofDays} nights:
-                </strong>{" "}
-                €{totalPrice.toFixed(2)}
+              <Typography variant="body1" sx={{ mt: 2 }}>
+                <strong>Total for {numofDays} nights:</strong> €
+                {totalPrice.toFixed(2)}
               </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary">
+              <Typography variant="body2" color="text.secondary">
                 <strong>Service Fee:</strong> €
-                {(
-                  (totalPrice *
-                    serviceFeePercentage) /
-                  100
-                ).toFixed(2)}
+                {((totalPrice * serviceFeePercentage) / 100).toFixed(2)}
               </Typography>
 
               <Divider sx={{ my: 2 }} />
 
-              <Typography
-                variant="body2"
-                color="text.secondary">
+              <Typography variant="body2" color="text.secondary">
                 <strong>Total:</strong> €
                 {(
                   totalPrice +
-                  (totalPrice *
-                    serviceFeePercentage) /
-                    100
+                  (totalPrice * serviceFeePercentage) / 100
                 ).toFixed(2)}
               </Typography>
 
@@ -742,11 +651,11 @@ const RoomPage = () => {
                   letterSpacing: 1,
                   textTransform: "uppercase",
                   "&:hover": {
-                    backgroundColor:
-                      "primary.dark",
+                    backgroundColor: "primary.dark",
                   },
                 }}
-                onClick={handleReserve}>
+                onClick={handleReserve}
+              >
                 Reserve Now
               </Button>
 
@@ -756,7 +665,8 @@ const RoomPage = () => {
                 sx={{
                   mt: 2,
                   textAlign: "center",
-                }}>
+                }}
+              >
                 You won’t be charged yet.
               </Typography>
             </CardContent>
@@ -765,30 +675,17 @@ const RoomPage = () => {
       </Grid>
 
       <Box sx={{ mt: 4 }}>
-        <Typography variant="h6">
-          Location
-        </Typography>
+        <Typography variant="h6">Location</Typography>
         <LeafletMap
-          latitude={
-            place.latitude
-              ? place.latitude
-              : 24.8607
-          }
-          longitude={
-            place.longitude
-              ? place.longitude
-              : 67.0011
-          }
+          latitude={place.latitude ? place.latitude : 24.8607}
+          longitude={place.longitude ? place.longitude : 67.0011}
           // popupText="Karachi, Pakistan"
         />
       </Box>
 
       <Box sx={{ mt: 4 }}>
         <Divider sx={{ mb: 2 }} />
-        <HostSection
-          data={host}
-          listing={place}
-        />
+        <HostSection data={host} listing={place} />
       </Box>
     </Box>
   );

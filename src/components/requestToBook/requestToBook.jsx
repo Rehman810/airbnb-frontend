@@ -4,13 +4,12 @@ import {
   Grid,
   Typography,
   Divider,
-  TextField,
   Button,
   Card,
   CardMedia,
   CardContent,
 } from "@mui/material";
-import CreditCardIcon from "@mui/icons-material/CreditCard";
+// import CreditCardIcon from "@mui/icons-material/CreditCard";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import { postDataById } from "../../config/ServiceApi/serviceApi";
@@ -27,47 +26,47 @@ const BookingComponent = () => {
   const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
 
-  const formatCardNumber = (cardNumber) => {
-    return cardNumber
-      .replace(/\D/g, "") 
-      .replace(/(\d{4})(?=\d)/g, "$1 "); 
-  };
+  // const formatCardNumber = (cardNumber) => {
+  //   return cardNumber
+  //     .replace(/\D/g, "") 
+  //     .replace(/(\d{4})(?=\d)/g, "$1 "); 
+  // };
 
   const validateForm = () => {
     if (!stripe || !elements) return false;
     return true;
   };
 
-  const [expiration, setExpiration] = useState("");
-  const [cvv, setCvv] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
+  // const [expiration, setExpiration] = useState("");
+  // const [cvv, setCvv] = useState("");
+  // const [cardNumber, setCardNumber] = useState("");
   
-  const [errors, setErrors] = useState({
-    cardNumber: "",
-    expiration: "",
-    cvv: "",
-  });
+//   const [errors, setErrors] = useState({
+//     cardNumber: "",
+//     expiration: "",
+//     cvv: "",
+//   });
 
-  const handleExpirationChange = (event) => {
-    let value = event.target.value.replace(/\D/g, "");
-    if (value.length > 2) {
-      value = `${value.slice(0, 2)}/${value.slice(2, 4)}`;
-    }
-    setExpiration(value);
-  };
+//   const handleExpirationChange = (event) => {
+//     let value = event.target.value.replace(/\D/g, "");
+//     if (value.length > 2) {
+//       value = `${value.slice(0, 2)}/${value.slice(2, 4)}`;
+//     }
+//     setExpiration(value);
+//   };
 
-  const handleCvvChange = (event) => {
-    let value = event.target.value.replace(/\D/g, "");
-    if (value.length > 3) {
-      value = value.slice(0, 3);
-    }
-    setCvv(value);
-  };
+//   const handleCvvChange = (event) => {
+//     let value = event.target.value.replace(/\D/g, "");
+//     if (value.length > 3) {
+//       value = value.slice(0, 3);
+//     }
+//     setCvv(value);
+//   };
 
- const handleCardNumberChange = (event) => {
-    const formattedCardNumber = formatCardNumber(event.target.value);
-    setCardNumber(formattedCardNumber);
-  };
+//  const handleCardNumberChange = (event) => {
+//     const formattedCardNumber = formatCardNumber(event.target.value);
+//     setCardNumber(formattedCardNumber);
+//   };
 
   // const validateForm = () => {
   //   const newErrors = {};
