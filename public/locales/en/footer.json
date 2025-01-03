@@ -9,6 +9,7 @@
     "reportNeighborhoodConcern":"Report Neighborhood Concern"
     },
     "Hosting":{
+        "hosting":"Hosting",
         "airbnbYourHome":"Airbnb Your Home",
         "airCoverForHosts":"AirCover For Hosts",
         "hostingResources":"Hosting Resources",
