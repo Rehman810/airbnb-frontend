@@ -4,6 +4,7 @@ import Card from "../../components/cards/cards";
 import { fetchData } from "../../config/ServiceApi/serviceApi";
 import { useAppContext } from "../../context/context";
 import LeafletMap from "../../components/map/map";
+import { t } from "i18next";
 
 const Home = () => {
   const [listing, setListing] = useState([]);
@@ -158,7 +159,7 @@ const Home = () => {
             ) : listing?.length === 0 ? (
               <Grid item xs={12}>
                 <Typography variant="h6" align="center" color="text.secondary">
-                  No listings present
+                  {t("home.noListingsPresent")}
                 </Typography>
               </Grid>
             ) : (
@@ -192,7 +193,7 @@ const Home = () => {
           }}
           onClick={toggleMapVisibility}
         >
-          {mapVisible ? "Show list" : "Show map"}
+          {mapVisible ? t("home.showMap") : t("home.showList")}
         </Button>
       )}
     </div>

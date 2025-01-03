@@ -71,5 +71,10 @@
   "navbar": {
     "airbnbYourHome": "在 Airbnb 上发布房源",
     "switchToHosting": "切换为房东"
+  },
+  "home": {
+    "showList": "显示列表",
+    "showMap": "显示地图",
+    "noListingsPresent": "没有房源"
   }
 }

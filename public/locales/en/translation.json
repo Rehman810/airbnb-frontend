@@ -71,5 +71,10 @@
   "navbar": {
     "airbnbYourHome": "Airbnb your home",
     "switchToHosting": "Switch to hosting"
+  },
+  "home": {
+    "showList": "Show list",
+    "showMap": "Show map",
+    "noListingsPresent": "No listings present"
   }
 }
