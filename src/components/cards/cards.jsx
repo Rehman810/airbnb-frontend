@@ -141,7 +141,7 @@ const CardItem = ({ data }) => {
             }}
           >
             <Avatar
-              src={data?.profileImg}
+              src={data?.hostData.photoProfile}
               alt="Host"
               sx={{ width: 40, height: 40 }}
             />

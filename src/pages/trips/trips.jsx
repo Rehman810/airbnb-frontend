@@ -5,83 +5,72 @@ import {
   Card,
   CardContent,
   Typography,
-  Avatar,
-  Stack,
-  Chip,
   Divider,
   Dialog,
   DialogContent,
-  DialogActions,
   IconButton,
+  Stack,
+  Chip,
+  Avatar,
 } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
 import Slider from "react-slick";
 import { Close as CloseIcon } from "@mui/icons-material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { fetchData } from "../../config/ServiceApi/serviceApi";
 
-const tripsData = [
-  {
-    id: 1,
-    title: "Cozy Beach House",
-    location: "Malibu, California",
-    description:
-      "A beautiful beachfront house perfect for a relaxing vacation.",
-    photos: [
-      "https://source.unsplash.com/featured/?beach-house",
-      "https://source.unsplash.com/featured/?beach",
-      "https://source.unsplash.com/featured/?ocean",
-    ],
-    amenities: ["Wi-Fi", "Swimming Pool", "Free Parking", "Kitchen"],
-    hostName: "John Doe",
-    hostAvatar: "https://source.unsplash.com/random/?person",
-    type: "House",
-    roomType: "Entire Home",
-  },
-  {
-    id: 2,
-    title: "Mountain Cabin Retreat",
-    location: "Aspen, Colorado",
-    description:
-      "Escape to the mountains in this charming cabin, perfect for hiking.",
-    photos: [
-      "https://source.unsplash.com/featured/?mountain-cabin",
-      "https://source.unsplash.com/featured/?mountain",
-      "https://source.unsplash.com/featured/?snow",
-    ],
-    amenities: ["Fireplace", "Hiking Trails", "Hot Tub"],
-    hostName: "Emily Smith",
-    hostAvatar: "https://source.unsplash.com/random/?person2",
-    type: "Cabin",
-    roomType: "Private Room",
-  },
-];
-
 const Trips = () => {
-  const [openImageDialog, setOpenImageDialog] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageDialogOpen, setImageDialogOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState("");
-  const [activeTrip, setActiveTrip] = useState(null);
-  const [trips, setTrips] = useState([])
-  const token = localStorage.getItem("token")
+  const [activeTripIndex, setActiveTripIndex] = useState(null);
+  const [trips, setTrips] = useState([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchTrips = async () => {
       const response = await fetchData("guest-bookings", token);
       console.log(response.userBookings);
-      setTrips(response.userBookings) 
+      setTrips(response.userBookings);
     };
     fetchTrips();
   }, []);
 
   const isMobile = useMediaQuery("(max-width:900px)");
 
-  const handleImageClick = (image) => {
+  const handleImageClick = (image, index, tripIndex) => {
     setSelectedImage(image);
-    setOpenImageDialog(true);
+    setCurrentImageIndex(index);
+    setActiveTripIndex(tripIndex); 
+    setImageDialogOpen(true);
   };
 
   const handleCloseImageDialog = () => {
-    setOpenImageDialog(false);
+    setImageDialogOpen(false);
     setSelectedImage("");
+    setCurrentImageIndex(0);
+    setActiveTripIndex(null);
+  };
+
+  const handleNextImage = () => {
+    if (activeTripIndex !== null) {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex + 1 < trips[activeTripIndex].listingId.photos.length
+          ? prevIndex + 1
+          : 0
+      );
+    }
+  };
+
+  const handlePreviousImage = () => {
+    if (activeTripIndex !== null) {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex - 1 >= 0
+          ? prevIndex - 1
+          : trips[activeTripIndex].listingId.photos.length - 1
+      );
+    }
   };
 
   const settings = {
@@ -94,96 +83,207 @@ const Trips = () => {
 
   return (
     <Box sx={{ padding: isMobile ? 2 : 4 }}>
-      <Typography variant="h4" fontWeight="bold" marginBottom={4} textAlign="center">
+      <Typography
+        variant="h4"
+        fontWeight="bold"
+        marginBottom={4}
+        textAlign="center"
+      >
         Your Trips
       </Typography>
       <Grid container spacing={3}>
-        {tripsData.map((trip) => (
-          <Grid item xs={12} sm={6} md={4} key={trip.id}>
-            <Card
-              sx={{
-                borderRadius: 3,
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-                overflow: "hidden",
-              }}
-            >
-              <Slider {...settings}>
-                {trip.photos.map((photo, index) => (
-                  <div key={index} onClick={() => handleImageClick(photo)}>
-                    <img
-                      src={photo}
-                      alt={`Trip image ${index}`}
-                      style={{
-                        width: "100%",
-                        height: "200px",
-                        objectFit: "cover",
-                        cursor: "pointer",
-                      }}
-                    />
-                  </div>
-                ))}
-              </Slider>
-              <CardContent>
-                <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  {trip.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  {trip.location}
-                </Typography>
-                <Typography variant="body1" sx={{ marginBottom: 2 }}>
-                  {trip.description}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: "bold" }}>
-                  Type: {trip.type}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Room Type: {trip.roomType}
-                </Typography>
-                <Divider sx={{ marginY: 1 }} />
-                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-                  Amenities
-                </Typography>
-                <Stack direction="row" spacing={1} flexWrap="wrap">
-                  {trip.amenities.map((amenity, index) => (
-                    <Chip
+        {trips.length > 0 ? (
+          trips.map((trip, tripIndex) => (
+            <Grid item xs={12} sm={6} md={4} key={trip.id}>
+              <Card
+                sx={{
+                  borderRadius: 3,
+                  boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                  overflow: "hidden",
+                }}
+              >
+                <Slider {...settings}>
+                  {trip.listingId.photos.map((photo, index) => (
+                    <div
                       key={index}
-                      label={amenity}
-                      variant="outlined"
-                      sx={{ marginBottom: 1 }}
-                    />
+                      onClick={() => handleImageClick(photo, index, tripIndex)}
+                    >
+                      <img
+                        src={photo}
+                        alt={`Trip image ${index}`}
+                        style={{
+                          width: "100%",
+                          height: "200px",
+                          objectFit: "cover",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </div>
                   ))}
-                </Stack>
-                <Divider sx={{ marginY: 2 }} />
-                <Stack direction="row" spacing={2} alignItems="center">
+                </Slider>
+                <Card>
+                  <CardContent>
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Typography variant="h6" fontWeight="bold" gutterBottom>
+                        {trip.listingId.title}
+                      </Typography>
+                      <Typography
+                        variant="subtitle2"
+                        fontWeight="bold"
+                        color={
+                          trip.status === "Active"
+                            ? "success.main"
+                            : "error.main"
+                        }
+                        sx={{
+                          padding: "4px 8px",
+                          border: "1px solid",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        {trip.status}
+                      </Typography>
+                    </Box>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      {trip.listingId.street}, {trip.listingId.flat},{" "}
+                      {trip.listingId.postcode}, {trip.listingId.city},{" "}
+                      {trip.listingId.town}
+                    </Typography>
+                    <Typography variant="body1" sx={{ marginBottom: 2 }}>
+                      {trip.listingId.description}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      Type: {trip.listingId.placeType}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Room Type: {trip.listingId.roomType}
+                    </Typography>
+                    <Divider sx={{ marginY: 1 }} />
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight="bold"
+                      gutterBottom
+                    >
+                      Amenities
+                    </Typography>
+                    <Stack direction="row" spacing={1} flexWrap="wrap">
+                      {trip.listingId.amenities.map((amenity, index) => (
+                        <Chip
+                          key={index}
+                          label={amenity}
+                          variant="outlined"
+                          sx={{ marginBottom: 1 }}
+                        />
+                      ))}
+                    </Stack>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      sx={{ marginTop: 2 }}
+                    >
+                      <strong>Trip Dates: </strong>
+                      {new Date(trip.startDate).toLocaleDateString()} -{" "}
+                      {new Date(trip.endDate).toLocaleDateString()}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      <strong>Total Price:</strong> {trip.totalPrice}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      <strong>Bedrooms:</strong> {trip.listingId.bedrooms} |{" "}
+                      <strong>Beds:</strong> {trip.listingId.beds}
+                    </Typography>
+                <Divider sx={{ marginY: 1 }}/>
+                <Stack direction="row" spacing={2} alignItems="center" pt={2}>
                   <Avatar
-                    src={trip.hostAvatar}
-                    alt={trip.hostName}
+                    src={trip.hostData.photoProfile}
+                    alt={trip.hostData.userName}
                     sx={{ width: 50, height: 50 }}
                   />
                   <Typography variant="body1">
-                    Hosted by <strong>{trip.hostName}</strong>
+                    Hosted by <strong>{trip.hostData.userName}</strong>
                   </Typography>
                 </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+                  </CardContent>
+                </Card>
+              </Card>
+            </Grid>
+          ))
+        ) : (
+          <Typography variant="h6" color="text.secondary" textAlign="center">
+            No trips available.
+          </Typography>
+        )}
       </Grid>
 
-      {/* Full-screen Image Dialog */}
-      <Dialog open={openImageDialog} onClose={handleCloseImageDialog} maxWidth="lg" fullWidth>
-        <DialogContent>
-          <img
-            src={selectedImage}
-            alt="Full screen"
-            style={{ width: "100%", height: "auto", borderRadius: "8px" }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <IconButton onClick={handleCloseImageDialog}>
+      <Dialog
+        fullScreen
+        open={imageDialogOpen}
+        onClose={handleCloseImageDialog}
+        sx={{ textAlign: "center" }}
+      >
+        <DialogContent
+          sx={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            position: "relative",
+          }}
+        >
+          <IconButton
+            sx={{ position: "absolute", top: 16, right: 16, color: "white" }}
+            onClick={handleCloseImageDialog}
+          >
             <CloseIcon />
           </IconButton>
-        </DialogActions>
+
+          <IconButton
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: 16,
+              color: "white",
+              transform: "translateY(-50%)",
+            }}
+            onClick={handlePreviousImage}
+          >
+            <ArrowBackIcon />
+          </IconButton>
+
+          <IconButton
+            sx={{
+              position: "absolute",
+              top: "50%",
+              right: 16,
+              color: "white",
+              transform: "translateY(-50%)",
+            }}
+            onClick={handleNextImage}
+          >
+            <ArrowForwardIcon />
+          </IconButton>
+
+          <img
+            src={
+              trips[activeTripIndex]?.listingId?.photos?.[currentImageIndex] ||
+              "/fallback-image.jpg"
+            }
+            alt={`Image ${currentImageIndex + 1}`}
+            style={{ borderRadius: "8px", width: "70%" }}
+          />
+        </DialogContent>
       </Dialog>
     </Box>
   );

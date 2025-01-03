@@ -194,6 +194,14 @@ const RoomPage = () => {
       });
       return;
     }
+    else if(!guests.adults){
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please select number of guests.",
+      });
+      return;
+    }
 
     const [startDate, endDate] = dates;
     const data = {
@@ -216,46 +224,40 @@ const RoomPage = () => {
   const disabledDate = (current) => {
     if (!current) return false;
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (current < today) {
+      return true;
+    }
+
     const currentDate = dayjs(current).startOf("day");
 
-    // Loop through all booked ranges and disable the dates falling within them
     for (let booked of bookedDates) {
       const { startDate: bookedStartStr, endDate: bookedEndStr } = booked;
       const bookedStart = dayjs(bookedStartStr).startOf("day");
       const bookedEnd = dayjs(bookedEndStr).startOf("day");
 
-      // If a start date is selected
       if (selectedStartDate) {
         const selectedStart = dayjs(selectedStartDate).startOf("day");
-
         if (selectedStart < bookedStart) {
-          // If start date is before the booked range:
-          // - Disable dates from the booked start onward
-          // - Allow only dates between the selected start date and one day before the booked start
           if (currentDate >= bookedStart || currentDate < selectedStart) {
-            return true; // Disable this date
+            return true; 
           }
         }
-
         if (selectedStart > bookedEnd) {
-          // If start date is after the booked range:
-          // - Disable dates within the booked range
           if (currentDate >= bookedStart && currentDate <= bookedEnd) {
-            return true; // Disable this date
+            return true;
           }
         }
       }
-
-      // Default: Disable dates within the booked range
       if (currentDate >= bookedStart && currentDate <= bookedEnd) {
-        return true; // Disable this date
+        return true;
       }
     }
-
-    return false; // Enable all other dates
+    return false; 
   };
 
-  // Function to clear the selected dates
   const clearDates = () => {
     setSelectedStartDate(null);
     setSelectedDates(null);
@@ -541,8 +543,8 @@ const RoomPage = () => {
                     color: "text.primary",
                   }}
                 >
-                  Guests
-                </Typography>
+                  Guests:
+                </Typography>{" "}
                 &nbsp;
                 <TextField
                   placeholder="How many guests"
@@ -557,7 +559,7 @@ const RoomPage = () => {
                     textAlign: "right",
                   }}
                   value={
-                    guests.adults ? `${guests.adults} Guests` : "Select guests"
+                    guests.adults ? `${guests.adults} Guests` : "Select No. of guests"
                   }
                   readOnly
                 />

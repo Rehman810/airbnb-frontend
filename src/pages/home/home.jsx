@@ -13,7 +13,9 @@ const Home = () => {
   const [showMapButton, setShowMapButton] = useState(true);
   const token = localStorage.getItem("token");
   const { searchParams } = useAppContext();
-
+  const user = JSON.parse(
+    localStorage.getItem("user")
+  );
   useEffect(() => {
     if (listing?.length === 0) {
       setFilteredData([]);
@@ -50,10 +52,10 @@ const Home = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const response = await fetchData("all-listring", token);
+        const response = await fetchData(`all-listring${token ? `?userId=${user._id}` : ''}`, token);
         console.log(response);
-        setListing(response.data);
-        setFilteredData(response.data);
+        setListing(response.listings);
+        setFilteredData(response.listings);
       } catch (error) {
         console.error("Failed to fetch options:", error);
       } finally {
@@ -61,7 +63,7 @@ const Home = () => {
       }
     };
     fetchOptions();
-  }, []);
+  }, [token]);
 
   const toggleMapVisibility = () => {
     setMapVisible((prev) => !prev);
