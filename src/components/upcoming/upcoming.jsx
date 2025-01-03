@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Avatar, Paper, Grid, Divider } from "@mui/material";
 import { fetchData } from "../../config/ServiceApi/serviceApi";
+import { useBookingContext } from "../../context/booking";
 
 const Upcoming = () => {
   const [checkouts, setCheckouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
+  const {setUpcoming} = useBookingContext()
   
   useEffect(() => {
     const fetchCheckouts = async () => {
       const response = await fetchData("upcoming-bookings", token);
       setCheckouts(response.upcomingBookings);
+      setUpcoming(response.count)
       setLoading(false);
-      console.log((response));
-      
+      // console.log((response));
     };
 
     fetchCheckouts();

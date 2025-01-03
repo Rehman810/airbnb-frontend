@@ -5,17 +5,19 @@ import CheckingOut from "../../components/checkingOut/checkingOut";
 import CurrentlyHosting from "../../components/currentlyHosting/currentlyHosting";
 import Upcoming from "../../components/upcoming/upcoming";
 import PendingBooking from "../../components/pendingBooking/pendingBooking";
+import { useBookingContext } from "../../context/booking";
 
 const ReservationSection = () => {
   const [selectedTab, setSelectedTab] = useState("Checking out");
   useDocumentTitle("Host Dashboard - Airbnb");
   const user = JSON.parse(localStorage.getItem("user"));
+  const { checkingOut, pendingBooking, currentlyHosting, upcoming } = useBookingContext();
 
   const tabs = [
-    { label: "Pending Booking", count: 0 },
-    { label: "Checking out", count: 0 },
-    { label: "Currently hosting", count: 0 },
-    { label: "Upcoming", count: 0 },
+    { label: "Pending Booking", count: pendingBooking || 0 },
+    { label: "Checking out", count: checkingOut || 0 },
+    { label: "Currently hosting", count: currentlyHosting || 0 },
+    { label: "Upcoming", count: upcoming || 0 },
   ];
 
   const renderContent = () => {
@@ -43,12 +45,11 @@ const ReservationSection = () => {
         <Typography variant="h4" fontWeight="bold">
           Welcome, {user.userName}!
         </Typography>
-        {/* <Button variant="outlined">Complete your listing</Button> */}
       </Box>
 
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h6">Your reservations</Typography>
-        <Button variant="text">All reservations (0)</Button>
+        <Button variant="text">All reservations {currentlyHosting || 0}</Button>
       </Box>
 
       <Box

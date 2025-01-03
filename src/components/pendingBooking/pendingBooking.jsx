@@ -10,20 +10,21 @@ import {
 } from "@mui/material";
 import { fetchData, postDataById } from "../../config/ServiceApi/serviceApi";
 import { showSuccessToast } from "../../components/toast/toast";
+import { useBookingContext } from "../../context/booking";
 
 const PendingBooking = () => {
   const [pendingBookings, setPendingBookings] = useState([]);
   const [isPending, setIsPending] = useState(false);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
-
+  const { setPendingBooking } = useBookingContext();
   useEffect(() => {
     const fetchBookings = async () => {
       try {
         const response = await fetchData("temporary-booking", token);
         setPendingBookings(response.bookings);
+        setPendingBooking(response.count);
         console.log(response);
-        
       } catch (error) {
         console.error("Error fetching pending bookings:", error);
       } finally {

@@ -9,6 +9,10 @@ export const useBookingContext = () => {
 export const BookingProvider = ({ children }) => {
   const [bookingData, setBookingData] = useState({});
   const [bookListing, setBookListing] = useState({});
+  const [checkingOut, setCheckingOut] = useState()
+  const [pendingBooking, setPendingBooking] = useState()
+  const [upcoming, setUpcoming] = useState()
+  const [currentlyHosting, setCurrentlyHosting] = useState()
 
   const resetBookingState = () => {
     setBookingData({});
@@ -20,7 +24,15 @@ export const BookingProvider = ({ children }) => {
     bookListing,
     bookingData,
     setBookingData,
-    setBookListing
+    setBookListing,
+    checkingOut,
+    setCheckingOut,
+    currentlyHosting,
+    setCurrentlyHosting,
+    pendingBooking,
+    setPendingBooking,
+    upcoming,
+    setUpcoming
   };
 
   return (

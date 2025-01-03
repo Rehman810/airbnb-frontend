@@ -10,6 +10,7 @@ const Home = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mapVisible, setMapVisible] = useState(false);
+  const [showMapButton, setShowMapButton] = useState(true);
   const token = localStorage.getItem("token");
   const { searchParams } = useAppContext();
 
@@ -18,31 +19,31 @@ const Home = () => {
       setFilteredData([]);
       return;
     }
-  
+
     if (!searchParams || !searchParams.destination || !searchParams.checkIn || !searchParams.checkOut) {
       console.error("Missing or invalid booking dates in searchParams");
-      return; 
+      return;
     }
-  
+
     const filteredProducts = listing.filter((product) => {
       const cityMatches = searchParams?.destination?.split(",")[0]?.trim().toLowerCase() == product.city?.trim().toLowerCase();
 
       const checkInDate = new Date(searchParams.checkIn);
       const checkOutDate = new Date(searchParams.checkOut);
-  
+
       const isAvailable = !product?.bookings?.some((booking) => {
         const bookingStart = new Date(booking.startDate);
         const bookingEnd = new Date(booking.endDate);
-  
-        const isOverlap = (checkInDate < bookingEnd && checkOutDate > bookingStart);
+
+        const isOverlap = checkInDate < bookingEnd && checkOutDate > bookingStart;
         return isOverlap;
       });
 
-      const guests = searchParams.guests <= product.guestCapacity
-  
-      return cityMatches && isAvailable && guests; 
+      const guests = searchParams.guests <= product.guestCapacity;
+
+      return cityMatches && isAvailable && guests;
     });
-  
+
     setFilteredData(filteredProducts);
   }, [searchParams, listing]);
 
@@ -60,11 +61,26 @@ const Home = () => {
       }
     };
     fetchOptions();
-  }, []); 
+  }, []);
 
   const toggleMapVisibility = () => {
-    setMapVisible((prev) => !prev); 
+    setMapVisible((prev) => !prev);
   };
+
+  const handleScroll = () => {
+    const footerHeight = 280;
+    const scrollY = window.scrollY + window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+
+    setShowMapButton(scrollY < documentHeight - footerHeight);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <div>
@@ -153,31 +169,32 @@ const Home = () => {
           </Grid>
         </Box>
       )}
-  
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{
-          position: "fixed",
-          bottom: "20px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          borderRadius: "25px",
-          padding: 1.5,
-          boxShadow: 2,
-          zIndex: 10,
-          backgroundColor: "#222222",
-          paddingLeft: "25px",
-          paddingRight: "25px",
-          fontSize: "12px",
-        }}
-        onClick={toggleMapVisibility}
-      >
-        {mapVisible ? "Show list" : "Show map"}
-      </Button>
+
+      {showMapButton && (
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{
+            position: "fixed",
+            bottom: "20px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            borderRadius: "25px",
+            padding: 1.5,
+            boxShadow: 2,
+            zIndex: 10,
+            backgroundColor: "#222222",
+            paddingLeft: "25px",
+            paddingRight: "25px",
+            fontSize: "12px",
+          }}
+          onClick={toggleMapVisibility}
+        >
+          {mapVisible ? "Show list" : "Show map"}
+        </Button>
+      )}
     </div>
   );
-  
 };
 
 export default Home;

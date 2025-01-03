@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Avatar, Paper, Grid, Divider } from "@mui/material";
 import { fetchData } from "../../config/ServiceApi/serviceApi";
+import { useBookingContext } from "../../context/booking";
 
 const CheckingOut = () => {
   const [checkouts, setCheckouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
-  
+  const {setCheckingOut} = useBookingContext()
   useEffect(() => {
     const fetchCheckouts = async () => {
       const response = await fetchData("bookings-checking-out-today", token);
       setCheckouts(response.bookingsCheckingOutToday);
-      setLoading(false);
+      setCheckingOut(response.count)
+      setLoading(false);      
     };
-
     fetchCheckouts();
   }, []);
 

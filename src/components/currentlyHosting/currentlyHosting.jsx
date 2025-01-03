@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Avatar, Paper, Grid, Divider } from "@mui/material";
 import { fetchData } from "../../config/ServiceApi/serviceApi";
+import { useBookingContext } from "../../context/booking";
 
 const CurrrentlyHosting = () => {
   const [checkouts, setCheckouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
+  const {setCurrentlyHosting} = useBookingContext()
   
   useEffect(() => {
     const fetchCheckouts = async () => {
       const response = await fetchData("currently-hosting", token);
       setCheckouts(response.currentlyHostingBookings);
+      setCurrentlyHosting(response.count)
       setLoading(false);
-      console.log((response));
-      
+      // console.log((response));
     };
 
     fetchCheckouts();
