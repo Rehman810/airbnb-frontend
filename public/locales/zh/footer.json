@@ -1,0 +1,29 @@
+{
+    "support": {
+        "support": "支持",
+        "helpCenter": "帮助中心",
+        "airCover": "空中保障",
+        "antiDiscrimination": "反歧视",
+        "disabilitySupport": "残疾支持",
+        "cancellationOptions": "取消选项",
+        "reportNeighborhoodConcern": "报告邻里关切"
+    },
+    "Hosting": {
+        "airbnbYourHome": "Airbnb 你的家",
+        "airCoverForHosts": "房东空中保障",
+        "hostingResources": "房东资源",
+        "CommunityForum": "社区论坛",
+        "hostingResponsibly": "负责任的房东",
+        "airbnbFriendlyApartments": "Airbnb 友好公寓",
+        "joinAFreeHostingClass": "参加免费的房东课程",
+        "findACoHost": "寻找合伙人"
+    },
+    "Airbnb": {
+        "newsroom": "新闻中心",
+        "newFeatures": "新功能",
+        "careers": "职业",
+        "investors": "投资者",
+        "giftCards": "礼品卡",
+        "airbnbOrgEmergencyStays": "Airbnb.Org 紧急住宿"
+    }
+}

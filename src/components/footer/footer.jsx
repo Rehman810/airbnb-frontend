@@ -1,5 +1,6 @@
 
 import { Box, Container, Grid, Typography, Link, Divider } from "@mui/material";
+import { t } from "i18next";
 import {
   FaFacebookF,
   FaTwitter,
@@ -27,7 +28,7 @@ const Footer = () => {
               gutterBottom
               sx={{ color: "black" }}
             >
-              Support
+              {t("support.support")}
             </Typography>
             <FooterLink text="Help Center" />
             <FooterLink text="AirCover" />
