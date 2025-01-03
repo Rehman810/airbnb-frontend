@@ -4,9 +4,10 @@ import Card from "../../components/cards/cards";
 import { fetchData } from "../../config/ServiceApi/serviceApi";
 import { useAppContext } from "../../context/context";
 import LeafletMap from "../../components/map/map";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
+    const { t } = useTranslation();
   const [listing, setListing] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);

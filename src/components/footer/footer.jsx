@@ -1,6 +1,6 @@
 
 import { Box, Container, Grid, Typography, Link, Divider } from "@mui/material";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 import {
   FaFacebookF,
   FaTwitter,
@@ -9,6 +9,8 @@ import {
 import { MdLanguage } from "react-icons/md";
 
 const Footer = () => {
+  const { t } = useTranslation("footer");
+
   return (
     <Box
       component="footer"
