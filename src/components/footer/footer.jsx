@@ -77,9 +77,10 @@ const Footer = () => {
             <FooterLink text={t("Airbnb.newsroom")} />
             <FooterLink text={t("Airbnb.newFeatures")} />
             <FooterLink text={t("Airbnb.careers")} />
-            <FooterLink text={t("Airbnb.investors")} />
+            <FooterLink text={t("Airbnb.investors")} /> 
             <FooterLink text={t("Airbnb.giftCards")} />
             <FooterLink text={t("Airbnb.airbnbOrgEmergencyStays")} />
+            
           </Grid>
         </Grid>
 
