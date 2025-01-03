@@ -68,7 +68,6 @@ const MyComponent = () => {
     return false; // Enable all other dates
   };
 
-  // Function to clear the selected dates
   const clearDates = () => {
     setSelectedStartDate(null);
     setSelectedDates(null);
@@ -83,10 +82,10 @@ const MyComponent = () => {
             marginBottom: 16,
           }}
           placeholder={["Check-in", "Check-out"]}
-          onCalendarChange={handleDateChange} // Trigger real-time changes
+          onCalendarChange={handleDateChange}
           disabledDate={disabledDate}
           format="DD MMM, YYYY"
-          value={selectedDates} // Bind selected dates to the RangePicker
+          value={selectedDates} 
         />
         <Button type="default" onClick={clearDates}>
           Clear Dates

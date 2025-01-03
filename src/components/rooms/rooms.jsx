@@ -296,7 +296,6 @@ const RoomPage = () => {
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
-      <MyComponent />
       <Box
         sx={{
           display: "flex",
