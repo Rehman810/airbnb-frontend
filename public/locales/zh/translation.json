@@ -13,7 +13,7 @@
       "text": "欣赏如费萨尔清真寺的景点"
     },
     "lahore": {
-      "name": "拉合尔", 
+      "name": "拉合尔",
       "text": "去国外旅行"
     }
   },
@@ -46,6 +46,26 @@
       "airbnbYourHome": "在 Airbnb 上发布房源",
       "hostAnExperience": "组织一次体验",
       "helpCenter": "帮助中心"
+    },
+    "hostMenu": {
+      "today": "今天",
+      "calendar": "日历",
+      "listings": "房源",
+      "messages": "消息"
+    },
+    "hostMenu2": {
+      "userProfile": "个人资料",
+      "userAccount": "账户",
+      "visitHelpCenter": "访问帮助中心",
+      "helpSafetyIssue": "获取安全问题帮助",
+      "giftCards": "礼品卡",
+      "switchToTravelling": "切换为旅行",
+      "logout": "登出"
+    },
+    "notifications": {
+      "newMessage": "新消息",
+      "updateAvailable": "可用更新",
+      "reminder": "提醒"
     }
   },
   "navbar": {

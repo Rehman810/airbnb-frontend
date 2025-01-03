@@ -46,10 +46,30 @@
       "airbnbYourHome": "Airbnb your home",
       "hostAnExperience": "Host an experience",
       "helpCenter": "Help center"
+    },
+    "hostMenu": {
+      "today": "Today",
+      "calendar": "Calendar",
+      "listings": "Listings",
+      "messages": "Messages"
+    },
+    "hostMenu2": {
+      "userProfile": "Profile",
+      "userAccount": "Account",
+      "visitHelpCenter": "Visit the help center",
+      "helpSafetyIssue": "Get help with safety issue",
+      "giftCards": "Gift cards",
+      "switchToTravelling": "Switch to travelling",
+      "logout": "Logout"
+    },
+    "notifications": {
+      "newMessage": "New message",
+      "updateAvailable": "Update available",
+      "reminder": "Reminder"
     }
   },
   "navbar": {
     "airbnbYourHome": "Airbnb your home",
-    "switchToHosting": "Switch to hosting" 
+    "switchToHosting": "Switch to hosting"
   }
 }

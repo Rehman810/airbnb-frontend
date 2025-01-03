@@ -22,16 +22,18 @@ import {
 } from "@mui/icons-material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import handleLogout from "../logout/logout";
+import { useTranslation } from "react-i18next";
 
 const NavbarHost = () => {
+  const { t } = useTranslation();
   const [notificationsMenuAnchorEl, setNotificationsMenuAnchorEl] =
     useState(null);
   const [avatarMenuAnchorEl, setAvatarMenuAnchorEl] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [notifications] = useState([
-    "New message",
-    "Update available",
-    "Reminder",
+    t("menu.notifications.newMessage"),
+    t("menu.notifications.updateAvailable"),
+    t("menu.notifications.reminder"),
   ]);
   const navigate = useNavigate();
   const location = useLocation();
@@ -41,7 +43,13 @@ const NavbarHost = () => {
 
   const isMobile = useMediaQuery("(max-width:900px)");
 
-  const menuItems = ["Today", "Calendar", "Listings", "Messages"];
+  // Define routes for the hosting menu items
+  const menuItems = [
+    { name: t("menu.hostMenu.today"), route: "/hosting/today" },
+    { name: t("menu.hostMenu.calendar"), route: "/hosting/calendar" },
+    { name: t("menu.hostMenu.listings"), route: "/hosting/listings" },
+    { name: t("menu.hostMenu.messages"), route: "/hosting/messages" },
+  ];
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -107,7 +115,7 @@ const NavbarHost = () => {
             {menuItems.map((menu, index) => (
               <Link
                 key={index}
-                to={`/hosting/${menu.toLowerCase()}`}
+                to={menu.route} // Use predefined routes
                 style={{ textDecoration: "none" }}
               >
                 <Typography
@@ -117,14 +125,9 @@ const NavbarHost = () => {
                     cursor: "pointer",
                     textTransform: "capitalize",
                     padding: "5px 10px",
-                    color:
-                      location.pathname === `/hosting/${menu.toLowerCase()}`
-                        ? "black"
-                        : "gray",
+                    color: location.pathname === menu.route ? "black" : "gray",
                     textDecoration:
-                      location.pathname === `/hosting/${menu.toLowerCase()}`
-                        ? "underline"
-                        : "none",
+                      location.pathname === menu.route ? "underline" : "none",
                     textUnderlineOffset: "10px",
                     fontSize: "14px",
                     "&:hover": {
@@ -133,7 +136,7 @@ const NavbarHost = () => {
                     },
                   }}
                 >
-                  {menu}
+                  {menu.name}
                 </Typography>
               </Link>
             ))}
@@ -209,22 +212,41 @@ const NavbarHost = () => {
                   horizontal: "right",
                 }}
               >
-                <MenuItem onClick={() => navigate("/user/profile")}>
-                  Profile
-                </MenuItem>
-                <MenuItem>Account</MenuItem>
-                <MenuItem>Visit the help center</MenuItem>
-                <MenuItem>Get help with safety issue</MenuItem>
-                <MenuItem>Gift cards</MenuItem>
+                {[
+                  {
+                    name: t("menu.hostMenu2.userProfile"),
+                    route: "/user/profile",
+                  },
+                  {
+                    name: t("menu.hostMenu2.userAccount"),
+                    route: "/user/account",
+                  },
+                  {
+                    name: t("menu.hostMenu2.visitHelpCenter"),
+                    route: "/help/center",
+                  },
+                  {
+                    name: t("menu.hostMenu2.helpSafetyIssue"),
+                    route: "/help/safety-issue",
+                  },
+                  {
+                    name: t("menu.hostMenu2.giftCards"),
+                    route: "/user/gift-cards",
+                  },
+                ].map((item, index) => (
+                  <MenuItem key={index} onClick={() => navigate(item.route)}>
+                    {item.name}
+                  </MenuItem>
+                ))}
                 <Divider />
                 <MenuItem onClick={() => navigate("/")}>
-                  Switch to travelling
+                  {t("menu.hostMenu2.switchToTravelling")}
                 </MenuItem>
                 <MenuItem
                   onClick={() => handleLogout(navigate)}
                   style={{ color: "red" }}
                 >
-                  Logout
+                  {t("menu.hostMenu2.logout")}
                 </MenuItem>
               </Menu>
             </>
@@ -256,7 +278,7 @@ const NavbarHost = () => {
           role="presentation"
           onKeyDown={toggleDrawer(false)}
         >
-          {["Today", "Calendar", "Listings", "Messages"].map((menu, index) => (
+          {menuItems.map((menu, index) => (
             <Typography
               key={index}
               variant="body1"
@@ -268,20 +290,35 @@ const NavbarHost = () => {
               }}
               onClick={() => {
                 setDrawerOpen(false);
-                navigate(`/hosting/${menu.toLowerCase()}`)
+                navigate(menu.route);
               }}
             >
-              {menu}
+              {menu.name}
             </Typography>
           ))}
           <Divider />
 
           {[
-            "Profile",
-            "Account",
-            "Visit the help center",
-            "Get help with safety issue",
-            "Gift cards",
+            {
+              name: t("menu.hostMenu2.userProfile"),
+              route: "/user/profile",
+            },
+            {
+              name: t("menu.hostMenu2.userAccount"),
+              route: "/user/account",
+            },
+            {
+              name: t("menu.hostMenu2.visitHelpCenter"),
+              route: "/help/center",
+            },
+            {
+              name: t("menu.hostMenu2.helpSafetyIssue"),
+              route: "/help/safety-issue",
+            },
+            {
+              name: t("menu.hostMenu2.giftCards"),
+              route: "/user/gift-cards",
+            },
           ].map((option, index) => (
             <Typography
               key={index}
@@ -294,10 +331,10 @@ const NavbarHost = () => {
               }}
               onClick={() => {
                 setDrawerOpen(false);
-                navigate(`/user/${option.toLowerCase().replace(/\s+/g, "-")}`)
+                navigate(item.route);
               }}
             >
-              {option}
+              {option.name}
             </Typography>
           ))}
           <Divider />
@@ -306,14 +343,14 @@ const NavbarHost = () => {
             color="primary"
             onClick={() => navigate("/")}
           >
-            Switch to travelling
+            {t("menu.hostMenu2.switchToTravelling")}
           </Button>
           <Button
             variant="outlined"
             color="error"
             onClick={() => handleLogout(navigate)}
           >
-            Logout
+            {t("menu.hostMenu2.logout")}
           </Button>
         </Box>
       </Drawer>
