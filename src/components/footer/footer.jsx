@@ -36,12 +36,12 @@ const Footer = () => {
             >
               {t("support.support")}
             </Typography>
-            <FooterLink text="Help Center" />
-            <FooterLink text="AirCover" />
-            <FooterLink text="Anti-discrimination" />
-            <FooterLink text="Disability support" />
-            <FooterLink text="Cancellation options" />
-            <FooterLink text="Report neighborhood concern" />
+            <FooterLink text={t("support.helpCenter")} />
+            <FooterLink text={t("support.airCover")} />
+            <FooterLink text={t("support.antiDiscrimination")} />
+            <FooterLink text={t("support.disabilitySupport")} />
+            <FooterLink text={t("support.cancellationOptions")} />
+            <FooterLink text={t("support.reportNeighborhoodConcern")} />
           </Grid>
 
           {/* Hosting Section */}
@@ -52,16 +52,16 @@ const Footer = () => {
               gutterBottom
               sx={{ color: "black" }}
             >
-              Hosting
+            {t("Hosting.hosting")}
             </Typography>
-            <FooterLink text="Airbnb your home" />
-            <FooterLink text="AirCover for Hosts" />
-            <FooterLink text="Hosting resources" />
-            <FooterLink text="Community forum" />
-            <FooterLink text="Hosting responsibly" />
-            <FooterLink text="Airbnb-friendly apartments" />
-            <FooterLink text="Join a free Hosting class" />
-            <FooterLink text="Find a co-host" />
+            <FooterLink text={t("Hosting.airbnbYourHome")} />
+            <FooterLink text={t("Hosting.airCoverForHosts")}/>
+            <FooterLink text={t("Hosting.hostingResources")} />
+            <FooterLink text={t("Hosting.CommunityForum")} />
+            <FooterLink text={t("Hosting.hostingResponsibly")} />
+            <FooterLink text={t("Hosting.airbnbFriendlyApartments")} />
+            <FooterLink text={t("Hosting.joinAFreeHostingClass")} />
+            <FooterLink text={t("Hosting.findACoHost")} />
           </Grid>
 
           {/* Airbnb Section */}
