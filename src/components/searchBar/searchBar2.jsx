@@ -11,8 +11,11 @@ import {
   LocationOn as LocationIcon,
 } from "@mui/icons-material";
 import { useAppContext } from "../../context/context";
+import { useTranslation } from "react-i18next";
 
 const SearchBar2 = () => {
+  const { t } = useTranslation();
+
   const [isVisible, setIsVisible] = useState(true);
   const [scrollPosition, setScrollPosition] = useState(0);
   const { setSearchVisible } = useAppContext();
@@ -35,12 +38,12 @@ const SearchBar2 = () => {
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
-    setSearchVisible(true)
+    setSearchVisible(true);
   };
 
   return (
     <Box
-    onClick={toggleVisibility}
+      onClick={toggleVisibility}
       className={`${!isVisible ? "search-visible" : "search-hidden"}`}
       sx={{
         display: "flex",
@@ -80,7 +83,7 @@ const SearchBar2 = () => {
                 variant="body2"
                 sx={{ fontWeight: "bold", fontSize: "12px" }}
               >
-                Anywhere
+                {t("anyWeek")}
               </Typography>
             </Box>
 
@@ -91,7 +94,7 @@ const SearchBar2 = () => {
                 variant="body2"
                 sx={{ fontWeight: "bold", fontSize: "12px" }}
               >
-                Any week
+                {t("anyWeek")}
               </Typography>
             </Box>
 
@@ -108,7 +111,7 @@ const SearchBar2 = () => {
                 variant="body2"
                 sx={{ fontWeight: "bold", fontSize: "12px" }}
               >
-                Add guests
+                {t("addGuests")}
               </Typography>
             </Box>
 

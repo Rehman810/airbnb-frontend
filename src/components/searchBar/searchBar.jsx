@@ -165,7 +165,7 @@ const SearchBar = () => {
               {t("where")}
             </Typography>
             <TextField
-              placeholder="Search destinations"
+              placeholder={t("destination")}
               variant="standard"
               fullWidth
               InputProps={{ disableUnderline: true }}
@@ -184,7 +184,7 @@ const SearchBar = () => {
               <MenuItem
                 key={city}
                 onClick={() => {
-                  setSelectedDestination(`${city.name}, Pakistan`);
+                  setSelectedDestination(`${city.name}, ${t("country")}`);
                   closeWhereMenu();
                 }}
               >
@@ -196,7 +196,7 @@ const SearchBar = () => {
                 />
                 <Box>
                   <Typography sx={{ fontWeight: "bold" }}>
-                    {city.name}, Pakistan
+                    {city.name}, {t("country")}
                   </Typography>
                   <Typography variant="body2" sx={{ color: "gray" }}>
                     {city.text}
@@ -215,11 +215,11 @@ const SearchBar = () => {
                   variant="body2"
                   sx={{ fontWeight: "bold", fontSize: "12px" }}
                 >
-                  Add Dates
+                  {t("addDates")}
                 </Typography>
                 <RangePicker
                   onChange={(dates) => setDates(dates)}
-                  placeholder={["Check in", "Check out"]}
+                  placeholder={[t("checkIn"), t("checkOut")]}
                   disabledDate={disableDates}
                   style={{
                     width: "100%",
@@ -243,19 +243,19 @@ const SearchBar = () => {
                   variant="body2"
                   sx={{ fontWeight: "bold", fontSize: "12px" }}
                 >
-                  Who
+                  {t("who")}
                 </Typography>
                 <TextField
-                  placeholder="Add guests"
+                  placeholder={t("addGuests")}
                   variant="standard"
                   fullWidth
                   InputProps={{ disableUnderline: true }}
                   sx={{ color: "gray", fontWeight: "bold" }}
                   value={[
-                    guests.adults ? `${guests.adults} Adults` : "",
-                    guests.children ? `${guests.children} Children` : "",
-                    guests.infants ? `${guests.infants} Infants` : "",
-                    guests.pets ? `${guests.pets} Pets` : "",
+                    guests.adults ? `${guests.adults} ${t("adults")}` : "",
+                    guests.children ? `${guests.children} ${t("children")}` : "",
+                    guests.infants ? `${guests.infants} ${t("infants")}` : "",
+                    guests.pets ? `${guests.pets} ${t("pets")}` : "",
                   ]
                     .filter(Boolean)
                     .join(", ")}
@@ -269,10 +269,10 @@ const SearchBar = () => {
                 onClose={closeGuestsMenu}
               >
                 {[
-                  { label: "Adults", type: "adults" },
-                  { label: "Children", type: "children" },
-                  { label: "Infants", type: "infants" },
-                  { label: "Pets", type: "pets" },
+                  { label: t("adults"), type: "adults" },
+                  { label: t("children"), type: "children" },
+                  { label: t("infants"), type: "infants" },
+                  { label: t("pets"), type: "pets" },
                 ].map((guest) => (
                   <MenuItem key={guest.type}>
                     <Box

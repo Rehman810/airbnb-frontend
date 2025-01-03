@@ -1,5 +1,8 @@
 {
   "where": "Where",
+  "destination": "Search Destination",
+  "anyWhere": "Any Where",
+  "anyWeek": "Any Week",
   "cities": {
     "karachi": {
       "name": "Karachi",
@@ -13,5 +16,40 @@
       "name": "Lahore",
       "text": "For a trip abroad"
     }
+  },
+  "country": "Pakistan",
+  "addDates": "Add Dates",
+  "checkIn": "Check In",
+  "checkOut": "Check Out",
+  "who": "Who",
+  "addGuests": "Add Guests",
+  "adults": "Adults",
+  "children": "Children",
+  "infants": "Infants",
+  "pets": "Pets",
+  "menu": {
+    "verified": {
+      "messages": "Messages",
+      "notifications": "Notifications",
+      "trips": "Trips",
+      "wishlists": "Wishlists",
+      "manageListings": "Manage Listings",
+      "account": "Account",
+      "giftCards": "Gift cards",
+      "helpCenter": "Help center",
+      "logout": "Logout"
+    },
+    "unverified": {
+      "login": "Login",
+      "signUp": "Sign up",
+      "giftCards": "Gift cards",
+      "airbnbYourHome": "Airbnb your home",
+      "hostAnExperience": "Host an experience",
+      "helpCenter": "Help center"
+    }
+  },
+  "navbar": {
+    "airbnbYourHome": "Airbnb your home",
+    "switchToHosting": "Switch to hosting" 
   }
 }

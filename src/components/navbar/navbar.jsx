@@ -23,69 +23,65 @@ import { useNavigate } from "react-router-dom";
 import handleLogout from "../logout/logout";
 import VerifyToken from "../protected/verifyToken";
 import Language from "../language/Language";
+import { useTranslation } from "react-i18next";
 
 const VerifiedMenu = ({
   anchorEl,
   handleMenuClose,
   navigate,
   handleLogout,
-}) => (
-  <Menu
-    anchorEl={anchorEl}
-    open={Boolean(anchorEl)}
-    onClose={handleMenuClose}
-    keepMounted>
-    <MenuItem>Messages</MenuItem>
-    <MenuItem>Notifications</MenuItem>
-    <MenuItem onClick={()=>navigate("/user/trips")}>Trips</MenuItem>
-    <MenuItem
-      onClick={() => navigate("/user/wishlist")}>
-      Wishlists
-    </MenuItem>
-    <Divider />
-    <MenuItem
-      onClick={() =>
-        navigate("/hosting/listings")
-      }>
-      Manage Listings
-    </MenuItem>
-    <MenuItem>Account</MenuItem>
-    <Divider />
-    <MenuItem>Gift cards</MenuItem>
-    <MenuItem>Help center</MenuItem>
-    <MenuItem
-      onClick={() => handleLogout(navigate)}>
-      Logout
-    </MenuItem>
-  </Menu>
-);
+}) => {
+  const { t } = useTranslation(); 
+
+  return (
+    <Menu
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleMenuClose}
+      keepMounted>
+      <MenuItem>{t("menu.verified.messages")}</MenuItem>
+      <MenuItem>{t("menu.verified.notifications")}</MenuItem>
+      <MenuItem onClick={() => navigate("/user/trips")}>{t("menu.verified.trips")}</MenuItem>
+      <MenuItem onClick={() => navigate("/user/wishlist")}>{t("menu.verified.wishlists")}</MenuItem>
+      <Divider />
+      <MenuItem onClick={() => navigate("/hosting/listings")}>{t("menu.verified.manageListings")}</MenuItem>
+      <MenuItem>{t("menu.verified.account")}</MenuItem>
+      <Divider />
+      <MenuItem>{t("menu.verified.giftCards")}</MenuItem>
+      <MenuItem>{t("menu.verified.helpCenter")}</MenuItem>
+      <MenuItem onClick={() => handleLogout(navigate)}>{t("menu.verified.logout")}</MenuItem>
+    </Menu>
+  );
+};
 
 const UnverifiedMenu = ({
   anchorEl,
   handleMenuClose,
   handleLoginModalOpen,
   handleSignUpModalOpen,
-}) => (
-  <Menu
-    anchorEl={anchorEl}
-    open={Boolean(anchorEl)}
-    onClose={handleMenuClose}
-    keepMounted>
-    <MenuItem onClick={handleLoginModalOpen}>
-      Login
-    </MenuItem>
-    <MenuItem onClick={handleSignUpModalOpen}>
-      Sign up
-    </MenuItem>
-    <Divider />
-    <MenuItem>Gift cards</MenuItem>
-    <MenuItem>Airbnb your home</MenuItem>
-    <MenuItem>Host an experience</MenuItem>
-    <MenuItem>Help center</MenuItem>
-  </Menu>
-);
+}) => {
+  const { t } = useTranslation();
+
+  return (
+    <Menu
+      anchorEl={anchorEl}
+      open={Boolean(anchorEl)}
+      onClose={handleMenuClose}
+      keepMounted>
+      <MenuItem onClick={handleLoginModalOpen}>{t("menu.unverified.login")}</MenuItem>
+      <MenuItem onClick={handleSignUpModalOpen}>{t("menu.unverified.signUp")}</MenuItem>
+      <Divider />
+      <MenuItem>{t("menu.unverified.giftCards")}</MenuItem>
+      <MenuItem>{t("menu.unverified.airbnbYourHome")}</MenuItem>
+      <MenuItem>{t("menu.unverified.hostAnExperience")}</MenuItem>
+      <MenuItem>{t("menu.unverified.helpCenter")}</MenuItem>
+    </Menu>
+  );
+};
 
 const Navbar = () => {
+  const { t } = useTranslation();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoginModalOpen, setIsLoginModalOpen] =
     useState(false);
@@ -154,7 +150,7 @@ const Navbar = () => {
             onClick={() => {
               navigate("/");
             }}>
-            airbnb
+            Airbnb
           </Typography>
         </Box>
 
@@ -190,8 +186,8 @@ const Navbar = () => {
                 navigate("/hosting/today")
               }>
               {!token
-                ? "Airbnb your home"
-                : "Switch to hosting"}
+                ? t("navbar.airbnbYourHome")
+                : t("navbar.switchToHosting")}
             </Button>
             <IconButton>
               <GlobalIcon onClick={toggleModal} />
