@@ -8,7 +8,7 @@ import {
   Grid,
   Divider,
 } from "@mui/material";
-import { fetchData, postDataById } from "../../config/ServiceApi/serviceApi";
+import { deleteDataById, fetchData, postDataById } from "../../config/ServiceApi/serviceApi";
 import { showSuccessToast } from "../../components/toast/toast";
 import { useBookingContext } from "../../context/booking";
 
@@ -24,7 +24,7 @@ const PendingBooking = () => {
         const response = await fetchData("temporary-booking", token);
         setPendingBookings(response.bookings);
         setPendingBooking(response.count);
-        console.log(response);
+        // console.log(response);
       } catch (error) {
         console.error("Error fetching pending bookings:", error);
       } finally {
@@ -45,8 +45,14 @@ const PendingBooking = () => {
     showSuccessToast("Booking Accepted!");
   };
 
-  const handleReject = (bookingId) => {
-    console.log(`Reject booking: ${bookingId}`);
+  const handleReject = async(bookingId) => {
+    const response = await deleteDataById(
+      "reject-booking",
+      token,
+      bookingId
+    );
+    setIsPending(response);
+    showSuccessToast("Booking Rejected!");
   };
 
   if (loading) {

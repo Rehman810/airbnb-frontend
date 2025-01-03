@@ -17,6 +17,9 @@ const RequestToBook = lazy(() =>
     "../../components/requestToBook/requestToBook"
   )
 );
+const Trips = lazy(() =>
+  import("../../pages/trips/trips")
+);
 const Navbar = lazy(() =>
   import("../../components/navbar/navbar2")
 );
@@ -30,6 +33,7 @@ const CommonRoutes = () => {
   return (
     <>
       <Navbar />
+        <div style={{minHeight: "22vh"}}>
       <Routes>
         {/* Request to Book Page */}
         <Route
@@ -64,7 +68,18 @@ const CommonRoutes = () => {
             />
           }
         />
+
+        {/* Trips Page */}
+        <Route
+          path="/trips"
+          element={
+            <Protected
+              Component={Trips}
+            />
+          }
+        />
       </Routes>
+        </div>
       <Footer />
     </>
   );

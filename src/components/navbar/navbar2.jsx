@@ -35,9 +35,10 @@ const NavbarHost = () => {
   ]);
   const navigate = useNavigate();
   const location = useLocation();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const isProfilePage = location.pathname.includes("hosting");
-  
+
   const isMobile = useMediaQuery("(max-width:900px)");
 
   const menuItems = ["Today", "Calendar", "Listings", "Messages"];
@@ -94,50 +95,50 @@ const NavbarHost = () => {
             airbnb
           </Typography>
         </Box>
-{isProfilePage && (
-        <Box
-          sx={{
-            display: { xs: "none", md: "flex" },
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "20px",
-          }}
-        >
-          {menuItems.map((menu, index) => (
-            <Link
-              key={index}
-              to={`/hosting/${menu.toLowerCase()}`}
-              style={{ textDecoration: "none" }}
-            >
-              <Typography
-                variant="body1"
-                sx={{
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  textTransform: "capitalize",
-                  padding: "5px 10px",
-                  color:
-                    location.pathname === `/hosting/${menu.toLowerCase()}`
-                      ? "black"
-                      : "gray",
-                  textDecoration:
-                    location.pathname === `/hosting/${menu.toLowerCase()}`
-                      ? "underline"
-                      : "none",
-                  textUnderlineOffset: "10px",
-                  fontSize: "14px",
-                  "&:hover": {
-                    backgroundColor: "#f0f0f0",
-                    borderRadius: "20px",
-                  },
-                }}
+        {isProfilePage && (
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "20px",
+            }}
+          >
+            {menuItems.map((menu, index) => (
+              <Link
+                key={index}
+                to={`/hosting/${menu.toLowerCase()}`}
+                style={{ textDecoration: "none" }}
               >
-                {menu}
-              </Typography>
-            </Link>
-          ))}
-        </Box>
-)}
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontWeight: "bold",
+                    cursor: "pointer",
+                    textTransform: "capitalize",
+                    padding: "5px 10px",
+                    color:
+                      location.pathname === `/hosting/${menu.toLowerCase()}`
+                        ? "black"
+                        : "gray",
+                    textDecoration:
+                      location.pathname === `/hosting/${menu.toLowerCase()}`
+                        ? "underline"
+                        : "none",
+                    textUnderlineOffset: "10px",
+                    fontSize: "14px",
+                    "&:hover": {
+                      backgroundColor: "#f0f0f0",
+                      borderRadius: "20px",
+                    },
+                  }}
+                >
+                  {menu}
+                </Typography>
+              </Link>
+            ))}
+          </Box>
+        )}
         <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <IconButton onClick={handleNotificationsMenuOpen}>
             <Badge badgeContent={notifications.length} color="error">
@@ -172,18 +173,29 @@ const NavbarHost = () => {
 
           {!isMobile && (
             <>
-              <IconButton onClick={handleAvatarMenuOpen}>
+              <Box
+                onClick={handleAvatarMenuOpen}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "row",
+                  cursor: "pointer",
+                }}
+              >
                 <Avatar
                   sx={{
-                    bgcolor: "#f2f2f2",
-                    color: "gray",
-                    width: 30,
-                    height: 30,
+                    bgcolor: user?.photoProfile ? "transparent" : "#f2f2f2",
+                    color: user?.photoProfile ? "inherit" : "gray",
+                    width: 32,
+                    height: 32,
                   }}
+                  src={user?.photoProfile || null}
                 >
-                  <PersonIcon />
+                  {!user?.photoProfile &&
+                    user?.userName.charAt(0).toUpperCase()}
                 </Avatar>
-              </IconButton>
+              </Box>
+
               <Menu
                 anchorEl={avatarMenuAnchorEl}
                 open={Boolean(avatarMenuAnchorEl)}
@@ -254,7 +266,10 @@ const NavbarHost = () => {
                 textTransform: "capitalize",
                 "&:hover": { textDecoration: "underline" },
               }}
-              onClick={() => navigate(`/${menu.toLowerCase()}`)}
+              onClick={() => {
+                setDrawerOpen(false);
+                navigate(`/hosting/${menu.toLowerCase()}`)
+              }}
             >
               {menu}
             </Typography>
@@ -276,6 +291,10 @@ const NavbarHost = () => {
                 cursor: "pointer",
                 textTransform: "capitalize",
                 "&:hover": { textDecoration: "underline" },
+              }}
+              onClick={() => {
+                setDrawerOpen(false);
+                navigate(`/user/${option.toLowerCase().replace(/\s+/g, "-")}`)
               }}
             >
               {option}

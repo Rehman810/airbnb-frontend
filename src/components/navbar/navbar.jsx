@@ -37,7 +37,7 @@ const VerifiedMenu = ({
     keepMounted>
     <MenuItem>Messages</MenuItem>
     <MenuItem>Notifications</MenuItem>
-    <MenuItem>Trips</MenuItem>
+    <MenuItem onClick={()=>navigate("/user/trips")}>Trips</MenuItem>
     <MenuItem
       onClick={() => navigate("/user/wishlist")}>
       Wishlists
@@ -89,7 +89,7 @@ const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isLoginModalOpen, setIsLoginModalOpen] =
     useState(false);
-    const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [signUp, isSignUp] = useState();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");

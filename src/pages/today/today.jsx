@@ -8,7 +8,7 @@ import PendingBooking from "../../components/pendingBooking/pendingBooking";
 import { useBookingContext } from "../../context/booking";
 
 const ReservationSection = () => {
-  const [selectedTab, setSelectedTab] = useState("Checking out");
+  const [selectedTab, setSelectedTab] = useState("Pending Booking");
   useDocumentTitle("Host Dashboard - Airbnb");
   const user = JSON.parse(localStorage.getItem("user"));
   const { checkingOut, pendingBooking, currentlyHosting, upcoming } = useBookingContext();
@@ -39,11 +39,18 @@ const ReservationSection = () => {
     }
   };
 
+  const formatUserName = (userName) => {
+    return userName
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" ");
+  };  
+
   return (
     <Box sx={{ p: 3 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4" fontWeight="bold">
-          Welcome, {user.userName}!
+          Welcome, {formatUserName(user.userName)}!
         </Typography>
       </Box>
 
