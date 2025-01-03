@@ -31,6 +31,7 @@ export const AppProvider = ({ children }) => {
       pets: 0,
     },
   });
+  const [langauge, setLanguage] = useState({})
 
   const resetListingState = () => {
     setPlaceType(null);
@@ -76,7 +77,9 @@ export const AppProvider = ({ children }) => {
     contextLatitude,
     contextLongitude,
     searchParams, 
-    setSearchParams
+    setSearchParams,
+    langauge,
+    setLanguage
   };
 
   return (

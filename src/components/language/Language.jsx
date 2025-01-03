@@ -9,9 +9,11 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
+import { useAppContext } from "../../context/context";
 
 const Language = ({ open, toggleModal }) => {
   const { i18n } = useTranslation();
+  const {setLanguage} = useAppContext()
 
   const languages = [
     { code: "en", lang: "English" },
@@ -63,7 +65,10 @@ const Language = ({ open, toggleModal }) => {
                   cursor: "pointer",
                   fontWeight: i18n.language === lng.code ? "bold" : "normal",
                 }}
-                onClick={() => changeLanguage(lng.code)}
+                onClick={() => {
+                  setLanguage(lng)                  
+                  changeLanguage(lng.code)}
+                }
               >
                 {lng.lang}
               </Typography>

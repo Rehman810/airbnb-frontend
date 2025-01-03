@@ -1,16 +1,20 @@
-
 import { Box, Container, Grid, Typography, Link, Divider } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-} from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import { MdLanguage } from "react-icons/md";
+import Language from "../language/Language";
+import { useState } from "react";
+import { useAppContext } from "../../context/context";
 
 const Footer = () => {
   const { t } = useTranslation("footer");
+  const [open, setOpen] = useState(false);
+  const { langauge } = useAppContext();
 
+  const toggleModal = () => {
+    setOpen(!open);
+  };
+  
   return (
     <Box
       component="footer"
@@ -70,7 +74,7 @@ const Footer = () => {
             >
               Airbnb
             </Typography>
-            <FooterLink  text="Newsroom" />
+            <FooterLink text="Newsroom" />
             <FooterLink text="New features" />
             <FooterLink text="Careers" />
             <FooterLink text="Investors" />
@@ -98,12 +102,17 @@ const Footer = () => {
           <Box display="flex" alignItems="center" gap={2}>
             <Box display="flex" alignItems="center" gap={0.5}>
               <MdLanguage size={18} />
-              <Typography variant="body2" color="text.secondary">
-                English (US)
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                onClick={toggleModal}
+                sx={{ cursor: "pointer" }}
+              >
+                {langauge.lang || "English"} ({langauge.code || "en"})
               </Typography>
             </Box>
             <Typography variant="body2" color="text.secondary">
-              $ USD
+              Rs PKR
             </Typography>
 
             {/* Social Media Icons */}
@@ -119,17 +128,14 @@ const Footer = () => {
           </Box>
         </Box>
       </Container>
+      <Language open={open} toggleModal={toggleModal} />
     </Box>
   );
 };
 
 // Footer Link Helper Component
 const FooterLink = ({ text }) => (
-  <Typography
-    variant="body2"
-    color="text.secondary"
-    sx={{ mb: 0.5 }}
-  >
+  <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
     <Link href="#" color="inherit" underline="hover">
       {text}
     </Link>
