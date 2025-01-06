@@ -143,4 +143,4 @@ const FooterLink = ({ text }) => (
   </Typography>
 );
 
-export default Footer;
+export default Footer
