@@ -1,0 +1,81 @@
+{
+    "where": "Où",
+    "destination": "Chercher une destination",
+    "anyWhere": "N'importe où",
+    "anyWeek": "N'importe quelle semaine",
+    "cities": {
+      "karachi": {
+        "name": "Karachi",
+        "text": "Pour profiter de la ville des lumières"
+      },
+      "islamabad": {
+        "name": "Islamabad",
+        "text": "Pour des sites comme la mosquée Faisal"
+      },
+      "lahore": {
+        "name": "Lahore",
+        "text": "Pour un voyage à l'étranger"
+      }
+    },
+    "country": "Pakistan",
+    "addDates": "Ajouter des dates",
+    "checkIn": "Enregistrer",
+    "checkOut": "Check-out",
+    "who": "Qui",
+    "addGuests": "Ajouter des invités",
+    "adults": "Adultes",
+    "children": "Enfants",
+    "infants": "Bébés",
+    "pets": "Animaux de compagnie",
+    "menu": {
+      "verified": {
+        "messages": "Messages",
+        "notifications": "Notifications",
+        "trips": "Voyages",
+        "wishlists": "Listes de souhaits",
+        "manageListings": "Gérer les annonces",
+        "account": "Compte",
+        "giftCards": "Cartes-cadeaux",
+        "helpCenter": "Centre d'aide",
+        "logout": "Se déconnecter"
+      },
+      "unverified": {
+        "login": "Se connecter",
+        "signUp": "S'inscrire",
+        "giftCards": "Cartes-cadeaux",
+        "airbnbYourHome": "Louer votre maison sur Airbnb",
+        "hostAnExperience": "Proposer une expérience",
+        "helpCenter": "Centre d'aide"
+      },
+      "hostMenu": {
+        "today": "Aujourd'hui",
+        "calendar": "Calendrier",
+        "listings": "Annonces",
+        "messages": "Messages"
+      },
+      "hostMenu2": {
+        "userProfile": "Profil",
+        "userAccount": "Compte",
+        "visitHelpCenter": "Visiter le centre d'aide",
+        "helpSafetyIssue": "Obtenir de l'aide pour un problème de sécurité",
+        "giftCards": "Cartes-cadeaux",
+        "switchToTravelling": "Passer au voyage",
+        "logout": "Se déconnecter"
+      },
+      "notifications": {
+        "newMessage": "Nouveau message",
+        "updateAvailable": "Mise à jour disponible",
+        "reminder": "Rappel"
+      }
+    },
+    "navbar": {
+      "airbnbYourHome": "Louer votre maison sur Airbnb",
+      "switchToHosting": "Passer à l'hébergement"
+    },
+    "home": {
+      "showList": "Afficher la liste",
+      "showMap": "Afficher la carte",
+      "noListingsPresent": "Aucune annonce présente"
+    }
+  }
+  

@@ -1,0 +1,31 @@
+{
+    "support": {
+      "support": "الدعم",
+      "helpCenter": "مركز المساعدة",
+      "airCover": "Air Cover",
+      "antiDiscrimination": "مكافحة التمييز",
+      "disabilitySupport": "دعم الإعاقة",
+      "cancellationOptions": "خيارات الإلغاء",
+      "reportNeighborhoodConcern": "الإبلاغ عن قلق في الحي"
+    },
+    "Hosting": {
+      "hosting": "الاستضافة",
+      "airbnbYourHome": "استأجر منزلك عبر Airbnb",
+      "airCoverForHosts": "AirCover للمضيفين",
+      "hostingResources": "موارد الاستضافة",
+      "CommunityForum": "منتدى المجتمع",
+      "hostingResponsibly": "الاستضافة بشكل مسؤول",
+      "airbnbFriendlyApartments": "شقق صديقة لـ Airbnb",
+      "joinAFreeHostingClass": "الانضمام إلى دورة استضافة مجانية",
+      "findACoHost": "ابحث عن مساعد مضيف"
+    },
+    "Airbnb": {
+      "newsroom": "غرفة الأخبار",
+      "newFeatures": "ميزات جديدة",
+      "careers": "وظائف",
+      "investors": "المستثمرين",
+      "giftCards": "بطاقات الهدايا",
+      "airbnbOrgEmergencyStays": "الإقامات الطارئة من Airbnb.Org"
+    }
+  }
+  

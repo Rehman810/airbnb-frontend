@@ -1,0 +1,81 @@
+{
+    "where": "أين",
+    "destination": "ابحث عن الوجهة",
+    "anyWhere": "أي مكان",
+    "anyWeek": "أي أسبوع",
+    "cities": {
+      "karachi": {
+        "name": "كراتشي",
+        "text": "للاستمتاع بمدينة الأضواء"
+      },
+      "islamabad": {
+        "name": "إسلام أباد",
+        "text": "لزيارة معالم مثل مسجد فيصل"
+      },
+      "lahore": {
+        "name": "لاهور",
+        "text": "لرحلة خارجية"
+      }
+    },
+    "country": "باكستان",
+    "addDates": "أضف التواريخ",
+    "checkIn": "تسجيل الوصول",
+    "checkOut": "تسجيل المغادرة",
+    "who": "من",
+    "addGuests": "إضافة ضيوف",
+    "adults": "بالغين",
+    "children": "أطفال",
+    "infants": "رضع",
+    "pets": "حيوانات أليفة",
+    "menu": {
+      "verified": {
+        "messages": "الرسائل",
+        "notifications": "الإشعارات",
+        "trips": "الرحلات",
+        "wishlists": "قوائم الأمنيات",
+        "manageListings": "إدارة القوائم",
+        "account": "الحساب",
+        "giftCards": "بطاقات الهدايا",
+        "helpCenter": "مركز المساعدة",
+        "logout": "تسجيل الخروج"
+      },
+      "unverified": {
+        "login": "تسجيل الدخول",
+        "signUp": "التسجيل",
+        "giftCards": "بطاقات الهدايا",
+        "airbnbYourHome": "استئجار منزلك عبر Airbnb",
+        "hostAnExperience": "استضافة تجربة",
+        "helpCenter": "مركز المساعدة"
+      },
+      "hostMenu": {
+        "today": "اليوم",
+        "calendar": "التقويم",
+        "listings": "القوائم",
+        "messages": "الرسائل"
+      },
+      "hostMenu2": {
+        "userProfile": "الملف الشخصي",
+        "userAccount": "الحساب",
+        "visitHelpCenter": "زيارة مركز المساعدة",
+        "helpSafetyIssue": "الحصول على مساعدة بخصوص قضية الأمان",
+        "giftCards": "بطاقات الهدايا",
+        "switchToTravelling": "التحول إلى السفر",
+        "logout": "تسجيل الخروج"
+      },
+      "notifications": {
+        "newMessage": "رسالة جديدة",
+        "updateAvailable": "تحديث متاح",
+        "reminder": "تذكير"
+      }
+    },
+    "navbar": {
+      "airbnbYourHome": "استئجار منزلك عبر Airbnb",
+      "switchToHosting": "التحول إلى الاستضافة"
+    },
+    "home": {
+      "showList": "عرض القائمة",
+      "showMap": "عرض الخريطة",
+      "noListingsPresent": "لا توجد قوائم"
+    }
+  }
+  

@@ -1,0 +1,80 @@
+{
+  "where": "Nerede",
+  "destination": "Hedef Ara",
+  "anyWhere": "Herhangi Bir Yer",
+  "anyWeek": "Herhangi Bir Hafta",
+  "cities": {
+    "karachi": {
+      "name": "Karachi",
+      "text": "Işıklar şehri Karachi'yi keşfetmek için"
+    },
+    "islamabad": {
+      "name": "İslamabad",
+      "text": "Faysal Camii gibi yerleri görmek için"
+    },
+    "lahore": {
+      "name": "Lahore",
+      "text": "Yurt dışı gezisi yapmak için"
+    }
+  },
+  "country": "Pakistan",
+  "addDates": "Tarih Ekle",
+  "checkIn": "Giriş Yap",
+  "checkOut": "Çıkış Yap",
+  "who": "Kim",
+  "addGuests": "Misafir Ekle",
+  "adults": "Yetişkinler",
+  "children": "Çocuklar",
+  "infants": "Bebekler",
+  "pets": "Evcil Hayvanlar",
+  "menu": {
+    "verified": {
+      "messages": "Mesajlar",
+      "notifications": "Bildirimler",
+      "trips": "Geziler",
+      "wishlists": "Dilek Listeleri",
+      "manageListings": "İlanları Yönet",
+      "account": "Hesap",
+      "giftCards": "Hediye Kartları",
+      "helpCenter": "Yardım Merkezi",
+      "logout": "Çıkış Yap"
+    },
+    "unverified": {
+      "login": "Giriş Yap",
+      "signUp": "Kaydol",
+      "giftCards": "Hediye Kartları",
+      "airbnbYourHome": "Evini Airbnb'ye Aç",
+      "hostAnExperience": "Deneyim Sun",
+      "helpCenter": "Yardım Merkezi"
+    },
+    "hostMenu": {
+      "today": "Bugün",
+      "calendar": "Takvim",
+      "listings": "İlanlar",
+      "messages": "Mesajlar"
+    },
+    "hostMenu2": {
+      "userProfile": "Profil",
+      "userAccount": "Hesap",
+      "visitHelpCenter": "Yardım Merkezini Ziyaret Et",
+      "helpSafetyIssue": "Güvenlik Sorunu Yardımı Al",
+      "giftCards": "Hediye Kartları",
+      "switchToTravelling": "Seyahate Geç",
+      "logout": "Çıkış Yap"
+    },
+    "notifications": {
+      "newMessage": "Yeni Mesaj",
+      "updateAvailable": "Güncelleme Mevcut",
+      "reminder": "Hatırlatma"
+    }
+  },
+  "navbar": {
+    "airbnbYourHome": "Evini Airbnb'ye Aç",
+    "switchToHosting": "Konuk Olmaya Geç"
+  },
+  "home": {
+    "showList": "Listeyi Göster",
+    "showMap": "Haritayı Göster",
+    "noListingsPresent": "Hiç İlan Yok"
+  }
+}

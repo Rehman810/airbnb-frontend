@@ -1,0 +1,31 @@
+{
+    "support": {
+      "support": "Support",
+      "helpCenter": "Centre d'aide",
+      "airCover": "Air Cover",
+      "antiDiscrimination": "Anti-discrimination",
+      "disabilitySupport": "Soutien aux personnes handicapées",
+      "cancellationOptions": "Options d'annulation",
+      "reportNeighborhoodConcern": "Signaler un problème de quartier"
+    },
+    "Hosting": {
+      "hosting": "Hébergement",
+      "airbnbYourHome": "Louer votre maison sur Airbnb",
+      "airCoverForHosts": "AirCover pour les hôtes",
+      "hostingResources": "Ressources pour les hôtes",
+      "CommunityForum": "Forum communautaire",
+      "hostingResponsibly": "Héberger de manière responsable",
+      "airbnbFriendlyApartments": "Appartements compatibles Airbnb",
+      "joinAFreeHostingClass": "Rejoindre un cours d'hébergement gratuit",
+      "findACoHost": "Trouver un co-hôte"
+    },
+    "Airbnb": {
+      "newsroom": "Salle de presse",
+      "newFeatures": "Nouvelles fonctionnalités",
+      "careers": "Carrières",
+      "investors": "Investisseurs",
+      "giftCards": "Cartes-cadeaux",
+      "airbnbOrgEmergencyStays": "Séjours d'urgence Airbnb.Org"
+    }
+  }
+  

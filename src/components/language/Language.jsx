@@ -6,6 +6,7 @@ import {
   Typography,
   Grid,
   IconButton,
+  Divider,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
@@ -13,11 +14,19 @@ import { useAppContext } from "../../context/context";
 
 const Language = ({ open, toggleModal }) => {
   const { i18n } = useTranslation();
-  const {setLanguage} = useAppContext()
+  const { setLanguage } = useAppContext();
 
   const languages = [
     { code: "en", lang: "English" },
     { code: "zh", lang: "Chinese" },
+  ];
+
+  const otherLanguages = [
+    { code: "tr", lang: "Turkish" },
+    { code: "ar", lang: "Arabic" },
+    { code: "ur", lang: "Urdu" },
+    { code: "fr", lang: "French" },
+    { code: "de", lang: "German" },
   ];
 
   const changeLanguage = (lng) => {
@@ -32,7 +41,7 @@ const Language = ({ open, toggleModal }) => {
       maxWidth="md"
       PaperProps={{
         style: {
-          height: "50vh", 
+          height: "50vh",
           borderRadius: "10px",
         },
       }}
@@ -44,7 +53,7 @@ const Language = ({ open, toggleModal }) => {
           alignItems: "center",
         }}
       >
-        <Typography variant="h6">Language and region</Typography>
+        <Typography variant="h5" fontWeight={"bold"}>Language and region</Typography>
         {/* Close Button */}
         <IconButton onClick={toggleModal}>
           <CloseIcon />
@@ -54,9 +63,10 @@ const Language = ({ open, toggleModal }) => {
         {/* Language Options */}
         <Typography variant="body1" style={{ marginBottom: "10px" }}>
           Choose a language
-          <hr />
+          <Divider style={{ margin: "20px 0" }}/>
         </Typography>
         <Grid container spacing={2}>
+          {/* First, display English and Chinese */}
           {languages.map((lng) => (
             <Grid item xs={6} sm={4} key={lng.code}>
               <Typography
@@ -64,11 +74,42 @@ const Language = ({ open, toggleModal }) => {
                 style={{
                   cursor: "pointer",
                   fontWeight: i18n.language === lng.code ? "bold" : "normal",
+                  border: i18n.language === lng.code ? "1px solid black" : "none",
+                  padding: "4px",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  width: "50%"
                 }}
                 onClick={() => {
-                  setLanguage(lng)                  
-                  changeLanguage(lng.code)}
-                }
+                  setLanguage(lng);
+                  changeLanguage(lng.code);
+                }}
+              >
+                {lng.lang}
+              </Typography>
+            </Grid>
+          ))}
+        </Grid>
+        <Divider style={{ margin: "20px 0" }} />
+        <Grid container spacing={2}>
+          {/* Other languages */}
+          {otherLanguages.map((lng) => (
+            <Grid item xs={6} sm={4} key={lng.code}>
+              <Typography
+                variant="body2"
+                style={{
+                  cursor: "pointer",
+                  fontWeight: i18n.language === lng.code ? "bold" : "normal",
+                  border: i18n.language === lng.code ? "1px solid black" : "none",
+                  padding: "4px",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  width: "50%"
+                }}
+                onClick={() => {
+                  setLanguage(lng);
+                  changeLanguage(lng.code);
+                }}
               >
                 {lng.lang}
               </Typography>

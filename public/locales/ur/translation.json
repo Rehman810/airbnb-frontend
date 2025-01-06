@@ -1,0 +1,81 @@
+{
+    "where": "کہاں",
+    "destination": "منزل تلاش کریں",
+    "anyWhere": "کہیں بھی",
+    "anyWeek": "کسی بھی ہفتے",
+    "cities": {
+      "karachi": {
+        "name": "کراچی",
+        "text": "روشنیوں کے شہر کا لطف اٹھانے کے لئے"
+      },
+      "islamabad": {
+        "name": "اسلام آباد",
+        "text": "فیسل مسجد جیسے مقامات کے لئے"
+      },
+      "lahore": {
+        "name": "لاہور",
+        "text": "غیر ملکی سفر کے لئے"
+      }
+    },
+    "country": "پاکستان",
+    "addDates": "تاریخیں شامل کریں",
+    "checkIn": "چیک ان",
+    "checkOut": "چیک آؤٹ",
+    "who": "کون",
+    "addGuests": "مہمان شامل کریں",
+    "adults": "بالغ",
+    "children": "بچے",
+    "infants": "نوزائیدہ",
+    "pets": "پالتو جانور",
+    "menu": {
+      "verified": {
+        "messages": "پیغامات",
+        "notifications": "نوٹیفکیشنز",
+        "trips": "سفر",
+        "wishlists": "خواہش کی فہرست",
+        "manageListings": "فہرستیں منظم کریں",
+        "account": "اکاؤنٹ",
+        "giftCards": "گفٹ کارڈز",
+        "helpCenter": "مدد کا مرکز",
+        "logout": "لاگ آؤٹ"
+      },
+      "unverified": {
+        "login": "لاگ ان",
+        "signUp": "سائن اپ کریں",
+        "giftCards": "گفٹ کارڈز",
+        "airbnbYourHome": "اپنے گھر کو Airbnb پر کرایہ پر دیں",
+        "hostAnExperience": "ایک تجربہ پیش کریں",
+        "helpCenter": "مدد کا مرکز"
+      },
+      "hostMenu": {
+        "today": "آج",
+        "calendar": "کیلنڈر",
+        "listings": "فہرستیں",
+        "messages": "پیغامات"
+      },
+      "hostMenu2": {
+        "userProfile": "پروفائل",
+        "userAccount": "اکاؤنٹ",
+        "visitHelpCenter": "مدد کے مرکز کا دورہ کریں",
+        "helpSafetyIssue": "سلامتی کے مسئلے پر مدد حاصل کریں",
+        "giftCards": "گفٹ کارڈز",
+        "switchToTravelling": "سفر کی طرف سوئچ کریں",
+        "logout": "لاگ آؤٹ"
+      },
+      "notifications": {
+        "newMessage": "نیا پیغام",
+        "updateAvailable": "اپ ڈیٹ دستیاب ہے",
+        "reminder": "یاد دہانی"
+      }
+    },
+    "navbar": {
+      "airbnbYourHome": "اپنے گھر کو Airbnb پر کرایہ پر دیں",
+      "switchToHosting": "استقبالیہ پر سوئچ کریں"
+    },
+    "home": {
+      "showList": "فہرست دکھائیں",
+      "showMap": "نقشہ دکھائیں",
+      "noListingsPresent": "کوئی فہرستیں موجود نہیں"
+    }
+  }
+  
