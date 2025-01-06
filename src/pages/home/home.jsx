@@ -7,7 +7,7 @@ import LeafletMap from "../../components/map/map";
 import { useTranslation } from "react-i18next";
 
 const Home = () => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const [listing, setListing] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,22 +15,27 @@ const Home = () => {
   const [showMapButton, setShowMapButton] = useState(true);
   const token = localStorage.getItem("token");
   const { searchParams } = useAppContext();
-  const user = JSON.parse(
-    localStorage.getItem("user")
-  );
+  const user = JSON.parse(localStorage.getItem("user"));
   useEffect(() => {
     if (listing?.length === 0) {
       setFilteredData([]);
       return;
     }
 
-    if (!searchParams || !searchParams.destination || !searchParams.checkIn || !searchParams.checkOut) {
-      console.error("Missing or invalid booking dates in searchParams");
+    if (
+      !searchParams ||
+      !searchParams.destination ||
+      !searchParams.checkIn ||
+      !searchParams.checkOut
+    ) {
+      // console.error("Missing or invalid booking dates in searchParams");
       return;
     }
 
     const filteredProducts = listing.filter((product) => {
-      const cityMatches = searchParams?.destination?.split(",")[0]?.trim().toLowerCase() == product.city?.trim().toLowerCase();
+      const cityMatches =
+        searchParams?.destination?.split(",")[0]?.trim().toLowerCase() ==
+        product.city?.trim().toLowerCase();
 
       const checkInDate = new Date(searchParams.checkIn);
       const checkOutDate = new Date(searchParams.checkOut);
@@ -39,7 +44,8 @@ const Home = () => {
         const bookingStart = new Date(booking.startDate);
         const bookingEnd = new Date(booking.endDate);
 
-        const isOverlap = checkInDate < bookingEnd && checkOutDate > bookingStart;
+        const isOverlap =
+          checkInDate < bookingEnd && checkOutDate > bookingStart;
         return isOverlap;
       });
 
@@ -54,8 +60,11 @@ const Home = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const response = await fetchData(`all-listring${token ? `?userId=${user._id}` : ''}`, token);
-        console.log(response);
+        const response = await fetchData(
+          `all-listring${token ? `?userId=${user._id}` : ""}`,
+          token
+        );
+        // console.log(response);
         setListing(response.listings);
         setFilteredData(response.listings);
       } catch (error) {
@@ -194,7 +203,7 @@ const Home = () => {
           }}
           onClick={toggleMapVisibility}
         >
-          {mapVisible ? t("home.showMap") : t("home.showList")}
+          {mapVisible ? t("home.showList") : t("home.showMap")}
         </Button>
       )}
     </div>

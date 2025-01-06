@@ -123,7 +123,7 @@ const RoomPage = () => {
     const fetchOptions = async () => {
       try {
         const response = await fetchDataById("listing", token, roomId);
-        console.log(response);
+        // console.log(response);
 
         if (response && response.listing) {
           setPlace(response.listing);
@@ -138,7 +138,6 @@ const RoomPage = () => {
           setWeekdayPrice(response.listing.weekdayPrice);
           setWeekenddayPrice(response.listing.weekendPrice);
           setLoadingText(false);
-          console.log(response.listing);
         } else {
           console.error("Unexpected response format:", response);
         }
@@ -193,8 +192,7 @@ const RoomPage = () => {
         text: "Please select a check-in and check-out date.",
       });
       return;
-    }
-    else if(!guests.adults){
+    } else if (!guests.adults) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
@@ -242,7 +240,7 @@ const RoomPage = () => {
         const selectedStart = dayjs(selectedStartDate).startOf("day");
         if (selectedStart < bookedStart) {
           if (currentDate >= bookedStart || currentDate < selectedStart) {
-            return true; 
+            return true;
           }
         }
         if (selectedStart > bookedEnd) {
@@ -255,7 +253,7 @@ const RoomPage = () => {
         return true;
       }
     }
-    return false; 
+    return false;
   };
 
   const clearDates = () => {
@@ -559,7 +557,9 @@ const RoomPage = () => {
                     textAlign: "right",
                   }}
                   value={
-                    guests.adults ? `${guests.adults} Guests` : "Select No. of guests"
+                    guests.adults
+                      ? `${guests.adults} Guests`
+                      : "Select No. of guests"
                   }
                   readOnly
                 />

@@ -1,31 +1,25 @@
-import React, {
-  useEffect,
-  useState,
-} from "react";
-import {
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import API_CONFIG from "../../config/Api/Api";
 import Loader from "../loader/loader";
 import LoginModal from "../Login/LoginModal";
 
-const Protected = ({
-  Component,
-  allowedRoles,
-}) => {
+const Protected = ({ Component, allowedRoles }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [isAuthenticated, setIsAuthenticated] =
-    useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] =
-    useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [signUp, setSignUp] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
+    if (!token) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    }
 
     const verifyTokenWithBackend = async () => {
       try {
@@ -43,8 +37,8 @@ const Protected = ({
         setIsAuthenticated(true);
       } catch (error) {
         setIsLoginModalOpen(true);
-        localStorage.removeItem("token")
-        localStorage.removeItem("user")
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
       }
     };
 
