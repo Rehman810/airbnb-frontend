@@ -304,7 +304,7 @@ const RoomPage = () => {
         }}
       >
         {loadingText ? (
-          <Skeleton variant="text" width="60%" height={40} animation="wave" />
+          <Skeleton variant="text" width="30%" height={40} animation="wave" />
         ) : (
           <Typography variant="h4" fontWeight="bold" gutterBottom>
             {toPascalCase(place.title)}
@@ -329,57 +329,58 @@ const RoomPage = () => {
       </Box>
 
       <Grid
-        container
-        spacing={2}
-        onClick={handleOpenModal}
-        style={{ cursor: "pointer" }}
-      >
-        <Grid item xs={12} md={6}>
-          {loadingImages && (
-            <Skeleton
-              variant="rectangular"
-              width="100%"
-              height={500}
-              animation="wave"
-            />
-          )}
-          <CardMedia
-            component="img"
-            height="500"
-            image={place?.photos?.[0]}
-            alt="Main Image"
-            sx={{ borderRadius: 2 }}
-            onLoad={handleImageLoad}
-            onError={(e) => (e.target.src = "/fallback-image.jpg")}
-          />
-        </Grid>
+    container
+    spacing={2}
+    onClick={handleOpenModal}
+    style={{ cursor: "pointer" }}
+  >
+    <Grid item xs={12} md={6}>
+      {loadingImages && (
+        <Skeleton
+          variant="rectangular"
+          width="100%"
+          height={500}
+          animation="wave"
+        />
+      )}
+        <CardMedia
+          component="img"
+          height="500"
+          image={place?.photos?.[0] || '/fallback-image.jpg'}
+          alt="Main Image"
+          sx={{ borderRadius: 2 }}
+          onLoad={handleImageLoad}
+          onError={(e) => (e.target.src = "/fallback-image.jpg")}
+        />
+      
+    </Grid>
 
-        <Grid item xs={12} md={6}>
-          <Grid container spacing={2}>
-            {place?.photos?.slice(1, 5).map((photo, index) => (
-              <Grid item xs={6} key={index}>
-                {loadingImages ? (
-                  <Skeleton
-                    variant="rectangular"
-                    width="100%"
-                    height={240}
-                    animation="wave"
-                  />
-                ) : (
-                  <CardMedia
-                    component="img"
-                    height="240"
-                    image={photo}
-                    alt={`Small Image ${index + 1}`}
-                    sx={{ borderRadius: 2 }}
-                    onError={(e) => (e.target.src = "/fallback-image.jpg")}
-                  />
-                )}
-              </Grid>
-            ))}
+    <Grid item xs={12} md={6}>
+      <Grid container spacing={2}>
+        {(loadingImages ? Array.from({ length: 4 }) : place?.photos?.slice(1, 5)).map((photo, index) => (
+          <Grid item xs={6} key={index}>
+            {loadingImages ? (
+              <Skeleton
+                variant="rectangular"
+                width="100%"
+                height={240}
+                animation="wave"
+              />
+            ) : (
+              <CardMedia
+                component="img"
+                height="240"
+                image={photo || '/fallback-image.jpg'}
+                alt={`Small Image ${index + 1}`}
+                sx={{ borderRadius: 2 }}
+                onError={(e) => (e.target.src = "/fallback-image.jpg")}
+              />
+            )}
           </Grid>
-        </Grid>
+        ))}
       </Grid>
+    </Grid>
+  </Grid>
 
       <Dialog
         fullScreen
